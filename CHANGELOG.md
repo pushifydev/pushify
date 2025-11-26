@@ -88,5 +88,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for details on how to contribute to Pushi
 
 ---
 
-[Unreleased]: https://github.com/yourusername/pushify/compare/v0.1.0-beta...HEAD
-[0.1.0-beta]: https://github.com/yourusername/pushify/releases/tag/v0.1.0-beta
+[Unreleased]: https://github.com/pushifydev/pushify/compare/v0.1.0-beta...HEAD
+[0.1.0-beta]: https://github.com/pushifydev/pushify/releases/tag/v0.1.0-beta

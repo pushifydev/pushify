@@ -3,7 +3,7 @@ version: '3.8'
 services:
   # Main Application (PHP-FPM + Nginx)
   app:
-    image: mazizkurt/pushify:${APP_VERSION:-latest}
+    image: pushifydev/pushify:${APP_VERSION:-latest}
     container_name: pushify_app
     restart: unless-stopped
     env_file:
@@ -84,7 +84,7 @@ services:
 
   # Symfony Messenger Worker
   worker:
-    image: mazizkurt/pushify:${APP_VERSION:-latest}
+    image: pushifydev/pushify:${APP_VERSION:-latest}
     container_name: pushify_worker
     restart: unless-stopped
     env_file:

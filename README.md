@@ -2,7 +2,7 @@
 
 <div align="center">
 
-[![Version](https://img.shields.io/badge/version-0.1.0--beta-blue.svg)](https://github.com/yourusername/pushify/releases)
+[![Version](https://img.shields.io/badge/version-0.1.0--beta-blue.svg)](https://github.com/pushifydev/pushify/releases)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?logo=php&logoColor=white)](https://php.net)
 [![Symfony](https://img.shields.io/badge/Symfony-7.0-000000?logo=symfony&logoColor=white)](https://symfony.com)
@@ -115,7 +115,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/pushify.git
+git clone https://github.com/pushifydev/pushify.git
 cd pushify
 
 # Install PHP dependencies
@@ -231,8 +231,8 @@ php bin/console messenger:consume async -vv
 
 We love contributions! Pushify is a community project and we welcome:
 
-- 🐛 **Bug reports** and **feature requests** via [GitHub Issues](https://github.com/yourusername/pushify/issues)
-- 📝 **Code contributions** via [Pull Requests](https://github.com/yourusername/pushify/pulls)
+- 🐛 **Bug reports** and **feature requests** via [GitHub Issues](https://github.com/pushifydev/pushify/issues)
+- 📝 **Code contributions** via [Pull Requests](https://github.com/pushifydev/pushify/pulls)
 - 📚 **Documentation improvements**
 - 🌍 **Translations** (coming soon)
 - 💬 **Community support**
@@ -259,7 +259,7 @@ Pushify follows [Semantic Versioning](https://semver.org/):
 
 - **Current Version**: `0.1.0-beta` (Beta Release)
 - **Changelog**: See [CHANGELOG.md](CHANGELOG.md)
-- **Releases**: [GitHub Releases](https://github.com/yourusername/pushify/releases)
+- **Releases**: [GitHub Releases](https://github.com/pushifydev/pushify/releases)
 
 ### Version Schema
 
@@ -286,7 +286,7 @@ MAJOR.MINOR.PATCH-LABEL
 - [ ] CLI tool
 - [ ] Marketplace for extensions
 
-[See full roadmap →](https://github.com/yourusername/pushify/projects)
+[See full roadmap →](https://github.com/pushifydev/pushify/projects)
 
 ---
 
@@ -294,7 +294,7 @@ MAJOR.MINOR.PATCH-LABEL
 
 Join our community to get help, share ideas, and stay updated:
 
-- **GitHub Discussions**: [Ask questions & share ideas](https://github.com/yourusername/pushify/discussions)
+- **GitHub Discussions**: [Ask questions & share ideas](https://github.com/pushifydev/pushify/discussions)
 - **Discord**: [Join our server](#) (Coming Soon)
 - **Twitter/X**: [@pushify_dev](#) (Coming Soon)
 - **Email**: support@pushify.dev
@@ -335,7 +335,7 @@ Special thanks to:
 - [Symfony](https://symfony.com) - The PHP framework
 - [Docker](https://docker.com) - Containerization platform
 - [Heroku](https://heroku.com) & [Vercel](https://vercel.com) - Inspiration
-- All our [contributors](https://github.com/yourusername/pushify/graphs/contributors)
+- All our [contributors](https://github.com/pushifydev/pushify/graphs/contributors)
 
 ---
 
@@ -344,8 +344,8 @@ Special thanks to:
 Need help?
 
 - 📖 Check the [Documentation](PRODUCTION_DEPLOYMENT_GUIDE.md)
-- 💬 Join [GitHub Discussions](https://github.com/yourusername/pushify/discussions)
-- 🐛 Report bugs via [GitHub Issues](https://github.com/yourusername/pushify/issues)
+- 💬 Join [GitHub Discussions](https://github.com/pushifydev/pushify/discussions)
+- 🐛 Report bugs via [GitHub Issues](https://github.com/pushifydev/pushify/issues)
 - 📧 Email: support@pushify.dev
 - 🔒 Security issues: security@pushify.dev
 

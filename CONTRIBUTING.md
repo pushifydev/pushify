@@ -123,7 +123,7 @@ Any other context, screenshots, or mockups.
 
 ```bash
 # Clone your fork
-git clone https://github.com/YOUR_USERNAME/pushify.git
+git clone https://github.com/YOUR_USERNAME/pushify.git  # Fork pushifydev/pushify first
 cd pushify
 
 # Install PHP dependencies
@@ -480,7 +480,7 @@ git checkout -b docs/contributing-guide
 ## Questions?
 
 - **Discord**: [Join our community](#)
-- **GitHub Discussions**: [Ask a question](https://github.com/yourusername/pushify/discussions)
+- **GitHub Discussions**: [Ask a question](https://github.com/pushifydev/pushify/discussions)
 - **Email**: support@pushify.dev
 
 ---

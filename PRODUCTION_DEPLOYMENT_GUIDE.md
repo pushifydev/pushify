@@ -305,7 +305,7 @@ sudo chown -R $USER:$USER pushify
 cd pushify
 
 # Clone repository
-git clone https://github.com/your-username/pushify.git .
+git clone https://github.com/pushifydev/pushify.git .
 # veya
 git clone git@github.com:your-username/pushify.git .
 ```

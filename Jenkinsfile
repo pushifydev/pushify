@@ -4,7 +4,7 @@ pipeline {
     environment {
         // Docker Registry (Docker Hub veya private registry)
         DOCKER_REGISTRY = 'docker.io'
-        DOCKER_IMAGE = 'mazizkurt/pushify'
+        DOCKER_IMAGE = 'pushifydev/pushify'
 
         // Deployment server
         PRODUCTION_SERVER = credentials('production-server-ssh')
