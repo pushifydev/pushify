@@ -85,33 +85,33 @@ pipeline {
         stage('Deploy to Production') {
             steps {
                 echo '🚀 Deploying to production...'
-                script {
-                    // SSH to production server and deploy
-                    withCredentials([sshUserPrivateKey(credentialsId: 'production-server-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
-                        sh """
-                            ssh -i \$SSH_KEY -o StrictHostKeyChecking=no ${PRODUCTION_USER}@${PRODUCTION_HOST} '
-                                cd /opt/pushify && \\
-                                git pull origin master && \\
-                                docker-compose -f docker-compose.prod.yml build && \\
-                                docker-compose -f docker-compose.prod.yml up -d --remove-orphans && \\
-                                docker-compose -f docker-compose.prod.yml exec -T app php bin/console doctrine:migrations:migrate --no-interaction && \\
-                                docker-compose -f docker-compose.prod.yml exec -T app php bin/console cache:clear --env=prod
-                            '
-                        """
-                    }
-                }
+                sh '''
+                    # Build and deploy using docker-compose
+                    docker-compose -f docker-compose.prod.yml build
+                    docker-compose -f docker-compose.prod.yml up -d --remove-orphans
+
+                    # Run database migrations
+                    docker-compose -f docker-compose.prod.yml exec -T app php bin/console doctrine:migrations:migrate --no-interaction
+
+                    # Clear production cache
+                    docker-compose -f docker-compose.prod.yml exec -T app php bin/console cache:clear --env=prod
+                '''
             }
         }
 
         stage('Health Check') {
             steps {
                 echo '🏥 Running health check...'
-                script {
-                    sleep 10 // Wait for app to start
-                    sh """
-                        curl -f https://${PRODUCTION_HOST}/health || exit 1
-                    """
-                }
+                sh '''
+                    # Wait for containers to be healthy
+                    sleep 10
+
+                    # Check if containers are running
+                    docker-compose -f docker-compose.prod.yml ps
+
+                    # Test health endpoint
+                    curl -f http://localhost:80/health || exit 1
+                '''
             }
         }
 
