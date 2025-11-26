@@ -13,9 +13,6 @@ pipeline {
         // Application
         APP_ENV = 'prod'
         APP_NAME = 'pushify'
-
-        // Version from VERSION file
-        APP_VERSION = readFile('VERSION').trim()
     }
 
     stages {
@@ -24,6 +21,11 @@ pipeline {
                 echo '📦 Checking out code...'
                 checkout scm
                 sh 'git fetch --tags'
+                script {
+                    // Read version after checkout
+                    env.APP_VERSION = readFile('VERSION').trim()
+                    echo "Version: ${env.APP_VERSION}"
+                }
             }
         }
 
@@ -202,15 +204,7 @@ pipeline {
         }
 
         always {
-            echo '🧹 Cleaning up...'
-            script {
-                try {
-                    // Clean up Docker images (optional)
-                    sh 'docker system prune -f || true'
-                } catch (Exception e) {
-                    echo "Cleanup warning: ${e.message}"
-                }
-            }
+            echo '🧹 Pipeline finished'
         }
     }
 }
