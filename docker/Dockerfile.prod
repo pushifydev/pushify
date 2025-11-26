@@ -1,13 +1,19 @@
 # Production Dockerfile for Pushify
 # Multi-stage build for optimized image size
 
-ARG PHP_VERSION=8.2
+ARG PHP_VERSION=8.4
 ARG NODE_VERSION=20
 
 # ============================================
 # Stage 1: PHP Dependencies
 # ============================================
-FROM composer:2 AS composer-builder
+FROM php:8.4-cli-alpine AS composer-builder
+
+# Install composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+
+# Install system dependencies for sockets
+RUN apk add --no-cache linux-headers
 
 WORKDIR /app
 
@@ -20,8 +26,7 @@ RUN composer install \
     --no-scripts \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader \
-    --ignore-platform-req=php
+    --optimize-autoloader
 
 COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
@@ -75,7 +80,8 @@ RUN apk add --no-cache \
     icu-dev \
     oniguruma-dev \
     bash \
-    curl
+    curl \
+    linux-headers
 
 # Install PHP extensions
 RUN docker-php-ext-install \
