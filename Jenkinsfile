@@ -82,27 +82,6 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                echo '🐳 Building Docker image...'
-                script {
-                    // Build with version tag
-                    def imageTag = "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${APP_VERSION}"
-                    def latestTag = "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest"
-
-                    sh """
-                        docker build \
-                            --build-arg APP_VERSION=${APP_VERSION} \
-                            --build-arg BUILD_DATE=\$(date -u +'%Y-%m-%dT%H:%M:%SZ') \
-                            --build-arg VCS_REF=${GIT_COMMIT} \
-                            -t ${imageTag} \
-                            -t ${latestTag} \
-                            -f docker/Dockerfile.prod .
-                    """
-                }
-            }
-        }
-
         stage('Deploy to Production') {
             steps {
                 echo '🚀 Deploying to production...'
