@@ -11,13 +11,17 @@ FROM composer:2 AS composer-builder
 
 WORKDIR /app
 
+# Install sockets extension
+RUN docker-php-ext-install sockets
+
 COPY composer.json composer.lock ./
 RUN composer install \
     --no-dev \
     --no-scripts \
     --no-interaction \
     --prefer-dist \
-    --optimize-autoloader
+    --optimize-autoloader \
+    --ignore-platform-req=php
 
 COPY . .
 RUN composer dump-autoload --optimize --classmap-authoritative
@@ -81,7 +85,8 @@ RUN docker-php-ext-install \
     opcache \
     intl \
     zip \
-    bcmath
+    bcmath \
+    sockets
 
 # Install Redis extension
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \
