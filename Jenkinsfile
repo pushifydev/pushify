@@ -8,7 +8,7 @@ pipeline {
 
         // Deployment server
         PRODUCTION_SERVER = credentials('production-server-ssh')
-        PRODUCTION_HOST = 'your-production-server.com'
+        PRODUCTION_HOST = 'pushify.dev'
         PRODUCTION_USER = 'deploy'
 
         // Application
