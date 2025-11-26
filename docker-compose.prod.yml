@@ -11,6 +11,8 @@ services:
     environment:
       - APP_ENV=prod
       - APP_DEBUG=0
+    ports:
+      - "9081:80"
     volumes:
       - ./var/deployments:/var/www/html/var/deployments
       - ./public/uploads:/var/www/html/public/uploads
@@ -22,12 +24,6 @@ services:
       - db
       - redis
       - rabbitmq
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.pushify.rule=Host(`pushify.dev`, `www.pushify.dev`)"
-      - "traefik.http.routers.pushify.entrypoints=websecure"
-      - "traefik.http.routers.pushify.tls.certresolver=letsencrypt"
-      - "traefik.http.services.pushify.loadbalancer.server.port=80"
 
   # PostgreSQL Database
   db:
@@ -102,47 +98,6 @@ services:
       - redis
       - rabbitmq
 
-  # Traefik Reverse Proxy (SSL)
-  traefik:
-    image: traefik:v2.10
-    container_name: pushify_traefik
-    restart: unless-stopped
-    ports:
-      - "80:80"
-      - "443:443"
-    command:
-      - "--api.insecure=false"
-      - "--providers.docker=true"
-      - "--providers.docker.exposedbydefault=false"
-      - "--entrypoints.web.address=:80"
-      - "--entrypoints.websecure.address=:443"
-      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
-      - "--certificatesresolvers.letsencrypt.acme.email=admin@pushify.dev"
-      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
-      # Redirect HTTP to HTTPS
-      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
-      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-      - traefik_certs:/letsencrypt
-    networks:
-      - pushify
-
-  # Watchtower (Auto-update containers)
-  watchtower:
-    image: containrrr/watchtower
-    container_name: pushify_watchtower
-    restart: unless-stopped
-    environment:
-      - WATCHTOWER_CLEANUP=true
-      - WATCHTOWER_POLL_INTERVAL=300
-      - WATCHTOWER_INCLUDE_STOPPED=true
-      - WATCHTOWER_REVIVE_STOPPED=false
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-    networks:
-      - pushify
-
 networks:
   pushify:
     driver: bridge
@@ -153,8 +108,6 @@ volumes:
   redis_data:
     driver: local
   rabbitmq_data:
-    driver: local
-  traefik_certs:
     driver: local
   app_cache:
     driver: local
