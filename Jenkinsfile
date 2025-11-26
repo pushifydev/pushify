@@ -87,9 +87,9 @@ pipeline {
                 echo '🚀 Deploying to production...'
                 script {
                     // SSH to production server and deploy
-                    sshagent(credentials: ['production-server-ssh']) {
+                    withCredentials([sshUserPrivateKey(credentialsId: 'production-server-ssh', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')]) {
                         sh """
-                            ssh -o StrictHostKeyChecking=no ${PRODUCTION_USER}@${PRODUCTION_HOST} '
+                            ssh -i \$SSH_KEY -o StrictHostKeyChecking=no ${PRODUCTION_USER}@${PRODUCTION_HOST} '
                                 cd /opt/pushify && \\
                                 git pull origin master && \\
                                 docker-compose -f docker-compose.prod.yml build && \\
