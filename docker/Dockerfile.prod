@@ -145,8 +145,5 @@ HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
 # Expose ports
 EXPOSE 80 9000
 
-# Switch to application user
-USER pushify
-
-# Start supervisor
+# Start supervisor as root (required for nginx and php-fpm)
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
