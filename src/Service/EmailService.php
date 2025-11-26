@@ -14,8 +14,12 @@ class EmailService
     public function __construct(
         private ProducerInterface $emailProducer,
         private LoggerInterface $logger,
-        private string $appUrl = 'http://localhost',
     ) {
+    }
+
+    private function getAppUrl(): string
+    {
+        return $_ENV['DEFAULT_URI'] ?? 'http://localhost';
     }
 
     /**
@@ -53,7 +57,7 @@ class EmailService
         string $token,
         \DateTimeImmutable $expiresAt
     ): void {
-        $invitationUrl = rtrim($this->appUrl, '/') . '/dashboard/teams/invite/' . $token;
+        $invitationUrl = rtrim($this->getAppUrl(), '/') . '/dashboard/teams/invite/' . $token;
 
         $message = SendEmailMessage::teamInvitation(
             email: $email,

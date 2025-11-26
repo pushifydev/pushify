@@ -1001,9 +1001,10 @@ DOCKERFILE;
 
         $deployment->appendDeployLog("✓ Container started: " . $project->getContainerId());
         $deployment->appendDeployLog("✓ Application available at port: " . $port);
-        $deployment->setDeploymentUrl('http://localhost:' . $port);
 
-        $project->setProductionUrl('http://localhost:' . $port);
+        $baseUrl = $_ENV['DEFAULT_URI'] ?? 'http://localhost:' . $port;
+        $deployment->setDeploymentUrl($baseUrl);
+        $project->setProductionUrl($baseUrl);
 
         $this->save($deployment);
     }

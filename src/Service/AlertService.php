@@ -259,8 +259,8 @@ class AlertService
      */
     private function getProjectUrl(Project $project): string
     {
-        // This should use url generator but simplified here
-        return "http://localhost:8000/dashboard/projects/{$project->getSlug()}";
+        $baseUrl = $_ENV['DEFAULT_URI'] ?? 'http://localhost:8000';
+        return "{$baseUrl}/dashboard/projects/{$project->getSlug()}";
     }
 
     /**
