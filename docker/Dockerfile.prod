@@ -138,9 +138,6 @@ RUN mkdir -p \
 # Set permissions
 RUN chmod -R 775 var public/uploads
 
-# Write version file
-RUN echo "${APP_VERSION}" > VERSION
-
 # Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=40s --retries=3 \
     CMD curl -f http://localhost/health || exit 1
