@@ -3,6 +3,11 @@ version: '3.8'
 services:
   # Main Application (PHP-FPM + Nginx)
   app:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.prod
+      args:
+        APP_VERSION: ${APP_VERSION:-latest}
     image: pushifydev/pushify:${APP_VERSION:-latest}
     container_name: pushify_app
     restart: unless-stopped
