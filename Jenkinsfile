@@ -103,21 +103,6 @@ pipeline {
             }
         }
 
-        stage('Push Docker Image') {
-            steps {
-                echo '📤 Pushing Docker image to registry...'
-                script {
-                    docker.withRegistry("https://${DOCKER_REGISTRY}", 'docker-hub-credentials') {
-                        def imageTag = "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:${APP_VERSION}"
-                        def latestTag = "${DOCKER_REGISTRY}/${DOCKER_IMAGE}:latest"
-
-                        sh "docker push ${imageTag}"
-                        sh "docker push ${latestTag}"
-                    }
-                }
-            }
-        }
-
         stage('Deploy to Production') {
             steps {
                 echo '🚀 Deploying to production...'
@@ -128,11 +113,10 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no ${PRODUCTION_USER}@${PRODUCTION_HOST} '
                                 cd /opt/pushify && \\
                                 git pull origin master && \\
-                                export APP_VERSION=${APP_VERSION} && \\
-                                docker-compose pull && \\
-                                docker-compose up -d --remove-orphans && \\
-                                docker-compose exec -T app php bin/console doctrine:migrations:migrate --no-interaction && \\
-                                docker-compose exec -T app php bin/console cache:clear --env=prod
+                                docker-compose -f docker-compose.prod.yml build && \\
+                                docker-compose -f docker-compose.prod.yml up -d --remove-orphans && \\
+                                docker-compose -f docker-compose.prod.yml exec -T app php bin/console doctrine:migrations:migrate --no-interaction && \\
+                                docker-compose -f docker-compose.prod.yml exec -T app php bin/console cache:clear --env=prod
                             '
                         """
                     }
