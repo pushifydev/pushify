@@ -1,0 +1,376 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Domains - {{ project.name }} - Pushify{% endblock %}
+
+{% block content %}
+<!-- Toast Manager Component -->
+<div {{ react_component('ToastManager') }}></div>
+
+<div class="space-y-6">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div class="flex items-center space-x-4">
+            <a href="{{ path('app_project_show', {slug: project.slug}) }}" class="text-gray-400 hover:text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                </svg>
+            </a>
+            <div>
+                <h1 class="text-2xl font-bold text-white">Domains</h1>
+                <p class="text-gray-400">{{ project.name }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Server Warning -->
+    {% if not project.server %}
+    <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-4">
+        <div class="flex items-center">
+            <svg class="w-5 h-5 text-yellow-500 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+            </svg>
+            <div>
+                <p class="text-yellow-500 font-medium">No Server Assigned</p>
+                <p class="text-yellow-500/70 text-sm">You need to assign a server to this project before adding custom domains. Go to <a href="{{ path('app_project_settings', {slug: project.slug}) }}" class="underline">project settings</a>.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Add Domain Form -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <h2 class="text-lg font-semibold text-white mb-4">Add Custom Domain</h2>
+        <form action="{{ path('app_project_domain_add', {projectId: project.id}) }}" method="POST" class="space-y-4">
+            <input type="hidden" name="_token" value="{{ csrf_token('add-domain') }}">
+
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <label for="domain" class="block text-sm font-medium text-gray-300 mb-1">Domain Name</label>
+                    <input type="text" name="domain" id="domain"
+                           placeholder="example.com or app.example.com"
+                           class="w-full bg-gray-900 border border-gray-700 rounded-lg px-4 py-2 text-white placeholder-gray-500 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                           required {% if not project.server %}disabled{% endif %}>
+                </div>
+                <div class="flex items-end">
+                    <label class="flex items-center space-x-2 text-gray-300">
+                        <input type="checkbox" name="is_primary" value="1"
+                               class="rounded bg-gray-900 border-gray-700 text-blue-500 focus:ring-blue-500"
+                               {% if not project.server %}disabled{% endif %}>
+                        <span class="text-sm">Set as primary</span>
+                    </label>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit"
+                            class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                            {% if not project.server %}disabled{% endif %}>
+                        Add Domain
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- DNS Instructions -->
+    {% if project.server %}
+    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
+        <h3 class="text-lg font-semibold text-white mb-3">DNS Configuration</h3>
+        <p class="text-gray-400 mb-4">Point your domain to your server by adding the following DNS record:</p>
+        <div class="bg-gray-900 rounded-lg p-4 font-mono text-sm">
+            <div class="grid grid-cols-3 gap-4 text-gray-400 mb-2">
+                <span>Type</span>
+                <span>Name</span>
+                <span>Value</span>
+            </div>
+            <div class="grid grid-cols-3 gap-4 text-white">
+                <span class="text-green-400">A</span>
+                <span>@ or subdomain</span>
+                <span class="text-blue-400">{{ project.server.ipAddress }}</span>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Purchased Domains Section -->
+    {% if allPurchases is not empty %}
+    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700 flex items-center justify-between">
+            <div>
+                <h2 class="text-lg font-semibold text-white">Purchased Domains</h2>
+                <p class="text-sm text-gray-400">Domains you own through Pushify</p>
+            </div>
+            <a href="{{ path('app_domain_marketplace') }}" class="text-sm text-primary hover:text-primary/80 inline-flex items-center gap-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Buy More
+            </a>
+        </div>
+
+        <div class="divide-y divide-gray-700">
+            {% for purchase in allPurchases %}
+            <div class="p-6 {{ purchase.project and purchase.project.id == project.id ? 'bg-primary/5' : '' }}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-10 h-10 rounded-lg {{ purchase.project and purchase.project.id == project.id ? 'bg-primary/20' : 'bg-gray-700' }} flex items-center justify-center">
+                            <svg class="w-5 h-5 {{ purchase.project and purchase.project.id == project.id ? 'text-primary' : 'text-gray-400' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                            </svg>
+                        </div>
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <span class="text-white font-medium font-mono">{{ purchase.domain }}</span>
+                                {% if purchase.project and purchase.project.id == project.id %}
+                                <span class="px-2 py-0.5 text-xs bg-primary/20 text-primary rounded">Connected</span>
+                                {% elseif purchase.project %}
+                                <span class="px-2 py-0.5 text-xs bg-gray-700 text-gray-400 rounded">Used by {{ purchase.project.name }}</span>
+                                {% endif %}
+                            </div>
+                            {% if purchase.expiresAt %}
+                            <p class="text-xs text-gray-500 mt-1">
+                                Expires {{ purchase.expiresAt|date('M d, Y') }}
+                                {% if purchase.daysUntilExpiry < 30 %}
+                                <span class="text-yellow-400">({{ purchase.daysUntilExpiry }} days)</span>
+                                {% endif %}
+                            </p>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        {% if purchase.project and purchase.project.id == project.id %}
+                            <!-- Auto-configure DNS Button -->
+                            {% if project.server %}
+                            <a href="{{ path('app_domain_dns', {id: purchase.id}) }}"
+                               class="px-3 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded-lg transition inline-flex items-center gap-1">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                                Manage DNS
+                            </a>
+                            {% endif %}
+                            <!-- Disconnect -->
+                            <form method="post" action="{{ path('app_domain_connect_project', {id: purchase.id}) }}" class="inline">
+                                <input type="hidden" name="project_id" value="">
+                                <button type="submit" class="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-lg transition">
+                                    Disconnect
+                                </button>
+                            </form>
+                        {% elseif not purchase.project %}
+                            <!-- Connect Button -->
+                            <form method="post" action="{{ path('app_domain_connect_project', {id: purchase.id}) }}" class="inline">
+                                <input type="hidden" name="project_id" value="{{ project.id }}">
+                                <button type="submit" class="px-3 py-1.5 text-sm bg-primary hover:bg-primary/90 text-white rounded-lg transition inline-flex items-center gap-1">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path>
+                                    </svg>
+                                    Connect to Project
+                                </button>
+                            </form>
+                        {% else %}
+                            <span class="text-xs text-gray-500">Connected to another project</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <!-- No Purchased Domains - Promo -->
+    <div class="bg-gradient-to-r from-primary/10 to-blue-500/10 border border-primary/20 rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h3 class="text-white font-medium">Need a domain?</h3>
+                    <p class="text-gray-400 text-sm">Register domains directly through Pushify with easy DNS management</p>
+                </div>
+            </div>
+            <a href="{{ path('app_domain_marketplace') }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                Browse Domains
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Domains List -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700">
+            <h2 class="text-lg font-semibold text-white">Custom Domains</h2>
+        </div>
+
+        {% if domains is empty %}
+        <div class="p-12 text-center">
+            <svg class="w-12 h-12 text-gray-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+            </svg>
+            <p class="text-gray-400">No custom domains configured</p>
+            <p class="text-gray-500 text-sm mt-1">Add a domain above to get started</p>
+        </div>
+        {% else %}
+        <div class="divide-y divide-gray-700">
+            {% for domain in domains %}
+            <div class="p-6" id="domain-{{ domain.id }}">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- SSL Icon -->
+                        {% if domain.sslEnabled %}
+                        <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        {% else %}
+                        <div class="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                            </svg>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ domain.fullUrl }}" target="_blank" class="text-white font-medium hover:text-blue-400">
+                                    {{ domain.domain }}
+                                </a>
+                                {% if domain.isPrimary %}
+                                <span class="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded">Primary</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center space-x-3 mt-1">
+                                <span class="px-2 py-0.5 text-xs rounded {{ domain.statusBadgeClass }}">
+                                    {{ domain.statusLabel }}
+                                </span>
+                                {% if domain.sslEnabled and domain.sslExpiresAt %}
+                                <span class="text-xs text-gray-500">
+                                    SSL expires: {{ domain.sslExpiresAt|date('M d, Y') }}
+                                    {% if domain.sslExpiringSoon %}
+                                    <span class="text-yellow-500">(Renewing soon)</span>
+                                    {% endif %}
+                                </span>
+                                {% endif %}
+                                {% if domain.lastError %}
+                                <span class="text-xs text-red-400">{{ domain.lastError }}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <!-- Verify DNS Button -->
+                        {% if not domain.dnsVerified %}
+                        <button onclick="verifyDns({{ domain.id }})"
+                                class="px-3 py-1.5 text-sm bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg transition"
+                                id="verify-btn-{{ domain.id }}">
+                            Verify DNS
+                        </button>
+                        {% endif %}
+
+                        <!-- Issue SSL Button -->
+                        {% if domain.dnsVerified and not domain.sslEnabled %}
+                        <button onclick="issueSsl({{ domain.id }})"
+                                class="px-3 py-1.5 text-sm bg-green-600 hover:bg-green-700 text-white rounded-lg transition"
+                                id="ssl-btn-{{ domain.id }}">
+                            Enable SSL
+                        </button>
+                        {% endif %}
+
+                        <!-- Set Primary Button -->
+                        {% if not domain.isPrimary %}
+                        <form action="{{ path('app_project_domain_primary', {projectId: project.id, id: domain.id}) }}" method="POST" class="inline">
+                            <input type="hidden" name="_token" value="{{ csrf_token('set-primary-' ~ domain.id) }}">
+                            <button type="submit" class="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">
+                                Set Primary
+                            </button>
+                        </form>
+                        {% endif %}
+
+                        <!-- Delete Button -->
+                        <form action="{{ path('app_project_domain_delete', {projectId: project.id, id: domain.id}) }}" method="POST" class="inline"
+                              onsubmit="return confirm('Are you sure you want to remove this domain?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete-domain-' ~ domain.id) }}">
+                            <button type="submit" class="px-3 py-1.5 text-sm bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded-lg transition">
+                                Remove
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+async function verifyDns(domainId) {
+    const btn = document.getElementById(`verify-btn-${domainId}`);
+    const originalText = btn.textContent;
+    btn.textContent = 'Verifying...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`{{ path('app_project_domains', {projectId: project.id}) }}/${domainId}/verify`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            window.toast.success('Success', 'DNS verification completed successfully!');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            window.toast.error('Error', data.error || 'DNS verification failed. Make sure your DNS is pointing to the server.');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        window.toast.error('Error', 'Error verifying DNS: ' + error.message);
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+
+async function issueSsl(domainId) {
+    const btn = document.getElementById(`ssl-btn-${domainId}`);
+    const originalText = btn.textContent;
+    btn.textContent = 'Issuing SSL...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch(`{{ path('app_project_domains', {projectId: project.id}) }}/${domainId}/ssl`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            window.toast.success('Success', 'SSL certificate issued successfully!');
+            setTimeout(() => location.reload(), 1000);
+        } else {
+            window.toast.error('Error', data.error || 'SSL issuance failed.');
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }
+    } catch (error) {
+        window.toast.error('Error', 'Error issuing SSL: ' + error.message);
+        btn.textContent = originalText;
+        btn.disabled = false;
+    }
+}
+</script>
+{% endblock %}

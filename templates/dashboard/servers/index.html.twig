@@ -1,0 +1,67 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Servers - Pushify{% endblock %}
+{% block page_title %}Servers{% endblock %}
+{% block page_subtitle %}Manage your deployment servers{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_server_new') }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+	<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+	</svg>
+	Add Server
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+	{% if servers is empty %}
+	<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-12 text-center">
+		<div class="w-16 h-16 mx-auto mb-4 bg-gray-700/50 rounded-xl flex items-center justify-center">
+			<svg class="w-8 h-8 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2"></path>
+			</svg>
+		</div>
+		<h3 class="text-lg font-semibold text-white mb-2">No servers yet</h3>
+		<p class="text-gray-400 mb-6">Add a server to deploy your applications.</p>
+		<a href="{{ path('app_server_new') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg">
+			Add Your First Server
+		</a>
+	</div>
+	{% else %}
+	<div class="grid gap-4">
+		{% for server in servers %}
+		<a href="{{ path('app_server_show', {id: server.id}) }}" class="block bg-gray-800/50 border border-gray-700/50 rounded-xl p-6 hover:border-gray-600 transition-all group">
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<div class="w-12 h-12 rounded-xl flex items-center justify-center {{ server.statusBadgeClass }}">
+						<svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2"></path>
+						</svg>
+					</div>
+					<div>
+						<div class="flex items-center gap-3">
+							<h3 class="font-semibold text-white group-hover:text-primary">{{ server.name }}</h3>
+							<span class="px-2 py-0.5 text-xs rounded-full {{ server.statusBadgeClass }}">{{ server.status|capitalize }}</span>
+							{% if server.provider != 'custom' %}
+							<span class="px-2 py-0.5 text-xs rounded-full bg-blue-500/20 text-blue-400">{{ server.providerLabel }}</span>
+							{% endif %}
+						</div>
+						<div class="flex items-center gap-4 mt-1 text-sm text-gray-400">
+							<span class="font-mono">{{ server.ipAddress }}</span>
+							{% if server.cpuCores %}{{ server.cpuCores }} CPU{% endif %}
+							{% if server.memoryGb %}{{ server.memoryGb }}GB RAM{% endif %}
+							{% if server.dockerInstalled %}<span class="text-green-400">Docker</span>{% endif %}
+						</div>
+					</div>
+				</div>
+				<svg class="w-5 h-5 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+				</svg>
+			</div>
+		</a>
+		{% endfor %}
+	</div>
+	{% endif %}
+</div>
+{% endblock %}

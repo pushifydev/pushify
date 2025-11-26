@@ -1,0 +1,104 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Notification Settings - Pushify{% endblock %}
+{% block page_title %}Notification Settings{% endblock %}
+{% block page_subtitle %}Configure how you receive notifications{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_notifications') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Notifications
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-full">
+    <form method="post" class="space-y-6">
+        <!-- Email Settings -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Email Notifications</h3>
+            <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                <div>
+                    <span class="font-medium text-white">Enable Email Notifications</span>
+                    <p class="text-sm text-gray-400 mt-1">Receive notifications via email</p>
+                </div>
+                <input type="checkbox" name="email_enabled" value="1" {{ settings.email_enabled ?? true ? 'checked' : '' }}
+                       class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+            </label>
+        </div>
+
+        <!-- Deployment Notifications -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Deployment Notifications</h3>
+            <div class="space-y-3">
+                <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                    <div>
+                        <span class="font-medium text-white">Deployment Started</span>
+                        <p class="text-sm text-gray-400 mt-1">When a deployment begins</p>
+                    </div>
+                    <input type="checkbox" name="deployment_started" value="1" {{ settings.deployment_started ?? false ? 'checked' : '' }}
+                           class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+                </label>
+                <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                    <div>
+                        <span class="font-medium text-white">Deployment Successful</span>
+                        <p class="text-sm text-gray-400 mt-1">When a deployment completes successfully</p>
+                    </div>
+                    <input type="checkbox" name="deployment_success" value="1" {{ settings.deployment_success ?? true ? 'checked' : '' }}
+                           class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+                </label>
+                <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                    <div>
+                        <span class="font-medium text-white">Deployment Failed</span>
+                        <p class="text-sm text-gray-400 mt-1">When a deployment fails</p>
+                    </div>
+                    <input type="checkbox" name="deployment_failed" value="1" {{ settings.deployment_failed ?? true ? 'checked' : '' }}
+                           class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+                </label>
+            </div>
+        </div>
+
+        <!-- Server Notifications -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Server Notifications</h3>
+            <div class="space-y-3">
+                <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                    <div>
+                        <span class="font-medium text-white">Server Offline</span>
+                        <p class="text-sm text-gray-400 mt-1">When a server becomes unreachable</p>
+                    </div>
+                    <input type="checkbox" name="server_offline" value="1" {{ settings.server_offline ?? true ? 'checked' : '' }}
+                           class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+                </label>
+                <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                    <div>
+                        <span class="font-medium text-white">Server Online</span>
+                        <p class="text-sm text-gray-400 mt-1">When a server comes back online</p>
+                    </div>
+                    <input type="checkbox" name="server_online" value="1" {{ settings.server_online ?? false ? 'checked' : '' }}
+                           class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+                </label>
+            </div>
+        </div>
+
+        <!-- SSL Notifications -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">SSL Notifications</h3>
+            <label class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg cursor-pointer hover:bg-gray-700/50 transition-colors">
+                <div>
+                    <span class="font-medium text-white">SSL Certificate Expiring</span>
+                    <p class="text-sm text-gray-400 mt-1">When an SSL certificate is about to expire</p>
+                </div>
+                <input type="checkbox" name="ssl_expiring" value="1" {{ settings.ssl_expiring ?? true ? 'checked' : '' }}
+                       class="w-5 h-5 rounded bg-gray-700 border-gray-600 text-primary focus:ring-primary focus:ring-offset-gray-800">
+            </label>
+        </div>
+
+        <button type="submit" class="w-full px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all">
+            Save Settings
+        </button>
+    </form>
+</div>
+{% endblock %}

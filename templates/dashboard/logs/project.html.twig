@@ -1,0 +1,51 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Logs -
+	{{ project.name }}
+	- Pushify
+{% endblock %}
+{% block page_title %}Container Logs
+{% endblock %}
+
+{% block content %}
+	<div
+		class="space-y-6">
+		<!-- Header -->
+		<div class="flex items-center space-x-4">
+			<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="text-gray-400 hover:text-white">
+				<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+				</svg>
+			</a>
+			<div>
+				<h1 class="text-2xl font-bold text-white">{{ project.name }}</h1>
+				<p class="text-gray-400">Container Logs</p>
+			</div>
+		</div>
+
+		<!-- Container Stats -->
+		{% if containerStatus.stats %}
+			<div class="grid grid-cols-4 gap-4">
+				<div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+					<p class="text-xs text-gray-500 uppercase">CPU Usage</p>
+					<p class="text-xl font-semibold text-white">{{ containerStatus.stats.CPUPerc|default('N/A') }}</p>
+				</div>
+				<div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+					<p class="text-xs text-gray-500 uppercase">Memory Usage</p>
+					<p class="text-xl font-semibold text-white">{{ containerStatus.stats.MemUsage|default('N/A') }}</p>
+				</div>
+				<div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+					<p class="text-xs text-gray-500 uppercase">Network I/O</p>
+					<p class="text-xl font-semibold text-white">{{ containerStatus.stats.NetIO|default('N/A') }}</p>
+				</div>
+				<div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+					<p class="text-xs text-gray-500 uppercase">Restarts</p>
+					<p class="text-xl font-semibold text-white">{{ containerStatus.restartCount|default(0) }}</p>
+				</div>
+			</div>
+		{% endif %}
+
+		<!-- React Container Logs Component -->
+		<div {{ react_component('logs/ContainerLogs', { projectSlug: project.slug, containerName: 'pushify-' ~ project.slug, serverIp: project.server ? project.server.ipAddress : null, initialStatus: containerStatus.status|default('unknown'), initialRunning: containerStatus.running|default(false) } ) }}></div>
+	</div>
+{% endblock %}

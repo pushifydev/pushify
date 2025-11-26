@@ -1,0 +1,77 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+      - 'v*.*.*-beta'
+      - 'v*.*.*-alpha'
+      - 'v*.*.*-rc*'
+
+jobs:
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get version from tag
+        id: get_version
+        run: |
+          VERSION=${GITHUB_REF#refs/tags/v}
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Check if pre-release
+        id: check_prerelease
+        run: |
+          if [[ "${{ steps.get_version.outputs.version }}" =~ (alpha|beta|rc) ]]; then
+            echo "prerelease=true" >> $GITHUB_OUTPUT
+            echo "This is a pre-release"
+          else
+            echo "prerelease=false" >> $GITHUB_OUTPUT
+            echo "This is a stable release"
+          fi
+
+      - name: Extract changelog for this version
+        id: changelog
+        run: |
+          VERSION=${{ steps.get_version.outputs.version }}
+
+          # Extract the changelog section for this version
+          if grep -q "\[$VERSION\]" CHANGELOG.md; then
+            CHANGELOG=$(awk "/\[$VERSION\]/,/^## \[/" CHANGELOG.md | sed '1d;$d')
+          else
+            CHANGELOG="See CHANGELOG.md for details"
+          fi
+
+          # Save to file to preserve formatting
+          echo "$CHANGELOG" > release_notes.md
+
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Pushify ${{ steps.get_version.outputs.version }}
+          body_path: release_notes.md
+          prerelease: ${{ steps.check_prerelease.outputs.prerelease }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify on Success
+        if: success()
+        run: |
+          echo "✅ Release v${{ steps.get_version.outputs.version }} created successfully!"
+          echo "🔗 https://github.com/${{ github.repository }}/releases/tag/v${{ steps.get_version.outputs.version }}"
+
+      - name: Notify on Failure
+        if: failure()
+        run: |
+          echo "❌ Failed to create release"
+          exit 1

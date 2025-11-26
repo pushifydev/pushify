@@ -1,0 +1,35 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Backups - {{ project.name }} - Pushify{% endblock %}
+{% block page_title %}Backups{% endblock %}
+{% block page_subtitle %}{{ project.name }}{% endblock %}
+
+{% block topbar_actions %}
+	<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+		</svg>
+		Back to Project
+	</a>
+{% endblock %}
+
+{% block content %}
+	<div class="space-y-6">
+		<div class="bg-green-500/20 border border-green-500/50 text-green-400 px-4 py-3 rounded-lg">
+			<div class="flex items-start gap-3">
+				<svg class="w-5 h-5 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+				</svg>
+				<div>
+					<p class="font-medium">Backup & Recovery</p>
+					<p class="text-sm text-green-300 mt-1">
+						Create database backups and restore points. Backups are compressed and stored with configurable retention periods.
+						You can restore, download, or delete backups at any time.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div {{ react_component('backups/BackupDashboard', { projectSlug: project.slug }) }}></div>
+	</div>
+{% endblock %}

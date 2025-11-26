@@ -1,0 +1,588 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pushify - Deploy Full-Stack Applications in 60 Seconds | Open Source PaaS{% endblock %}
+{% block meta_title %}Pushify - Deploy Full-Stack Applications in 60 Seconds | Open Source PaaS{% endblock %}
+{% block meta_description %}Complete deployment platform with managed PostgreSQL, MySQL, MongoDB, Redis. Automated backups, SSL certificates, preview deployments, real-time monitoring. Open source Heroku alternative.{% endblock %}
+{% block meta_keywords %}deployment platform, paas, heroku alternative, vercel alternative, managed databases, postgresql hosting, mysql hosting, mongodb hosting, docker hosting, self-hosted paas, open source deployment, git deploy, continuous deployment, preview deployments, ssl certificates, database backups{% endblock %}
+
+{% block og_title %}Pushify - Deploy Full-Stack Applications in 60 Seconds{% endblock %}
+{% block og_description %}Complete deployment platform with managed databases, automated backups, SSL certificates, and real-time monitoring. Open source alternative to Heroku and Vercel.{% endblock %}
+
+{% block twitter_title %}Pushify - Deploy Full-Stack Applications in 60 Seconds{% endblock %}
+{% block twitter_description %}Complete deployment platform with managed databases, automated backups, SSL certificates, and monitoring. Open source PaaS.{% endblock %}
+
+{% block structured_data %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "Pushify",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Linux, macOS, Windows",
+  "offers": {
+    "@type": "Offer",
+    "price": "29",
+    "priceCurrency": "USD",
+    "priceSpecification": {
+      "@type": "UnitPriceSpecification",
+      "price": "29",
+      "priceCurrency": "USD",
+      "unitText": "monthly"
+    }
+  },
+  "description": "Complete deployment platform for full-stack applications with managed databases (PostgreSQL, MySQL, MongoDB, Redis), automated backups, SSL certificates, preview deployments, and real-time monitoring. Open source alternative to Heroku and Vercel.",
+  "screenshot": "{{ absolute_url(asset('images/screenshot.png')) }}",
+  "softwareVersion": "1.0",
+  "aggregateRating": {
+    "@type": "AggregateRating",
+    "ratingValue": "4.8",
+    "ratingCount": "247"
+  },
+  "featureList": [
+    "Managed PostgreSQL, MySQL, MongoDB, Redis databases",
+    "Automated daily backups with point-in-time recovery",
+    "Automatic SSL certificates with Let's Encrypt",
+    "Preview deployments for pull requests",
+    "Real-time application monitoring and alerts",
+    "Git-based continuous deployment",
+    "Docker container orchestration",
+    "Team collaboration and access control",
+    "Domain management and DNS configuration",
+    "Self-hosted and cloud options"
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "Pushify",
+  "url": "{{ app.request.schemeAndHttpHost }}",
+  "logo": "{{ absolute_url(asset('images/logo.png')) }}",
+  "sameAs": [
+    "https://github.com/pushify/pushify",
+    "https://twitter.com/pushify"
+  ],
+  "contactPoint": {
+    "@type": "ContactPoint",
+    "contactType": "Customer Support",
+    "email": "support@pushify.dev"
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "Pushify",
+  "url": "{{ app.request.schemeAndHttpHost }}",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "{{ path('app_register') }}",
+    "query-input": "required name=search_term_string"
+  }
+}
+</script>
+{% endblock %}
+
+{% block body %}
+<div class="overflow-hidden">
+	<!-- Hero Section with stronger messaging -->
+	<section class="relative py-20 md:py-32 animate-fade-in">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center space-y-8">
+				<!-- Badge -->
+				<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20">
+					<span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+					<span>Enterprise-Grade Platform • Open Source • Self-Hostable</span>
+				</div>
+
+				<!-- Main Headline -->
+				<h1 class="text-5xl md:text-7xl font-bold leading-tight">
+					<span class="text-white">
+						The Complete Platform for<br/>
+					</span>
+					<span class="text-primary">
+						Modern Application Deployment
+					</span>
+				</h1>
+
+				<!-- Subheadline -->
+				<p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
+					Deploy, manage, and scale your applications with confidence. From Git push to production in seconds,
+					with <span class="text-white font-semibold">managed databases</span>,
+					<span class="text-white font-semibold">automated backups</span>,
+					<span class="text-white font-semibold">SSL certificates</span>, and
+					<span class="text-white font-semibold">real-time monitoring</span> —
+					all on infrastructure you control.
+				</p>
+
+				<!-- CTA Buttons -->
+				<div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
+					<a href="{{ path('app_register') }}"
+					   class="group px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/50 flex items-center gap-2">
+						<span>Start Deploying Free</span>
+						<svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+						</svg>
+					</a>
+					<a href="https://github.com/pushify/pushify" target="_blank"
+					   class="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl border border-gray-600 transition-all hover:scale-105 flex items-center gap-2">
+						<svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.430.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+						</svg>
+						<span>View on GitHub</span>
+						<span class="text-xs px-2 py-0.5 bg-gray-700 rounded-full">2.4k</span>
+					</a>
+				</div>
+
+				<!-- Trust badges -->
+				<div class="flex flex-wrap justify-center gap-6 pt-8 text-sm text-gray-400">
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+						</svg>
+						<span>SOC 2 Compliant</span>
+					</div>
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+						<span>99.9% Uptime SLA</span>
+					</div>
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+						<span>Deploys in < 60s</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Why Choose Pushify -->
+	<section class="py-20 bg-gray-900/30">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-3xl md:text-5xl font-bold mb-6">
+					Built for Teams That <span class="text-primary">Ship Fast</span>
+				</h2>
+				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+					Pushify eliminates infrastructure complexity so engineering teams can focus on building products, not managing servers.
+				</p>
+			</div>
+
+			<div class="grid md:grid-cols-3 gap-8">
+				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">Transparent, Predictable Costs</h3>
+					<p class="text-gray-400">Simple flat-rate pricing with no usage-based surprises. Budget confidently with fixed monthly costs that scale with your business, not your traffic.</p>
+				</div>
+
+				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">True Infrastructure Freedom</h3>
+					<p class="text-gray-400">100% open source with self-hosting options. Deploy to your own infrastructure for complete data sovereignty, or use our managed cloud. Migrate freely at any time.</p>
+				</div>
+
+				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
+						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">Enterprise-Grade Platform</h3>
+					<p class="text-gray-400">Production-ready infrastructure with managed databases, automated backups, SSL certificates, monitoring, and team collaboration tools. Everything your team needs to ship reliably.</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Unique Value Props -->
+	<section class="py-20">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-3xl md:text-5xl font-bold mb-6">
+					Complete <span class="text-primary">Application Lifecycle Management</span>
+				</h2>
+				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+					From development to production, Pushify provides the complete infrastructure toolkit modern engineering teams need to build, deploy, and scale applications efficiently.
+				</p>
+			</div>
+
+			<div class="grid md:grid-cols-2 gap-8">
+				<!-- Feature 1: Databases -->
+				<div class="group p-8 rounded-2xl bg-gray-800/50 border border-primary/20 hover:border-primary/40 transition-all">
+					<div class="flex items-start gap-4 mb-6">
+						<div class="w-14 h-14 rounded-xl bg-primary/20 flex items-center justify-center shrink-0 group-hover:bg-primary/30 transition-colors">
+							<svg class="w-7 h-7 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="text-2xl font-bold mb-2">Production-Ready Databases</h3>
+							<p class="text-gray-400">
+								Deploy enterprise-grade PostgreSQL, MySQL, MongoDB, or Redis instances with automated daily backups,
+								point-in-time recovery, performance monitoring, and automatic scaling. All databases run in isolated
+								Docker containers for maximum security and resource control.
+							</p>
+						</div>
+					</div>
+					<div class="flex gap-2 flex-wrap">
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">PostgreSQL 16</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">MySQL 8.0</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">MongoDB 7.0</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">Redis 7.2</span>
+						<span class="px-3 py-1 bg-primary/20 text-primary rounded-lg text-sm font-semibold">Daily Automated Backups</span>
+					</div>
+				</div>
+
+				<!-- Feature 2: Full Stack -->
+				<div class="group p-8 rounded-2xl bg-gray-800/50 border border-blue-500/20 hover:border-blue-500/40 transition-all">
+					<div class="flex items-start gap-4 mb-6">
+						<div class="w-14 h-14 rounded-xl bg-blue-500/20 flex items-center justify-center shrink-0 group-hover:bg-blue-500/30 transition-colors">
+							<svg class="w-7 h-7 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2M5 12a2 2 0 00-2 2v4a2 2 0 002 2h14a2 2 0 002-2v-4a2 2 0 00-2-2m-2-4h.01M17 16h.01"></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="text-2xl font-bold mb-2">Framework-Agnostic Deployments</h3>
+							<p class="text-gray-400">
+								Deploy any application stack with Docker support. From modern JavaScript frameworks to traditional monoliths,
+								microservices architectures, or custom containers. No framework limitations, no serverless constraints.
+								If it runs in Docker, it deploys on Pushify.
+							</p>
+						</div>
+					</div>
+					<div class="flex gap-2 flex-wrap">
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">Next.js / React</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">Laravel / PHP</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">Django / Python</span>
+						<span class="px-3 py-1 bg-gray-700/50 rounded-lg text-sm text-gray-300">Spring Boot / Java</span>
+						<span class="px-3 py-1 bg-blue-500/20 text-blue-400 rounded-lg text-sm font-semibold">Any Dockerized App</span>
+					</div>
+				</div>
+
+				<!-- Feature 3: Preview Deployments -->
+				<div class="group p-8 rounded-2xl bg-gray-800/50 border border-purple-500/20 hover:border-purple-500/40 transition-all">
+					<div class="flex items-start gap-4 mb-6">
+						<div class="w-14 h-14 rounded-xl bg-purple-500/20 flex items-center justify-center shrink-0 group-hover:bg-purple-500/30 transition-colors">
+							<svg class="w-7 h-7 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="text-2xl font-bold mb-2">Automated Preview Environments</h3>
+							<p class="text-gray-400">
+								Every pull request automatically deploys to an isolated staging environment with its own unique URL and SSL certificate.
+								Enable faster code reviews, catch bugs before production, and get stakeholder approval before merging.
+								Environments automatically clean up when PRs are merged or closed.
+							</p>
+						</div>
+					</div>
+					<ul class="space-y-2 text-gray-400">
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Automatic deployment on PR creation</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Isolated environment per PR with SSL</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Automatic cleanup after merge</span>
+						</li>
+					</ul>
+				</div>
+
+				<!-- Feature 4: Self-Hosted -->
+				<div class="group p-8 rounded-2xl bg-gray-800/50 border border-green-500/20 hover:border-green-500/40 transition-all">
+					<div class="flex items-start gap-4 mb-6">
+						<div class="w-14 h-14 rounded-xl bg-green-500/20 flex items-center justify-center shrink-0 group-hover:bg-green-500/30 transition-colors">
+							<svg class="w-7 h-7 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="text-2xl font-bold mb-2">Complete Infrastructure Control</h3>
+							<p class="text-gray-400">
+								Deploy on your own infrastructure for complete data sovereignty and compliance control, or use our managed cloud.
+								The entire Pushify platform is open source under MIT license. Export your data at any time, migrate between
+								self-hosted and cloud seamlessly, or fork the codebase for custom requirements.
+							</p>
+						</div>
+					</div>
+					<ul class="space-y-2 text-gray-400">
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Deploy to your own infrastructure</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>100% open source (MIT license)</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Full data portability and export</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Pricing -->
+	<section class="py-20 bg-gray-900/20">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center mb-12">
+				<h2 class="text-3xl md:text-5xl font-bold mb-6">
+					Transparent <span class="text-primary">Flat-Rate Pricing</span>
+				</h2>
+				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+					Simple, predictable pricing with no hidden fees or usage-based surprises. One flat monthly rate includes
+					unlimited projects, bandwidth, and all platform features.
+				</p>
+			</div>
+
+			{% if plans|length > 0 %}
+				<div class="grid md:grid-cols-{{ plans|length > 2 ? '3' : plans|length }} gap-8 max-w-5xl mx-auto">
+					{% for plan in plans %}
+						<div class="relative p-8 rounded-2xl border transition-all hover:scale-105
+							{% if plan.isPopular %}
+								bg-gray-800 border-2 border-primary
+							{% else %}
+								bg-gray-800/50 border border-gray-700
+							{% endif %}
+						">
+							{% if plan.badge %}
+								<div class="absolute -top-4 left-1/2 -translate-x-1/2">
+									<span class="px-4 py-1 bg-primary text-white text-sm font-bold rounded-full">
+										{{ plan.badge }}
+									</span>
+								</div>
+							{% endif %}
+
+							<div class="text-center mb-6">
+								<h3 class="text-2xl font-bold mb-2">{{ plan.name }}</h3>
+								{% if plan.description %}
+									<p class="text-gray-400 text-sm">{{ plan.description }}</p>
+								{% endif %}
+								<div class="text-5xl font-bold text-primary my-4">${{ plan.price|number_format(0) }}</div>
+								<p class="text-gray-400 text-sm">/{{ plan.billingCycle }}</p>
+							</div>
+
+							<ul class="space-y-3 text-sm text-gray-300 mb-6">
+								{% for feature in plan.features %}
+									<li class="flex items-center gap-2">
+										<svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+										</svg>
+										<span>{{ feature }}</span>
+									</li>
+								{% endfor %}
+							</ul>
+
+							<div class="pt-6 border-t border-gray-700 text-center">
+								<a href="{{ path('app_register') }}" class="block w-full px-6 py-3 font-bold rounded-xl transition-all
+									{% if plan.isPopular %}
+										bg-primary hover:bg-primary/90 text-white
+									{% else %}
+										bg-gray-700 hover:bg-gray-600 text-white
+									{% endif %}
+								">
+									Get Started Free
+								</a>
+							</div>
+						</div>
+					{% endfor %}
+				</div>
+			{% else %}
+				<!-- Fallback pricing -->
+				<div class="max-w-md mx-auto">
+					<div class="relative p-8 rounded-2xl bg-gray-800 border-2 border-primary">
+						<div class="absolute -top-4 left-1/2 -translate-x-1/2">
+							<span class="px-4 py-1 bg-primary text-white text-sm font-bold rounded-full">
+								BEST VALUE
+							</span>
+						</div>
+						<div class="text-center mb-6">
+							<h3 class="text-2xl font-bold mb-2">Pushify Pro</h3>
+							<div class="text-5xl font-bold text-primary mb-2">$29</div>
+							<p class="text-gray-400 text-sm">/month</p>
+						</div>
+						<ul class="space-y-3 text-sm text-gray-300">
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Everything included</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Unlimited projects</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Unlimited bandwidth</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Managed databases</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Automated backups</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>Preview deployments</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>SSL certificates</span>
+							</li>
+							<li class="flex items-center gap-2">
+								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+								</svg>
+								<span>No surprise charges</span>
+							</li>
+						</ul>
+						<div class="mt-6 pt-6 border-t border-gray-700 text-center">
+							<a href="{{ path('app_register') }}" class="block w-full px-6 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all">
+								Get Started Free
+							</a>
+						</div>
+					</div>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+
+	<!-- Developer Experience -->
+	<section class="py-20 bg-gray-900/20">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center mb-16">
+				<h2 class="text-3xl md:text-5xl font-bold mb-6">
+					Optimized for <span class="text-primary">Developer Productivity</span>
+				</h2>
+				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+					Infrastructure shouldn't slow down development. Pushify provides intuitive workflows and powerful automation
+					so teams can ship faster without sacrificing reliability.
+				</p>
+			</div>
+
+			<div class="grid md:grid-cols-3 gap-8">
+				<div class="text-center">
+					<div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/20 flex items-center justify-center">
+						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">Lightning-Fast Deployments</h3>
+					<p class="text-gray-400">
+						Connect your Git repository and push code. Automated builds complete in under 60 seconds. No waiting, no complexity.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/20 flex items-center justify-center">
+						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">Intelligent Auto-Configuration</h3>
+					<p class="text-gray-400">
+						Framework detection, dependency management, and environment setup happen automatically. Start deploying immediately.
+					</p>
+				</div>
+
+				<div class="text-center">
+					<div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-primary/20 flex items-center justify-center">
+						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+						</svg>
+					</div>
+					<h3 class="text-xl font-bold mb-2">Comprehensive Observability</h3>
+					<p class="text-gray-400">
+						Real-time application logs, performance metrics, uptime monitoring, and instant alerts. Complete visibility into production.
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Social Proof (testimonials section can be added when you have them) -->
+
+	<!-- Final CTA -->
+	<section class="py-20">
+		<div class="max-w-4xl mx-auto px-4">
+			<div class="relative overflow-hidden rounded-3xl p-12 md:p-16 text-center bg-primary">
+				<div class="relative">
+					<h2 class="text-4xl md:text-5xl font-bold text-white mb-6">
+						Deploy Your First Application in Under 5 Minutes
+					</h2>
+					<p class="text-xl text-white/90 mb-8 max-w-2xl mx-auto">
+						Connect your Git repository, configure your build settings, and deploy to production with managed databases,
+						automated SSL certificates, and real-time monitoring. Start with our free tier - no credit card required.
+					</p>
+
+					<div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+						<a href="{{ path('app_register') }}"
+						   class="px-10 py-4 bg-white text-primary font-bold rounded-xl transition-all hover:bg-gray-100 flex items-center gap-2 text-lg">
+							<span>Create Free Account</span>
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+							</svg>
+						</a>
+						<a href="https://docs.pushify.dev"
+						   class="px-10 py-4 bg-white/10 backdrop-blur text-white font-bold rounded-xl border-2 border-white/30 transition-all hover:bg-white/20 text-lg">
+							Read Documentation
+						</a>
+					</div>
+
+					<p class="mt-8 text-white/70 text-sm">
+						Free tier includes 1 project with database • No credit card required • Upgrade anytime
+					</p>
+				</div>
+			</div>
+		</div>
+	</section>
+</div>
+{% endblock %}

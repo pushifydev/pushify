@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1"/>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+		{# Primary Meta Tags #}
+		<title>{% block title %}Pushify - Deploy Full-Stack Applications with Managed Databases{% endblock %}</title>
+		<meta name="title" content="{% block meta_title %}Pushify - Deploy Full-Stack Applications with Managed Databases{% endblock %}">
+		<meta name="description" content="{% block meta_description %}Deploy, manage, and scale full-stack applications with managed databases, automated backups, SSL certificates, and real-time monitoring. Open source alternative to Heroku and Vercel.{% endblock %}">
+		<meta name="keywords" content="{% block meta_keywords %}deployment platform, managed databases, docker hosting, heroku alternative, vercel alternative, paas, platform as a service, database hosting, postgresql hosting, mysql hosting, self-hosted deployment{% endblock %}">
+		<meta name="author" content="Pushify">
+		<meta name="robots" content="{% block meta_robots %}index, follow{% endblock %}">
+		<link rel="canonical" href="{% block canonical_url %}{{ app.request.uri }}{% endblock %}">
+
+		{# Open Graph / Facebook #}
+		<meta property="og:type" content="{% block og_type %}website{% endblock %}">
+		<meta property="og:url" content="{{ app.request.uri }}">
+		<meta property="og:title" content="{% block og_title %}Pushify - Deploy Full-Stack Applications with Managed Databases{% endblock %}">
+		<meta property="og:description" content="{% block og_description %}Deploy, manage, and scale full-stack applications with managed databases, automated backups, SSL certificates, and real-time monitoring. Open source PaaS platform.{% endblock %}">
+		<meta property="og:image" content="{% block og_image %}{{ absolute_url(asset('images/og-image.png')) }}{% endblock %}">
+		<meta property="og:site_name" content="Pushify">
+		<meta property="og:locale" content="en_US">
+
+		{# Twitter Card #}
+		<meta name="twitter:card" content="summary_large_image">
+		<meta name="twitter:url" content="{{ app.request.uri }}">
+		<meta name="twitter:title" content="{% block twitter_title %}Pushify - Deploy Full-Stack Applications with Managed Databases{% endblock %}">
+		<meta name="twitter:description" content="{% block twitter_description %}Deploy, manage, and scale full-stack applications with managed databases, automated backups, SSL certificates, and real-time monitoring.{% endblock %}">
+		<meta name="twitter:image" content="{% block twitter_image %}{{ absolute_url(asset('images/og-image.png')) }}{% endblock %}">
+		<meta name="twitter:creator" content="@pushify">
+
+		{# Favicon #}
+		<link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+		<link rel="apple-touch-icon" sizes="180x180" href="{{ asset('apple-touch-icon.png') }}">
+
+		{# Preconnect for performance #}
+		<link rel="preconnect" href="https://cdn.jsdelivr.net">
+		<link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+			<script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+		{% endblock %}
+
+		{# Structured Data #}
+		{% block structured_data %}{% endblock %}
+
+		{# Google Analytics - Add your tracking ID #}
+		{% if app.environment == 'prod' %}
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+			gtag('config', 'G-XXXXXXXXXX');
+		</script>
+		{% endif %}
+	</head>
+	<body data-theme="dark" class="min-h-screen bg-gray-900 text-gray-100 antialiased">
+		{% block header %}
+			{% include 'header.html.twig' %}
+		{% endblock %}
+		<div class="container mx-auto max-w-7xl">
+			{% block body %}{% endblock %}
+			{% block footer %}
+				{% include 'footer.html.twig' %}
+			{% endblock %}
+		</div>
+	</body>
+</html>

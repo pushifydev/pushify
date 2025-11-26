@@ -1,0 +1,162 @@
+version: '3.8'
+
+services:
+  # Main Application (PHP-FPM + Nginx)
+  app:
+    image: mazizkurt/pushify:${APP_VERSION:-latest}
+    container_name: pushify_app
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      - APP_ENV=prod
+      - APP_DEBUG=0
+    volumes:
+      - ./var/deployments:/var/www/html/var/deployments
+      - ./public/uploads:/var/www/html/public/uploads
+      - app_cache:/var/www/html/var/cache
+      - app_logs:/var/www/html/var/log
+    networks:
+      - pushify
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.pushify.rule=Host(`pushify.dev`, `www.pushify.dev`)"
+      - "traefik.http.routers.pushify.entrypoints=websecure"
+      - "traefik.http.routers.pushify.tls.certresolver=letsencrypt"
+      - "traefik.http.services.pushify.loadbalancer.server.port=80"
+
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: pushify_db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${DATABASE_NAME:-pushify}
+      - POSTGRES_USER=${DATABASE_USER:-pushify}
+      - POSTGRES_PASSWORD=${DATABASE_PASSWORD}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    networks:
+      - pushify
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USER:-pushify}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: pushify_redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - redis_data:/data
+    networks:
+      - pushify
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # RabbitMQ Message Queue
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: pushify_rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-pushify}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - pushify
+    healthcheck:
+      test: rabbitmq-diagnostics -q ping
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Symfony Messenger Worker
+  worker:
+    image: mazizkurt/pushify:${APP_VERSION:-latest}
+    container_name: pushify_worker
+    restart: unless-stopped
+    env_file:
+      - .env.prod
+    environment:
+      - APP_ENV=prod
+    command: php bin/console messenger:consume async -vv
+    volumes:
+      - ./var/deployments:/var/www/html/var/deployments
+      - app_logs:/var/www/html/var/log
+    networks:
+      - pushify
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+
+  # Traefik Reverse Proxy (SSL)
+  traefik:
+    image: traefik:v2.10
+    container_name: pushify_traefik
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    command:
+      - "--api.insecure=false"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencrypt.acme.tlschallenge=true"
+      - "--certificatesresolvers.letsencrypt.acme.email=admin@pushify.dev"
+      - "--certificatesresolvers.letsencrypt.acme.storage=/letsencrypt/acme.json"
+      # Redirect HTTP to HTTPS
+      - "--entrypoints.web.http.redirections.entryPoint.to=websecure"
+      - "--entrypoints.web.http.redirections.entryPoint.scheme=https"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik_certs:/letsencrypt
+    networks:
+      - pushify
+
+  # Watchtower (Auto-update containers)
+  watchtower:
+    image: containrrr/watchtower
+    container_name: pushify_watchtower
+    restart: unless-stopped
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300
+      - WATCHTOWER_INCLUDE_STOPPED=true
+      - WATCHTOWER_REVIVE_STOPPED=false
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - pushify
+
+networks:
+  pushify:
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+  redis_data:
+    driver: local
+  rabbitmq_data:
+    driver: local
+  traefik_certs:
+    driver: local
+  app_cache:
+    driver: local
+  app_logs:
+    driver: local

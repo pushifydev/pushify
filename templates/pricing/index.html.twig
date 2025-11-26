@@ -1,0 +1,287 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pricing - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20">
+	<!-- Header Section -->
+	<section class="text-center mb-16 animate-fade-in">
+		<h1 class="text-4xl md:text-5xl font-bold mb-6">
+			Simple, Transparent Pricing
+		</h1>
+		<p class="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto">
+			Start free and scale as you grow. No hidden fees, no surprises.
+			Cancel anytime.
+		</p>
+	</section>
+
+	<!-- Pricing Cards -->
+	<section class="mb-20">
+		{% if plans|length > 0 %}
+			<div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+				{% for plan in plans %}
+					<div class="relative p-8 rounded-2xl border transition-all hover:scale-105
+						{% if plan.isPopular %}
+							bg-gradient-to-br from-primary/20 via-gray-800/80 to-gray-900 border-primary/50 shadow-lg shadow-primary/20
+						{% else %}
+							bg-gray-800/50 border-gray-700/50 hover:border-primary/30
+						{% endif %}
+					">
+						{% if plan.badge %}
+							<div class="absolute -top-3 left-1/2 -translate-x-1/2">
+								<span class="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full">
+									{{ plan.badge }}
+								</span>
+							</div>
+						{% endif %}
+
+						<div class="text-center mb-8">
+							<h3 class="text-2xl font-bold mb-2">{{ plan.name }}</h3>
+							{% if plan.description %}
+								<p class="text-gray-400 text-sm">{{ plan.description }}</p>
+							{% endif %}
+						</div>
+
+						<div class="text-center mb-8">
+							<div class="flex items-baseline justify-center gap-1">
+								<span class="text-5xl font-bold">${{ plan.price|number_format(0) }}</span>
+								<span class="text-gray-400">/{{ plan.billingCycle }}</span>
+							</div>
+						</div>
+
+						<ul class="space-y-4 mb-8">
+							{% for feature in plan.features %}
+								<li class="flex items-start gap-3">
+									<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+									</svg>
+									<span class="text-gray-300">{{ feature }}</span>
+								</li>
+							{% endfor %}
+						</ul>
+
+						<a href="{{ path('app_register') }}" class="block w-full py-3 text-center font-semibold rounded-lg transition-all
+							{% if plan.isPopular %}
+								bg-primary hover:bg-primary/90 text-white
+							{% else %}
+								bg-gray-700 hover:bg-gray-600 text-white
+							{% endif %}
+						">
+							Get Started
+						</a>
+					</div>
+				{% endfor %}
+			</div>
+		{% else %}
+			<!-- Fallback when no plans in database -->
+			<div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+				<!-- Free Plan -->
+				<div class="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-primary/30 transition-all hover:scale-105">
+					<div class="text-center mb-8">
+						<h3 class="text-2xl font-bold mb-2">Hobby</h3>
+						<p class="text-gray-400 text-sm">Perfect for side projects</p>
+					</div>
+					<div class="text-center mb-8">
+						<div class="flex items-baseline justify-center gap-1">
+							<span class="text-5xl font-bold">$0</span>
+							<span class="text-gray-400">/month</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">1 Server</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">3 Projects</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Auto SSL Certificates</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Community Support</span>
+						</li>
+					</ul>
+					<a href="{{ path('app_register') }}" class="block w-full py-3 text-center font-semibold rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-all">
+						Get Started Free
+					</a>
+				</div>
+
+				<!-- Pro Plan -->
+				<div class="relative p-8 rounded-2xl bg-gradient-to-br from-primary/20 via-gray-800/80 to-gray-900 border border-primary/50 shadow-lg shadow-primary/20 transition-all hover:scale-105">
+					<div class="absolute -top-3 left-1/2 -translate-x-1/2">
+						<span class="px-4 py-1 bg-primary text-white text-sm font-semibold rounded-full">
+							Most Popular
+						</span>
+					</div>
+					<div class="text-center mb-8">
+						<h3 class="text-2xl font-bold mb-2">Pro</h3>
+						<p class="text-gray-400 text-sm">For growing teams</p>
+					</div>
+					<div class="text-center mb-8">
+						<div class="flex items-baseline justify-center gap-1">
+							<span class="text-5xl font-bold">$29</span>
+							<span class="text-gray-400">/month</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">5 Servers</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Unlimited Projects</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Database Backups</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Team Collaboration</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Priority Support</span>
+						</li>
+					</ul>
+					<a href="{{ path('app_register') }}" class="block w-full py-3 text-center font-semibold rounded-lg bg-primary hover:bg-primary/90 text-white transition-all">
+						Get Started
+					</a>
+				</div>
+
+				<!-- Enterprise Plan -->
+				<div class="p-8 rounded-2xl bg-gray-800/50 border border-gray-700/50 hover:border-primary/30 transition-all hover:scale-105">
+					<div class="text-center mb-8">
+						<h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+						<p class="text-gray-400 text-sm">For large organizations</p>
+					</div>
+					<div class="text-center mb-8">
+						<div class="flex items-baseline justify-center gap-1">
+							<span class="text-5xl font-bold">$99</span>
+							<span class="text-gray-400">/month</span>
+						</div>
+					</div>
+					<ul class="space-y-4 mb-8">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Unlimited Servers</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Unlimited Projects</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Advanced Analytics</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">SSO / SAML</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">24/7 Dedicated Support</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Custom SLA</span>
+						</li>
+					</ul>
+					<a href="mailto:sales@pushify.dev" class="block w-full py-3 text-center font-semibold rounded-lg bg-gray-700 hover:bg-gray-600 text-white transition-all">
+						Contact Sales
+					</a>
+				</div>
+			</div>
+		{% endif %}
+	</section>
+
+	<!-- FAQ Section -->
+	<section class="max-w-3xl mx-auto">
+		<h2 class="text-2xl md:text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+		<div class="space-y-4">
+			<details class="group p-6 rounded-xl bg-gray-800/50 border border-gray-700/50">
+				<summary class="flex items-center justify-between cursor-pointer list-none font-semibold">
+					Can I change my plan later?
+					<svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</summary>
+				<p class="mt-4 text-gray-400">
+					Yes, you can upgrade or downgrade your plan at any time. Changes take effect immediately, and we'll prorate your billing accordingly.
+				</p>
+			</details>
+
+			<details class="group p-6 rounded-xl bg-gray-800/50 border border-gray-700/50">
+				<summary class="flex items-center justify-between cursor-pointer list-none font-semibold">
+					What payment methods do you accept?
+					<svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</summary>
+				<p class="mt-4 text-gray-400">
+					We accept all major credit cards (Visa, MasterCard, American Express) and PayPal. Enterprise customers can also pay via invoice.
+				</p>
+			</details>
+
+			<details class="group p-6 rounded-xl bg-gray-800/50 border border-gray-700/50">
+				<summary class="flex items-center justify-between cursor-pointer list-none font-semibold">
+					Is there a free trial?
+					<svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</summary>
+				<p class="mt-4 text-gray-400">
+					Our Hobby plan is free forever. For Pro and Enterprise plans, we offer a 14-day free trial with full access to all features.
+				</p>
+			</details>
+
+			<details class="group p-6 rounded-xl bg-gray-800/50 border border-gray-700/50">
+				<summary class="flex items-center justify-between cursor-pointer list-none font-semibold">
+					Can I self-host Pushify?
+					<svg class="w-5 h-5 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+					</svg>
+				</summary>
+				<p class="mt-4 text-gray-400">
+					Absolutely! Pushify is open-source and can be self-hosted on your own infrastructure. The cloud plans are for those who prefer a managed solution.
+				</p>
+			</details>
+		</div>
+	</section>
+</div>
+{% endblock %}

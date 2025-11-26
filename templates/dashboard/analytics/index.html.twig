@@ -1,0 +1,10 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Analytics - Pushify
+{% endblock %}
+{% block page_title %}Analytics
+{% endblock %}
+
+{% block content %}
+	<div {{ react_component('analytics/AnalyticsDashboard', { stats: stats, projectStats: projectStats, apiUrl: '/dashboard/analytics/api' } ) }}></div>
+{% endblock %}

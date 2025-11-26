@@ -1,0 +1,139 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}New Webhook - Pushify{% endblock %}
+{% block page_title %}New Webhook{% endblock %}
+{% block page_subtitle %}Configure a new webhook endpoint{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_webhooks_manage') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Webhooks
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-full">
+    <form method="post" class="space-y-6">
+        <!-- Basic Info -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Basic Information</h3>
+
+            <div class="space-y-4">
+                <div>
+                    <label for="name" class="block text-sm font-medium text-gray-300 mb-1">Name *</label>
+                    <input type="text" id="name" name="name" required
+                           value="{{ webhook.name ?? '' }}"
+                           placeholder="My Slack Webhook"
+                           class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="url" class="block text-sm font-medium text-gray-300 mb-1">Webhook URL *</label>
+                    <input type="url" id="url" name="url" required
+                           value="{{ webhook.url ?? '' }}"
+                           placeholder="https://hooks.slack.com/services/..."
+                           class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary">
+                </div>
+
+                <div>
+                    <label for="preset" class="block text-sm font-medium text-gray-300 mb-1">Webhook Type</label>
+                    <select id="preset" name="preset"
+                            class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary">
+                        <option value="custom" {{ (webhook.preset ?? '') == 'custom' ? 'selected' : '' }}>Custom Webhook</option>
+                        <option value="slack" {{ (webhook.preset ?? '') == 'slack' ? 'selected' : '' }}>Slack</option>
+                        <option value="discord" {{ (webhook.preset ?? '') == 'discord' ? 'selected' : '' }}>Discord</option>
+                        <option value="teams" {{ (webhook.preset ?? '') == 'teams' ? 'selected' : '' }}>Microsoft Teams</option>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Selecting a preset will format the payload for that service.</p>
+                </div>
+
+                <div>
+                    <label for="project_id" class="block text-sm font-medium text-gray-300 mb-1">Project (Optional)</label>
+                    <select id="project_id" name="project_id"
+                            class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary">
+                        <option value="">All Projects</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}" {{ (webhook.project.id ?? '') == project.id ? 'selected' : '' }}>
+                            {{ project.name }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Leave empty to receive events from all projects.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Events -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Events</h3>
+            <p class="text-sm text-gray-400 mb-4">Select which events should trigger this webhook.</p>
+
+            <div class="grid grid-cols-2 gap-3">
+                {% for eventKey, eventLabel in events %}
+                <label class="flex items-center gap-3 p-3 bg-gray-900/50 rounded-lg cursor-pointer hover:bg-gray-900 transition-colors">
+                    <input type="checkbox" name="events[]" value="{{ eventKey }}"
+                           {{ eventKey in (webhook.events ?? []) ? 'checked' : '' }}
+                           class="w-4 h-4 rounded bg-gray-800 border-gray-600 text-primary focus:ring-primary">
+                    <div>
+                        <p class="text-sm font-medium text-white">{{ eventLabel }}</p>
+                        <p class="text-xs text-gray-500">{{ eventKey }}</p>
+                    </div>
+                </label>
+                {% endfor %}
+            </div>
+
+            <div class="mt-4 flex gap-2">
+                <button type="button" onclick="selectAllEvents()" class="text-sm text-primary hover:text-primary/80">Select All</button>
+                <span class="text-gray-600">|</span>
+                <button type="button" onclick="selectDeploymentEvents()" class="text-sm text-primary hover:text-primary/80">Deployment Events</button>
+                <span class="text-gray-600">|</span>
+                <button type="button" onclick="clearEvents()" class="text-sm text-gray-400 hover:text-gray-300">Clear</button>
+            </div>
+        </div>
+
+        <!-- Security -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Security (Optional)</h3>
+
+            <div>
+                <label for="secret" class="block text-sm font-medium text-gray-300 mb-1">Signing Secret</label>
+                <input type="text" id="secret" name="secret"
+                       value="{{ webhook.secret ?? '' }}"
+                       placeholder="Enter a secret key for signing payloads"
+                       class="w-full px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary">
+                <p class="text-xs text-gray-500 mt-1">
+                    If set, we'll include an <code class="text-primary">X-Pushify-Signature</code> header with an HMAC-SHA256 signature.
+                </p>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex justify-end gap-3">
+            <a href="{{ path('app_webhooks_manage') }}" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors">
+                Cancel
+            </a>
+            <button type="submit" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors">
+                Create Webhook
+            </button>
+        </div>
+    </form>
+</div>
+
+<script>
+function selectAllEvents() {
+    document.querySelectorAll('input[name="events[]"]').forEach(cb => cb.checked = true);
+}
+
+function selectDeploymentEvents() {
+    document.querySelectorAll('input[name="events[]"]').forEach(cb => {
+        cb.checked = cb.value.startsWith('deployment.');
+    });
+}
+
+function clearEvents() {
+    document.querySelectorAll('input[name="events[]"]').forEach(cb => cb.checked = false);
+}
+</script>
+{% endblock %}

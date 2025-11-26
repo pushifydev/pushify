@@ -1,0 +1,117 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Domains - Pushify{% endblock %}
+{% block page_title %}Domains{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    {% if domains is empty %}
+    <!-- Empty State -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl">
+        <div class="p-12 text-center">
+            <div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+                <svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-white mb-2">No domains configured</h3>
+            <p class="text-gray-400 mb-8 max-w-md mx-auto">Add custom domains to your projects for professional URLs with automatic SSL certificates.</p>
+
+            {% if projects is not empty %}
+            <div class="flex justify-center">
+                <div class="relative">
+                    <select onchange="if(this.value) window.location.href=this.value" class="appearance-none bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-6 pr-10 rounded-lg cursor-pointer">
+                        <option value="">Add Domain to Project</option>
+                        {% for project in projects %}
+                        <option value="{{ path('app_project_domains', {projectId: project.id}) }}">{{ project.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <svg class="w-5 h-5 text-white absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+            </div>
+            {% else %}
+            <p class="text-gray-500 text-sm">Create a project first to add custom domains</p>
+            {% endif %}
+        </div>
+    </div>
+    {% else %}
+    <!-- Quick Actions -->
+    <div class="flex justify-between items-center">
+        <h2 class="text-lg font-semibold text-white">All Domains ({{ domains|length }})</h2>
+        <div class="relative">
+            <select onchange="if(this.value) window.location.href=this.value" class="appearance-none bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 pr-10 rounded-lg cursor-pointer text-sm">
+                <option value="">Add Domain</option>
+                {% for project in projects %}
+                <option value="{{ path('app_project_domains', {projectId: project.id}) }}">{{ project.name }}</option>
+                {% endfor %}
+            </select>
+            <svg class="w-4 h-4 text-white absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+        </div>
+    </div>
+
+    <!-- Domains List -->
+    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div class="divide-y divide-gray-700">
+            {% for item in domains %}
+            <div class="p-6 hover:bg-gray-700/30 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <!-- SSL Icon -->
+                        {% if item.domain.sslEnabled %}
+                        <div class="w-10 h-10 rounded-lg bg-green-500/20 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
+                            </svg>
+                        </div>
+                        {% else %}
+                        <div class="w-10 h-10 rounded-lg bg-gray-700 flex items-center justify-center">
+                            <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                            </svg>
+                        </div>
+                        {% endif %}
+
+                        <div>
+                            <div class="flex items-center space-x-2">
+                                <a href="{{ item.domain.fullUrl }}" target="_blank" class="text-white font-medium hover:text-blue-400">
+                                    {{ item.domain.domain }}
+                                </a>
+                                {% if item.domain.isPrimary %}
+                                <span class="px-2 py-0.5 text-xs bg-blue-500/20 text-blue-400 rounded">Primary</span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center space-x-3 mt-1">
+                                <a href="{{ path('app_project_show', {slug: item.project.slug}) }}" class="text-sm text-gray-400 hover:text-white">
+                                    {{ item.project.name }}
+                                </a>
+                                <span class="text-gray-600">|</span>
+                                <span class="px-2 py-0.5 text-xs rounded {{ item.domain.statusBadgeClass }}">
+                                    {{ item.domain.statusLabel }}
+                                </span>
+                                {% if item.domain.sslEnabled and item.domain.sslExpiresAt %}
+                                <span class="text-xs text-gray-500">
+                                    SSL expires: {{ item.domain.sslExpiresAt|date('M d, Y') }}
+                                </span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <a href="{{ path('app_project_domains', {projectId: item.project.id}) }}"
+                           class="px-3 py-1.5 text-sm bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition">
+                            Manage
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

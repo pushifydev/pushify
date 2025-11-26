@@ -1,0 +1,298 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}
+	{{ project.name }}
+	- Pushify
+{% endblock %}
+{% block page_title %}
+	{{ project.name }}
+{% endblock %}
+{% block page_subtitle %}
+	{{ project.repositoryName }}
+{% endblock %}
+
+{% block topbar_actions %}
+	<div class="flex items-center gap-3">
+		<!-- Quick Actions Dropdown -->
+		<div class="relative" x-data="{ open: false }">
+			<button @click="open = !open" @click.away="open = false" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+				</svg>
+				Actions
+				<svg class="w-3 h-3 transition-transform" :class="open ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+				</svg>
+			</button>
+
+			<div x-show="open"
+				 x-transition:enter="transition ease-out duration-100"
+				 x-transition:enter-start="transform opacity-0 scale-95"
+				 x-transition:enter-end="transform opacity-100 scale-100"
+				 x-transition:leave="transition ease-in duration-75"
+				 x-transition:leave-start="transform opacity-100 scale-100"
+				 x-transition:leave-end="transform opacity-0 scale-95"
+				 class="absolute right-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-xl z-50"
+				 style="display: none;">
+				<div class="py-1">
+					<a href="{{ project.repositoryUrl }}" target="_blank" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" viewbox="0 0 24 24" fill="currentColor">
+							<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+						</svg>
+						<span>Repository</span>
+					</a>
+					<a href="{{ path('app_project_monitoring', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+						</svg>
+						<span>Monitoring</span>
+					</a>
+					<a href="{{ path('app_database_index', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+						</svg>
+						<span>Databases</span>
+					</a>
+				<a href="{{ path('app_backup_index', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+					<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+					</svg>
+					<span>Backups</span>
+				</a>
+					<a href="{{ path('app_project_logs', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+						</svg>
+						<span>Container Logs</span>
+					</a>
+					<a href="{{ path('app_project_environment', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+						</svg>
+						<span>Environment Variables</span>
+					</a>
+					<a href="{{ path('app_project_domains', {projectId: project.id}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+						</svg>
+						<span>Domains</span>
+					</a>
+					<div class="border-t border-gray-700 my-1"></div>
+					<a href="{{ path('app_project_settings', {slug: project.slug}) }}" class="flex items-center gap-3 px-4 py-3 text-gray-300 hover:bg-gray-700/50 transition-colors">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						</svg>
+						<span>Settings</span>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<!-- Deploy Button -->
+		<form method="post" action="{{ path('app_project_deploy', {slug: project.slug}) }}" class="inline">
+			<input type="hidden" name="_token" value="{{ csrf_token('deploy-' ~ project.id) }}">
+			<button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+				</svg>
+				Deploy
+			</button>
+		</form>
+	</div>
+{% endblock %}
+
+{% block content %}
+	<div
+		class="space-y-6">
+		<!-- Status Banner -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<div class="w-12 h-12 rounded-xl {{ project.status == 'deployed' ? 'bg-green-500/20' : (project.status == 'building' ? 'bg-yellow-500/20' : 'bg-gray-700/50') }} flex items-center justify-center">
+						{% if project.status == 'deployed' %}
+							<svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						{% elseif project.status == 'building' %}
+							<svg class="w-6 h-6 text-yellow-400 animate-spin" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+						{% elseif project.status == 'failed' %}
+							<svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+							</svg>
+						{% else %}
+							<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+						{% endif %}
+					</div>
+					<div>
+						<div class="flex items-center gap-2">
+							<span class="px-3 py-1 rounded-full text-xs font-medium {{ project.statusBadgeClass }}">
+								{{ project.status|capitalize }}
+							</span>
+							{% if project.lastDeployedAt %}
+								<span class="text-sm text-gray-400">Last deployed
+									{{ project.lastDeployedAt|date('M d, Y \\a\\t H:i') }}</span>
+							{% endif %}
+						</div>
+						{% if project.productionUrl %}
+							<a href="{{ project.productionUrl }}" target="_blank" class="text-primary hover:text-primary/80 mt-1 inline-flex items-center gap-1">
+								{{ project.productionUrl }}
+								<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+								</svg>
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="grid grid-cols-3 gap-6">
+			<!-- Project Info -->
+			<div
+				class="col-span-2 space-y-6">
+				<!-- Quick Actions -->
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+					<h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+					<div class="grid grid-cols-3 gap-4">
+						<button class="flex flex-col items-center gap-2 p-4 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors">
+							<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+							<span class="text-sm text-gray-300">Redeploy</span>
+						</button>
+						<a href="{{ path('app_project_logs', {slug: project.slug}) }}" class="flex flex-col items-center gap-2 p-4 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors">
+							<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+							</svg>
+							<span class="text-sm text-gray-300">View Logs</span>
+						</a>
+						<a href="{{ path('app_project_domains', {projectId: project.id}) }}" class="flex flex-col items-center gap-2 p-4 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors">
+							<svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+							</svg>
+							<span class="text-sm text-gray-300">Domains</span>
+						</a>
+					</div>
+				</div>
+
+				<!-- Recent Deployments -->
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+					<div class="flex items-center justify-between mb-4">
+						<h3 class="text-lg font-semibold text-white">Recent Deployments</h3>
+						<a href="{{ path('app_project_deployments', {slug: project.slug}) }}" class="text-sm text-primary hover:text-primary/80">View All</a>
+					</div>
+					{% if deployments is empty %}
+						<div class="text-center py-8 text-gray-400">
+							<svg class="w-12 h-12 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+							</svg>
+							<p>No deployments yet</p>
+							<p class="text-sm mt-1">Push to your repository to trigger a deployment</p>
+						</div>
+					{% else %}
+						<div class="space-y-3">
+							{% for deployment in deployments %}
+								<a href="{{ path('app_deployment_show', {slug: project.slug, id: deployment.id}) }}" class="block p-3 bg-gray-700/30 hover:bg-gray-700/50 rounded-lg transition-colors">
+									<div class="flex items-center justify-between">
+										<div class="flex items-center gap-3">
+											<div class="w-8 h-8 rounded-lg flex items-center justify-center {{ deployment.statusBadgeClass }}">
+												{% if deployment.isRunning %}
+													<svg class="w-4 h-4 animate-spin" fill="none" viewbox="0 0 24 24">
+														<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+														<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+													</svg>
+												{% elseif deployment.isSuccess %}
+													<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+														<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+													</svg>
+												{% elseif deployment.isFailed %}
+													<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+														<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+													</svg>
+												{% else %}
+													<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+														<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+													</svg>
+												{% endif %}
+											</div>
+											<div>
+												<span class="text-white font-medium">#{{ deployment.id }}</span>
+												{% if deployment.shortCommitHash %}
+													<span class="text-gray-500 font-mono text-sm ml-2">{{ deployment.shortCommitHash }}</span>
+												{% endif %}
+											</div>
+										</div>
+										<div class="text-right">
+											<span class="text-xs px-2 py-0.5 rounded-full {{ deployment.statusBadgeClass }}">{{ deployment.status|capitalize }}</span>
+											<p class="text-xs text-gray-500 mt-1">{{ deployment.createdAt|date('M d, H:i') }}</p>
+										</div>
+									</div>
+								</a>
+							{% endfor %}
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			<!-- Sidebar Info -->
+			<div
+				class="space-y-6">
+				<!-- Project Details -->
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+					<h3 class="text-lg font-semibold text-white mb-4">Project Details</h3>
+					<div class="space-y-4">
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Framework</p>
+							<p class="text-white">{{ project.frameworkLabel }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Branch</p>
+							<p class="text-white font-mono text-sm">{{ project.branch }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Build Command</p>
+							<p class="text-white font-mono text-sm bg-gray-900/50 px-2 py-1 rounded">{{ project.buildCommand ?? 'Not set' }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Output Directory</p>
+							<p class="text-white font-mono text-sm bg-gray-900/50 px-2 py-1 rounded">{{ project.outputDirectory ?? 'Not set' }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Auto Deploy</p>
+							<p class="text-white">{{ project.autoDeployEnabled ? 'Enabled' : 'Disabled' }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Created</p>
+							<p class="text-white">{{ project.createdAt|date('M d, Y') }}</p>
+						</div>
+					</div>
+				</div>
+
+				<!-- Environment Variables -->
+				<a href="{{ path('app_project_environment', {slug: project.slug}) }}" class="block bg-gray-800/50 border border-gray-700/50 hover:border-gray-600 rounded-xl p-6 transition-colors">
+					<div class="flex items-center justify-between mb-3">
+						<h3 class="text-lg font-semibold text-white">Environment Variables</h3>
+						<svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+						</svg>
+					</div>
+					<p class="text-gray-400 text-sm">
+						Manage secure environment variables for your deployments
+					</p>
+					<div class="mt-4 flex items-center gap-2 text-primary">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+						</svg>
+						<span class="text-sm font-medium">Configure Variables</span>
+					</div>
+				</a>
+			</div>
+		</div>
+	</div>
+{% endblock %}

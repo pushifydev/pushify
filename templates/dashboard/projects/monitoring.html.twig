@@ -1,0 +1,35 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Monitoring - {{ project.name }} - Pushify{% endblock %}
+{% block page_title %}Monitoring{% endblock %}
+{% block page_subtitle %}{{ project.name }}{% endblock %}
+
+{% block topbar_actions %}
+	<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+		</svg>
+		Back to Project
+	</a>
+{% endblock %}
+
+{% block content %}
+	<div class="space-y-6">
+		<div class="bg-blue-500/20 border border-blue-500/50 text-blue-400 px-4 py-3 rounded-lg">
+			<div class="flex items-start gap-3">
+				<svg class="w-5 h-5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<p class="font-medium">Real-time Health Monitoring</p>
+					<p class="text-sm text-blue-300 mt-1">
+						Monitor your application's health, performance metrics, and resource usage in real-time.
+						Health checks run automatically every 5 minutes.
+					</p>
+				</div>
+			</div>
+		</div>
+
+		<div {{ react_component('monitoring/MonitoringDashboard', { projectSlug: project.slug }) }}></div>
+	</div>
+{% endblock %}

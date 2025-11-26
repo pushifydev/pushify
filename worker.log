@@ -1,0 +1,15 @@
+
+ [OK] Consuming messages from transport "async".                                                                        
+
+
+ // The worker will automatically exit once it has received a stop signal via the messenger:stop-workers command.       
+
+ // Quit the worker with CONTROL-C.                                                                                     
+
+18:09:47 INFO      [messenger] Received message App\Message\ProcessDeploymentMessage ["class" => "App\Message\ProcessDeploymentMessage"]
+18:09:47 INFO      [app] Processing deployment ["deployment_id" => 37,"project" => "sesanalizi_frontend"]
+18:09:49 WARNING   [messenger] Error thrown while handling message App\Message\ProcessDeploymentMessage. Sending for retry #1 using 1001 ms delay. Error: "Handling "App\Message\ProcessDeploymentMessage" failed: The EntityManager is closed." ["class" => "App\Message\ProcessDeploymentMessage","message_id" => 61,"retryCount" => 1,"delay" => 1001,"error" => "Handling "App\Message\ProcessDeploymentMessage" failed: The EntityManager is closed.","exception" => Symfony\Component\Messenger\Exception\HandlerFailedException { …}]
+18:09:50 INFO      [messenger] Received message App\Message\ProcessDeploymentMessage ["class" => "App\Message\ProcessDeploymentMessage"]
+18:09:50 INFO      [app] Deployment already processed ["id" => 37]
+18:09:50 INFO      [messenger] Message App\Message\ProcessDeploymentMessage handled by App\MessageHandler\ProcessDeploymentMessageHandler::__invoke ["class" => "App\Message\ProcessDeploymentMessage","handler" => "App\MessageHandler\ProcessDeploymentMessageHandler::__invoke"]
+18:09:50 INFO      [messenger] App\Message\ProcessDeploymentMessage was handled successfully (acknowledging to transport). ["class" => "App\Message\ProcessDeploymentMessage","message_id" => 62]

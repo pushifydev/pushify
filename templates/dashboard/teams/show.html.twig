@@ -1,0 +1,175 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}{{ team.name }} - Pushify{% endblock %}
+{% block page_title %}{{ team.name }}{% endblock %}
+{% block page_subtitle %}{{ team.memberCount }} member{{ team.memberCount != 1 ? 's' : '' }}{% endblock %}
+
+{% block topbar_actions %}
+<div class="flex items-center gap-2">
+    {% if canManage %}
+    <a href="{{ path('app_team_settings', {slug: team.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+        </svg>
+        Settings
+    </a>
+    {% endif %}
+    <a href="{{ path('app_teams') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+        </svg>
+        Back
+    </a>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Main Content -->
+    <div class="lg:col-span-2 space-y-6">
+        <!-- Members -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-700/50 flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white">Members</h3>
+            </div>
+            <div class="divide-y divide-gray-700/50">
+                <!-- Owner -->
+                <div class="p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white font-semibold">
+                            {{ team.owner.name|slice(0, 1)|upper }}
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">{{ team.owner.name }}</p>
+                            <p class="text-sm text-gray-400">{{ team.owner.email }}</p>
+                        </div>
+                    </div>
+                    <span class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-sm rounded-full">Owner</span>
+                </div>
+
+                <!-- Members -->
+                {% for member in members %}
+                <div class="p-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 bg-gray-600 rounded-full flex items-center justify-center text-white font-semibold">
+                            {{ member.user.name|slice(0, 1)|upper }}
+                        </div>
+                        <div>
+                            <p class="text-white font-medium">{{ member.user.name }}</p>
+                            <p class="text-sm text-gray-400">{{ member.user.email }}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        {% if canManage %}
+                        <form method="post" action="{{ path('app_team_member_role', {slug: team.slug, memberId: member.id}) }}" class="inline">
+                            <select name="role" onchange="this.form.submit()" class="px-3 py-1.5 bg-gray-700 border border-gray-600 rounded-lg text-sm text-white">
+                                {% for label, value in member.roleChoices %}
+                                <option value="{{ value }}" {{ member.role == value ? 'selected' : '' }}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                        </form>
+                        <form method="post" action="{{ path('app_team_member_remove', {slug: team.slug, memberId: member.id}) }}" onsubmit="return confirm('Remove this member from the team?')">
+                            <input type="hidden" name="_token" value="{{ csrf_token('remove-member-' ~ member.id) }}">
+                            <button type="submit" class="p-2 text-gray-400 hover:text-red-400 transition-colors">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </form>
+                        {% else %}
+                        <span class="px-3 py-1 {{ member.roleBadgeClass }} text-sm rounded-full">{{ member.roleLabel }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Pending Invitations -->
+        {% if canManage and pendingInvitations|length > 0 %}
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-700/50">
+                <h3 class="text-lg font-semibold text-white">Pending Invitations</h3>
+            </div>
+            <div class="divide-y divide-gray-700/50">
+                {% for invitation in pendingInvitations %}
+                <div class="p-4 flex items-center justify-between">
+                    <div>
+                        <p class="text-white">{{ invitation.email }}</p>
+                        <p class="text-sm text-gray-400">Invited as {{ invitation.roleLabel }} - Expires {{ invitation.expiresAt|date('M d') }}</p>
+                    </div>
+                    <form method="post" action="{{ path('app_team_invitation_cancel', {slug: team.slug, invitationId: invitation.id}) }}">
+                        <input type="hidden" name="_token" value="{{ csrf_token('cancel-invitation-' ~ invitation.id) }}">
+                        <button type="submit" class="px-3 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 text-sm rounded-lg transition-colors">
+                            Cancel
+                        </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Sidebar -->
+    <div class="space-y-6">
+        <!-- Invite Member -->
+        {% if canManage %}
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Invite Member</h3>
+            <form method="post" action="{{ path('app_team_invite', {slug: team.slug}) }}" class="space-y-4">
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Email Address</label>
+                    <input type="email" name="email" required placeholder="colleague@example.com" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary">
+                </div>
+                <div>
+                    <label class="block text-sm text-gray-400 mb-2">Role</label>
+                    <select name="role" class="w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:border-primary">
+                        <option value="viewer">Viewer - Can view projects</option>
+                        <option value="developer" selected>Developer - Can deploy</option>
+                        <option value="admin">Admin - Can manage team</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-colors">
+                    Send Invitation
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Team Info -->
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Team Info</h3>
+            <dl class="space-y-3 text-sm">
+                <div class="flex justify-between">
+                    <dt class="text-gray-400">Created</dt>
+                    <dd class="text-white">{{ team.createdAt|date('M d, Y') }}</dd>
+                </div>
+                <div class="flex justify-between">
+                    <dt class="text-gray-400">Projects</dt>
+                    <dd class="text-white">{{ team.projects|length }}</dd>
+                </div>
+                <div class="flex justify-between">
+                    <dt class="text-gray-400">Your Role</dt>
+                    <dd class="text-white">{{ userRole|capitalize }}</dd>
+                </div>
+            </dl>
+        </div>
+
+        <!-- Leave Team -->
+        {% if team.owner != app.user %}
+        <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+            <h3 class="text-lg font-semibold text-white mb-4">Leave Team</h3>
+            <p class="text-sm text-gray-400 mb-4">You will lose access to all team projects.</p>
+            <form method="post" action="{{ path('app_team_leave', {slug: team.slug}) }}" onsubmit="return confirm('Are you sure you want to leave this team?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('leave-team-' ~ team.id) }}">
+                <button type="submit" class="w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg transition-colors">
+                    Leave Team
+                </button>
+            </form>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

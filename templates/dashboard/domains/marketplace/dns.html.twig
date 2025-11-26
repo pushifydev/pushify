@@ -1,0 +1,248 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}DNS Management - {{ purchase.domain }} - Pushify{% endblock %}
+{% block page_title %}DNS Management{% endblock %}
+{% block page_subtitle %}{{ purchase.domain }}{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_my_domains') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Domains
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl space-y-6" x-data="dnsManager()">
+    <!-- Domain Info -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center">
+                    <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+                    </svg>
+                </div>
+                <div>
+                    <p class="font-mono text-xl font-bold text-white">{{ purchase.domain }}</p>
+                    {% if purchase.expiresAt %}
+                    <p class="text-sm text-gray-400">Expires {{ purchase.expiresAt|date('M d, Y') }}</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Setup -->
+    {% if purchase.project and purchase.project.server %}
+    <div class="bg-blue-500/10 border border-blue-500/30 rounded-xl p-6">
+        <div class="flex items-start gap-3">
+            <svg class="w-6 h-6 text-blue-400 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            <div class="flex-1">
+                <h4 class="font-medium text-blue-400">Quick Setup for {{ purchase.project.name }}</h4>
+                <p class="text-sm text-blue-400/80 mt-1">Point this domain to your project server</p>
+                <form method="post" class="mt-4">
+                    <input type="hidden" name="record_name[]" value="@">
+                    <input type="hidden" name="record_type[]" value="A">
+                    <input type="hidden" name="record_value[]" value="{{ purchase.project.server.ipAddress }}">
+                    <input type="hidden" name="record_ttl[]" value="1800">
+                    <input type="hidden" name="record_name[]" value="www">
+                    <input type="hidden" name="record_type[]" value="CNAME">
+                    <input type="hidden" name="record_value[]" value="{{ purchase.domain }}">
+                    <input type="hidden" name="record_ttl[]" value="1800">
+                    <button type="submit" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors">
+                        Auto-Configure DNS
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- DNS Records Form -->
+    <form method="post" class="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700/50 flex items-center justify-between">
+            <div>
+                <h3 class="text-lg font-semibold text-white">DNS Records</h3>
+                <p class="text-sm text-gray-400">Manage your domain's DNS configuration</p>
+            </div>
+            <button type="button" @click="addRecord()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors inline-flex items-center gap-2">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                </svg>
+                Add Record
+            </button>
+        </div>
+
+        <div class="p-6">
+            <!-- Headers -->
+            <div class="grid grid-cols-12 gap-4 mb-4 text-sm font-medium text-gray-400">
+                <div class="col-span-2">Type</div>
+                <div class="col-span-3">Name</div>
+                <div class="col-span-4">Value</div>
+                <div class="col-span-2">TTL</div>
+                <div class="col-span-1"></div>
+            </div>
+
+            <!-- Existing Records -->
+            {% for record in records %}
+            <div class="grid grid-cols-12 gap-4 mb-3 items-center">
+                <div class="col-span-2">
+                    <select name="record_type[]" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm">
+                        <option value="A" {{ record.type == 'A' ? 'selected' : '' }}>A</option>
+                        <option value="AAAA" {{ record.type == 'AAAA' ? 'selected' : '' }}>AAAA</option>
+                        <option value="CNAME" {{ record.type == 'CNAME' ? 'selected' : '' }}>CNAME</option>
+                        <option value="MX" {{ record.type == 'MX' ? 'selected' : '' }}>MX</option>
+                        <option value="TXT" {{ record.type == 'TXT' ? 'selected' : '' }}>TXT</option>
+                        <option value="NS" {{ record.type == 'NS' ? 'selected' : '' }}>NS</option>
+                    </select>
+                </div>
+                <div class="col-span-3">
+                    <input type="text" name="record_name[]" value="{{ record.name }}" placeholder="@" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-mono">
+                </div>
+                <div class="col-span-4">
+                    <input type="text" name="record_value[]" value="{{ record.value }}" placeholder="Value" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-mono">
+                </div>
+                <div class="col-span-2">
+                    <select name="record_ttl[]" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm">
+                        <option value="300" {{ record.ttl == 300 ? 'selected' : '' }}>5 min</option>
+                        <option value="1800" {{ record.ttl == 1800 ? 'selected' : '' }}>30 min</option>
+                        <option value="3600" {{ record.ttl == 3600 ? 'selected' : '' }}>1 hour</option>
+                        <option value="86400" {{ record.ttl == 86400 ? 'selected' : '' }}>1 day</option>
+                    </select>
+                </div>
+                <div class="col-span-1">
+                    <button type="button" class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            {% endfor %}
+
+            <!-- New Records (Alpine.js) -->
+            <template x-for="(record, index) in newRecords" :key="index">
+                <div class="grid grid-cols-12 gap-4 mb-3 items-center">
+                    <div class="col-span-2">
+                        <select :name="'record_type[]'" x-model="record.type" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm">
+                            <option value="A">A</option>
+                            <option value="AAAA">AAAA</option>
+                            <option value="CNAME">CNAME</option>
+                            <option value="MX">MX</option>
+                            <option value="TXT">TXT</option>
+                            <option value="NS">NS</option>
+                        </select>
+                    </div>
+                    <div class="col-span-3">
+                        <input type="text" :name="'record_name[]'" x-model="record.name" placeholder="@" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-mono">
+                    </div>
+                    <div class="col-span-4">
+                        <input type="text" :name="'record_value[]'" x-model="record.value" placeholder="Value" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm font-mono">
+                    </div>
+                    <div class="col-span-2">
+                        <select :name="'record_ttl[]'" x-model="record.ttl" class="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm">
+                            <option value="300">5 min</option>
+                            <option value="1800">30 min</option>
+                            <option value="3600">1 hour</option>
+                            <option value="86400">1 day</option>
+                        </select>
+                    </div>
+                    <div class="col-span-1">
+                        <button type="button" @click="removeRecord(index)" class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition-colors">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </template>
+
+            {% if records is empty %}
+            <div x-show="newRecords.length === 0" class="text-center py-8 text-gray-400">
+                <svg class="w-12 h-12 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <p>No DNS records configured</p>
+                <button type="button" @click="addRecord()" class="mt-4 text-primary hover:text-primary/80">
+                    Add your first record
+                </button>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="px-6 py-4 border-t border-gray-700/50 flex justify-end">
+            <button type="submit" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-colors">
+                Save DNS Records
+            </button>
+        </div>
+    </form>
+
+    <!-- Common DNS Templates -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <h4 class="font-medium text-white mb-4">Common Configurations</h4>
+        <div class="grid grid-cols-3 gap-4">
+            <button type="button" @click="applyTemplate('vercel')" class="p-4 bg-gray-900/50 hover:bg-gray-700/50 rounded-lg text-left transition-colors">
+                <p class="font-medium text-white">Vercel</p>
+                <p class="text-sm text-gray-400">76.76.21.21</p>
+            </button>
+            <button type="button" @click="applyTemplate('netlify')" class="p-4 bg-gray-900/50 hover:bg-gray-700/50 rounded-lg text-left transition-colors">
+                <p class="font-medium text-white">Netlify</p>
+                <p class="text-sm text-gray-400">75.2.60.5</p>
+            </button>
+            <button type="button" @click="applyTemplate('cloudflare')" class="p-4 bg-gray-900/50 hover:bg-gray-700/50 rounded-lg text-left transition-colors">
+                <p class="font-medium text-white">Cloudflare Pages</p>
+                <p class="text-sm text-gray-400">CNAME pages.dev</p>
+            </button>
+        </div>
+    </div>
+</div>
+
+<script>
+function dnsManager() {
+    return {
+        newRecords: [],
+
+        addRecord() {
+            this.newRecords.push({
+                type: 'A',
+                name: '@',
+                value: '',
+                ttl: '1800'
+            });
+        },
+
+        removeRecord(index) {
+            this.newRecords.splice(index, 1);
+        },
+
+        applyTemplate(provider) {
+            this.newRecords = [];
+            switch (provider) {
+                case 'vercel':
+                    this.newRecords.push(
+                        { type: 'A', name: '@', value: '76.76.21.21', ttl: '1800' },
+                        { type: 'CNAME', name: 'www', value: 'cname.vercel-dns.com', ttl: '1800' }
+                    );
+                    break;
+                case 'netlify':
+                    this.newRecords.push(
+                        { type: 'A', name: '@', value: '75.2.60.5', ttl: '1800' },
+                        { type: 'CNAME', name: 'www', value: '{{ purchase.domain }}', ttl: '1800' }
+                    );
+                    break;
+                case 'cloudflare':
+                    this.newRecords.push(
+                        { type: 'CNAME', name: '@', value: 'your-project.pages.dev', ttl: '1800' },
+                        { type: 'CNAME', name: 'www', value: 'your-project.pages.dev', ttl: '1800' }
+                    );
+                    break;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}

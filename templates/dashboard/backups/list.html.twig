@@ -1,0 +1,271 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Backups - Pushify{% endblock %}
+{% block page_title %}
+	{% if database %}
+		Backups for {{ database.name }}
+	{% else %}
+		All Backups
+	{% endif %}
+{% endblock %}
+{% block page_subtitle %}
+	<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="text-primary hover:text-primary/80">{{ project.name }}</a>
+	{% if database %}
+		/ <a href="{{ path('app_database_show', {slug: project.slug, id: database.id}) }}" class="text-primary hover:text-primary/80">{{ database.name }}</a>
+	{% endif %}
+	/ Backup Management
+{% endblock %}
+
+{% block content %}
+<!-- Toast Manager Component -->
+<div {{ react_component('ToastManager') }}></div>
+
+<div class="space-y-6">
+	<!-- Stats Cards -->
+	<div class="grid md:grid-cols-4 gap-6">
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between mb-2">
+				<h3 class="text-sm text-gray-400">Total Backups</h3>
+				<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+				</svg>
+			</div>
+			<div class="text-3xl font-bold text-white">{{ stats.total ?? 0 }}</div>
+		</div>
+
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between mb-2">
+				<h3 class="text-sm text-gray-400">Completed</h3>
+				<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+			</div>
+			<div class="text-3xl font-bold text-white">{{ stats.completed ?? 0 }}</div>
+		</div>
+
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between mb-2">
+				<h3 class="text-sm text-gray-400">In Progress</h3>
+				<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+				</svg>
+			</div>
+			<div class="text-3xl font-bold text-white">{{ stats.in_progress ?? 0 }}</div>
+		</div>
+
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between mb-2">
+				<h3 class="text-sm text-gray-400">Total Size</h3>
+				<svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+				</svg>
+			</div>
+			<div class="text-3xl font-bold text-white">
+				{{ (stats.total_size_mb ?? 0)|number_format(2) }} MB
+			</div>
+		</div>
+	</div>
+
+	<!-- Actions Bar -->
+	<div class="flex items-center justify-between">
+		<div class="flex items-center gap-3">
+			{% if database %}
+				<a href="{{ path('app_backup_list', {slug: project.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-all">
+					<div class="flex items-center gap-2">
+						<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+						</svg>
+						All Backups
+					</div>
+				</a>
+			{% endif %}
+		</div>
+		<button onclick="showCreateBackupModal()" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+			<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+			</svg>
+			Create Backup
+		</button>
+	</div>
+
+	<!-- Backups List -->
+	{% if backups|length > 0 %}
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden">
+			<div class="overflow-x-auto">
+				<table class="w-full">
+					<thead>
+						<tr class="border-b border-gray-700">
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Name</th>
+							{% if not database %}
+								<th class="text-left p-4 text-sm font-semibold text-gray-300">Database</th>
+							{% endif %}
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Type</th>
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Status</th>
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Size</th>
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Created</th>
+							<th class="text-left p-4 text-sm font-semibold text-gray-300">Retention</th>
+							<th class="text-right p-4 text-sm font-semibold text-gray-300">Actions</th>
+						</tr>
+					</thead>
+					<tbody class="divide-y divide-gray-700">
+						{% for backup in backups %}
+							<tr class="hover:bg-gray-700/30 transition-colors">
+								<td class="p-4">
+									<div class="flex items-center gap-3">
+										<div class="w-10 h-10 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+											<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+											</svg>
+										</div>
+										<div>
+											<div class="text-white font-medium">{{ backup.name }}</div>
+											<div class="text-xs text-gray-500">ID: {{ backup.id }}</div>
+										</div>
+									</div>
+								</td>
+								{% if not database %}
+									<td class="p-4">
+										<a href="{{ path('app_database_show', {slug: project.slug, id: backup.database.id}) }}" class="text-primary hover:text-primary/80 transition-colors">
+											{{ backup.database.name }}
+										</a>
+									</td>
+								{% endif %}
+								<td class="p-4">
+									<span class="px-2 py-1 rounded text-xs font-medium {{ backup.typeBadgeClass }}">
+										{{ backup.typeLabel }}
+									</span>
+								</td>
+								<td class="p-4">
+									<span class="px-2 py-1 rounded text-xs font-medium {{ backup.statusBadgeClass }}">
+										{{ backup.status|capitalize }}
+									</span>
+								</td>
+								<td class="p-4 text-gray-300">
+									{{ backup.fileSizeFormatted ?? 'N/A' }}
+								</td>
+								<td class="p-4 text-gray-300">
+									<div class="text-sm">{{ backup.createdAt|date('M d, Y') }}</div>
+									<div class="text-xs text-gray-500">{{ backup.createdAt|date('H:i') }}</div>
+								</td>
+								<td class="p-4">
+									<div class="text-sm text-gray-300">{{ backup.retentionDays }} days</div>
+									{% if backup.expiresAt %}
+										<div class="text-xs text-gray-500">
+											Expires {{ backup.expiresAt|date('M d') }}
+										</div>
+									{% endif %}
+								</td>
+								<td class="p-4">
+									<div class="flex items-center justify-end gap-2">
+										{% if backup.isCompleted %}
+											<a href="{{ path('app_backup_download', {slug: project.slug, id: backup.id}) }}" class="px-3 py-1.5 bg-gray-700 hover:bg-gray-600 text-white text-xs rounded transition-all" title="Download">
+												<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+												</svg>
+											</a>
+											<button onclick="restoreBackup({{ backup.id }})" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs rounded transition-all" title="Restore">
+												<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+													<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+												</svg>
+											</button>
+										{% endif %}
+										<button onclick="deleteBackup({{ backup.id }})" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs rounded transition-all" title="Delete">
+											<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+												<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+											</svg>
+										</button>
+									</div>
+								</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+		</div>
+	{% else %}
+		<!-- Empty State -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl">
+			<div class="p-12 text-center">
+				<div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-blue-500/20 flex items-center justify-center">
+					<svg class="w-10 h-10 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold text-white mb-2">No backups yet</h3>
+				<p class="text-gray-400 mb-8 max-w-md mx-auto">
+					{% if database %}
+						Create your first backup for {{ database.name }} to protect your data.
+					{% else %}
+						Create backups to protect your database data. Backups can be restored at any time.
+					{% endif %}
+				</p>
+				<button onclick="showCreateBackupModal()" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+					</svg>
+					Create First Backup
+				</button>
+			</div>
+		</div>
+	{% endif %}
+</div>
+
+<script>
+function showCreateBackupModal() {
+	window.toast.info('Coming Soon', 'Create backup modal to be implemented with proper form');
+	// TODO: Implement modal for creating backup
+}
+
+function restoreBackup(backupId) {
+	if (!confirm('Are you sure you want to restore this backup? This will overwrite the current database data.')) {
+		return;
+	}
+
+	fetch(`{{ path('app_backup_restore', {slug: project.slug, id: '__ID__'})|replace({'__ID__': ''}) }}${backupId}/restore`, {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Backup restored successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to restore backup: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while restoring the backup');
+		console.error(error);
+	});
+}
+
+function deleteBackup(backupId) {
+	if (!confirm('Are you sure you want to delete this backup? This action cannot be undone.')) {
+		return;
+	}
+
+	fetch(`{{ path('app_backup_delete', {slug: project.slug, id: '__ID__'})|replace({'__ID__': ''}) }}${backupId}`, {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Backup deleted successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to delete backup: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while deleting the backup');
+		console.error(error);
+	});
+}
+</script>
+{% endblock %}

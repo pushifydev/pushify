@@ -1,0 +1,122 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Databases - Pushify{% endblock %}
+{% block page_title %}Databases{% endblock %}
+{% block page_subtitle %}Manage your database instances{% endblock %}
+
+{% block content %}
+{% if databases|length > 0 %}
+	<!-- Databases List -->
+	<div class="grid gap-6">
+		{% for item in databases %}
+			{% set database = item.database %}
+			{% set project = item.project %}
+			<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6 hover:border-primary/30 transition-all">
+				<div class="flex items-start justify-between mb-4">
+					<div class="flex items-start gap-4">
+						<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center shrink-0">
+							<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+							</svg>
+						</div>
+						<div>
+							<h3 class="text-lg font-semibold text-white mb-1">{{ database.name }}</h3>
+							<div class="flex items-center gap-3 text-sm text-gray-400">
+								<span>{{ database.typeLabel }}</span>
+								{% if database.version %}
+									<span>•</span>
+									<span>v{{ database.version }}</span>
+								{% endif %}
+								<span>•</span>
+								<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="text-primary hover:text-primary/80 transition-colors">
+									{{ project.name }}
+								</a>
+							</div>
+						</div>
+					</div>
+					<span class="px-3 py-1 rounded-full text-xs font-medium {{ database.statusBadgeClass }}">
+						{{ database.status|capitalize }}
+					</span>
+				</div>
+
+				<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+					<div>
+						<div class="text-xs text-gray-500 mb-1">Port</div>
+						<div class="text-sm text-white font-medium">{{ database.port ?? database.defaultPort }}</div>
+					</div>
+					<div>
+						<div class="text-xs text-gray-500 mb-1">Username</div>
+						<div class="text-sm text-white font-medium">{{ database.username }}</div>
+					</div>
+					<div>
+						<div class="text-xs text-gray-500 mb-1">Memory</div>
+						<div class="text-sm text-white font-medium">{{ database.memorySizeMb ?? 'N/A' }} MB</div>
+					</div>
+					<div>
+						<div class="text-xs text-gray-500 mb-1">Uptime</div>
+						<div class="text-sm text-white font-medium">{{ database.uptime ?? 'N/A' }}</div>
+					</div>
+				</div>
+
+				{% if database.connectionString %}
+					<div class="p-3 bg-gray-900/50 rounded-lg mb-4">
+						<div class="text-xs text-gray-500 mb-1">Connection String</div>
+						<div class="flex items-center gap-2">
+							<code class="text-xs text-gray-300 flex-1 overflow-x-auto">{{ database.connectionString }}</code>
+							<button onclick="navigator.clipboard.writeText('{{ database.connectionString }}')" class="px-2 py-1 bg-gray-700 hover:bg-gray-600 text-white text-xs rounded transition-all">
+								Copy
+							</button>
+						</div>
+					</div>
+				{% endif %}
+
+				<div class="flex items-center gap-2">
+					<a href="{{ path('app_database_show', {slug: project.slug, id: database.id}) }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white text-sm font-medium rounded-lg transition-all">
+						Manage
+					</a>
+					{% if database.isRunning %}
+						<button class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-all">
+							Stop
+						</button>
+					{% elseif database.isStopped %}
+						<button class="px-4 py-2 bg-green-600 hover:bg-green-700 text-white text-sm font-medium rounded-lg transition-all">
+							Start
+						</button>
+					{% endif %}
+					<a href="{{ path('app_backup_list', {slug: project.slug, databaseId: database.id}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm font-medium rounded-lg transition-all">
+						Backups
+					</a>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+{% else %}
+	<!-- Empty State -->
+	<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl">
+		<div class="p-12 text-center">
+			<div class="w-20 h-20 mx-auto mb-6 rounded-2xl bg-orange-500/20 flex items-center justify-center">
+				<svg class="w-10 h-10 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+				</svg>
+			</div>
+			<h3 class="text-xl font-semibold text-white mb-2">No databases yet</h3>
+			<p class="text-gray-400 mb-8 max-w-md mx-auto">Create a database to store your application data. We support PostgreSQL, MySQL, MongoDB, and Redis.</p>
+			{% if projects|length > 0 %}
+				<div class="text-gray-400 text-sm mb-6">
+					Go to a project's page to create a database for that project.
+				</div>
+				<a href="{{ path('app_projects') }}" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+					</svg>
+					View Projects
+				</a>
+			{% else %}
+				<div class="text-gray-500 text-sm">
+					You need to <a href="{{ path('app_project_create') }}" class="text-primary hover:text-primary/80">create a project</a> first.
+				</div>
+			{% endif %}
+		</div>
+	</div>
+{% endif %}
+{% endblock %}

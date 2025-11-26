@@ -1,0 +1,145 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Deployment #{{ deployment.id }}
+	-
+	{{ project.name }}
+	- Pushify
+{% endblock %}
+{% block page_title %}Deployment #{{ deployment.id }}
+{% endblock %}
+{% block page_subtitle %}
+	{{ project.name }}
+	-
+	{{ deployment.branch }}
+{% endblock %}
+
+{% block topbar_actions %}
+	<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+		</svg>
+		Back to Project
+	</a>
+{% endblock %}
+
+{% block content %}
+	<div
+		class="space-y-6">
+		<!-- Deployment Status -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center justify-between">
+				<div class="flex items-center gap-4">
+					<div class="w-12 h-12 rounded-xl flex items-center justify-center {{ deployment.statusBadgeClass }}" id="status-icon">
+						{% if deployment.status == 'success' %}
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						{% elseif deployment.isRunning %}
+							<svg class="w-6 h-6 animate-spin" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+						{% elseif deployment.status == 'failed' %}
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+							</svg>
+						{% else %}
+							<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+						{% endif %}
+					</div>
+					<div>
+						<div class="flex items-center gap-2">
+							<span class="px-3 py-1 rounded-full text-sm font-medium {{ deployment.statusBadgeClass }}" id="status-badge">
+								{{ deployment.status|capitalize }}
+							</span>
+							<span class="text-gray-400">{{ deployment.trigger|capitalize }}
+								deploy</span>
+						</div>
+						<p class="text-sm text-gray-500 mt-1">Started
+							{{ deployment.createdAt|date('M d, Y \\a\\t H:i:s') }}</p>
+					</div>
+				</div>
+
+				<div class="flex items-center gap-4">
+					{% if deployment.totalDuration %}
+						<div class="text-right">
+							<p class="text-sm text-gray-400">Duration</p>
+							<p class="text-lg font-semibold text-white">{{ deployment.totalDuration }}s</p>
+						</div>
+					{% endif %}
+
+					{% if deployment.isRunning %}
+						<form method="post" action="{{ path('app_deployment_cancel', {slug: project.slug, id: deployment.id}) }}">
+							<input type="hidden" name="_token" value="{{ csrf_token('cancel-deployment') }}">
+							<button type="submit" class="px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg transition-all">
+								Cancel
+							</button>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div>
+
+		<div
+			class="grid grid-cols-3 gap-6">
+			<!-- Logs Section (React Component) -->
+			<div class="col-span-2" {{ react_component('deployment/DeploymentLogs', { deploymentId: deployment.id, projectSlug: project.slug, initialStatus: deployment.status, initialBuildLogs: deployment.buildLogs, initialDeployLogs: deployment.deployLogs, initialError: deployment.errorMessage, isRunning: deployment.isRunning() } ) }}></div>
+
+			<!-- Deployment Info -->
+			<div class="space-y-4">
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+					<h3 class="font-semibold text-white mb-4">Deployment Info</h3>
+					<div class="space-y-4">
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Commit</p>
+							<p class="text-white font-mono text-sm">{{ deployment.shortCommitHash ?? 'Unknown' }}</p>
+							{% if deployment.commitMessage %}
+								<p class="text-gray-400 text-sm mt-1 truncate">{{ deployment.commitMessage }}</p>
+							{% endif %}
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Branch</p>
+							<p class="text-white font-mono text-sm">{{ deployment.branch }}</p>
+						</div>
+						<div>
+							<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Triggered by</p>
+							<p class="text-white">{{ deployment.triggeredBy.name }}</p>
+						</div>
+						{% if deployment.dockerImage %}
+							<div>
+								<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">Docker Image</p>
+								<p class="text-white font-mono text-xs break-all">{{ deployment.dockerImage }}:{{ deployment.dockerTag }}</p>
+							</div>
+						{% endif %}
+						{% if deployment.deploymentUrl %}
+							<div>
+								<p class="text-xs text-gray-500 uppercase tracking-wide mb-1">URL</p>
+								<a href="{{ deployment.deploymentUrl }}" target="_blank" class="text-primary hover:text-primary/80 text-sm inline-flex items-center gap-1">
+									{{ deployment.deploymentUrl }}
+									<svg class="w-3 h-3" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+									</svg>
+								</a>
+							</div>
+						{% endif %}
+					</div>
+				</div>
+
+				<!-- Redeploy Button -->
+				{% if deployment.isFinished %}
+					<form method="post" action="{{ path('app_project_deploy', {slug: project.slug}) }}">
+						<input type="hidden" name="_token" value="{{ csrf_token('deploy-' ~ project.id) }}">
+						<button type="submit" class="w-full px-4 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center justify-center gap-2">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+							Redeploy
+						</button>
+					</form>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+{% endblock %}

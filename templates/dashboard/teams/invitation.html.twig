@@ -1,0 +1,93 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Team Invitation - Pushify{% endblock %}
+{% block page_title %}Team Invitation{% endblock %}
+{% block page_subtitle %}You've been invited to join a team{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-8 text-center">
+        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+        </div>
+
+        <h2 class="text-2xl font-bold text-white mb-2">Join {{ invitation.team.name }}</h2>
+        <p class="text-gray-400 mb-6">
+            {{ invitation.invitedBy.name }} has invited you to join as a <span class="text-white font-medium">{{ invitation.roleLabel }}</span>
+        </p>
+
+        <div class="bg-gray-900/50 rounded-lg p-4 mb-6 text-left">
+            <h4 class="text-sm font-medium text-white mb-3">As a {{ invitation.roleLabel }}, you can:</h4>
+            <ul class="text-sm text-gray-400 space-y-2">
+                {% if invitation.role == 'viewer' %}
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    View team projects and deployments
+                </li>
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    View deployment logs
+                </li>
+                {% elseif invitation.role == 'developer' %}
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Deploy and rollback projects
+                </li>
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Manage environment variables
+                </li>
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    View deployment logs
+                </li>
+                {% else %}
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Full access to all team projects
+                </li>
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Invite and manage team members
+                </li>
+                <li class="flex items-center gap-2">
+                    <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    Manage team settings
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+
+        <form method="post" class="flex gap-3 justify-center">
+            <button type="submit" name="action" value="accept" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all">
+                Accept Invitation
+            </button>
+            <button type="submit" name="action" value="decline" class="px-6 py-3 bg-gray-700 hover:bg-gray-600 text-white font-semibold rounded-lg transition-all">
+                Decline
+            </button>
+        </form>
+
+        <p class="text-sm text-gray-500 mt-4">
+            This invitation expires on {{ invitation.expiresAt|date('F d, Y') }}
+        </p>
+    </div>
+</div>
+{% endblock %}

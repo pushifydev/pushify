@@ -1,0 +1,172 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Configure Project - Pushify{% endblock %}
+{% block page_title %}Configure Project{% endblock %}
+{% block page_subtitle %}Set up your deployment settings{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl">
+	<form method="post" class="space-y-6">
+		<!-- Repository Info -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-center gap-4 mb-6">
+				<div class="w-12 h-12 rounded-xl bg-gray-700/50 flex items-center justify-center">
+					<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+						<path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+					</svg>
+				</div>
+				<div>
+					<h3 class="text-lg font-semibold text-white">{{ repository.full_name }}</h3>
+					<p class="text-sm text-gray-400">{{ repository.description ?? 'No description' }}</p>
+				</div>
+			</div>
+
+			<div class="grid grid-cols-2 gap-4">
+				<!-- Project Name -->
+				<div>
+					<label for="name" class="block text-sm font-medium text-gray-300 mb-2">Project Name</label>
+					<input type="text"
+						   id="name"
+						   name="name"
+						   value="{{ repository.name }}"
+						   required
+						   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+				</div>
+
+				<!-- Branch -->
+				<div>
+					<label for="branch" class="block text-sm font-medium text-gray-300 mb-2">Branch</label>
+					<select id="branch"
+							name="branch"
+							class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+						{% for branch in branches %}
+						<option value="{{ branch.name }}" {{ branch.name == repository.default_branch ? 'selected' : '' }}>
+							{{ branch.name }}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+			</div>
+		</div>
+
+		<!-- Build Settings -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<h3 class="text-lg font-semibold text-white mb-4">Build Settings</h3>
+
+			<!-- Framework Detection -->
+			<div class="mb-6 p-4 bg-primary/10 border border-primary/30 rounded-lg">
+				<div class="flex items-center gap-3">
+					<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+					<span class="text-primary">Detected Framework: <strong>{{ detectedFramework|capitalize }}</strong></span>
+				</div>
+			</div>
+
+			<div class="space-y-4">
+				<!-- Framework -->
+				<div>
+					<label for="framework" class="block text-sm font-medium text-gray-300 mb-2">Framework Preset</label>
+					<select id="framework"
+							name="framework"
+							class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+						{% for label, value in frameworks %}
+						<option value="{{ value }}" {{ value == detectedFramework ? 'selected' : '' }}>
+							{{ label }}
+						</option>
+						{% endfor %}
+					</select>
+				</div>
+
+				<!-- Root Directory -->
+				<div>
+					<label for="rootDirectory" class="block text-sm font-medium text-gray-300 mb-2">Root Directory</label>
+					<input type="text"
+						   id="rootDirectory"
+						   name="rootDirectory"
+						   value="./"
+						   placeholder="./"
+						   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+					<p class="text-xs text-gray-500 mt-1">Leave as ./ for root directory</p>
+				</div>
+
+				<!-- Install Command -->
+				<div>
+					<label for="installCommand" class="block text-sm font-medium text-gray-300 mb-2">Install Command</label>
+					<input type="text"
+						   id="installCommand"
+						   name="installCommand"
+						   value="{{ defaults.installCommand }}"
+						   placeholder="npm install"
+						   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-mono text-sm">
+				</div>
+
+				<!-- Build Command -->
+				<div>
+					<label for="buildCommand" class="block text-sm font-medium text-gray-300 mb-2">Build Command</label>
+					<input type="text"
+						   id="buildCommand"
+						   name="buildCommand"
+						   value="{{ defaults.buildCommand }}"
+						   placeholder="npm run build"
+						   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-mono text-sm">
+				</div>
+
+				<!-- Output Directory -->
+				<div>
+					<label for="outputDirectory" class="block text-sm font-medium text-gray-300 mb-2">Output Directory</label>
+					<input type="text"
+						   id="outputDirectory"
+						   name="outputDirectory"
+						   value="{{ defaults.outputDirectory }}"
+						   placeholder="dist"
+						   class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary font-mono text-sm">
+					<p class="text-xs text-gray-500 mt-1">Directory containing your built files</p>
+				</div>
+			</div>
+		</div>
+
+		<!-- Actions -->
+		<div class="flex items-center justify-between">
+			<a href="{{ path('app_project_new') }}" class="px-6 py-3 text-gray-400 hover:text-white transition-colors">
+				Back
+			</a>
+			<button type="submit" class="px-8 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all hover:scale-[1.02] inline-flex items-center gap-2">
+				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+				</svg>
+				Deploy Project
+			</button>
+		</div>
+	</form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+	const frameworkSelect = document.getElementById('framework');
+	const installInput = document.getElementById('installCommand');
+	const buildInput = document.getElementById('buildCommand');
+	const outputInput = document.getElementById('outputDirectory');
+
+	const frameworkDefaults = {
+		nextjs: { install: 'npm install', build: 'npm run build', output: '.next' },
+		react: { install: 'npm install', build: 'npm run build', output: 'build' },
+		vue: { install: 'npm install', build: 'npm run build', output: 'dist' },
+		nuxt: { install: 'npm install', build: 'npm run build', output: '.output' },
+		svelte: { install: 'npm install', build: 'npm run build', output: 'build' },
+		laravel: { install: 'composer install --no-dev', build: 'npm install && npm run build', output: 'public' },
+		symfony: { install: 'composer install --no-dev', build: 'npm install && npm run build', output: 'public' },
+		nodejs: { install: 'npm install', build: 'npm run build', output: 'dist' },
+		static: { install: '', build: '', output: '.' },
+		other: { install: 'npm install', build: 'npm run build', output: 'dist' }
+	};
+
+	frameworkSelect.addEventListener('change', function() {
+		const defaults = frameworkDefaults[this.value] || frameworkDefaults.other;
+		installInput.value = defaults.install;
+		buildInput.value = defaults.build;
+		outputInput.value = defaults.output;
+	});
+});
+</script>
+{% endblock %}

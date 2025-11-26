@@ -1,0 +1,68 @@
+@import "tailwindcss";
+@source not "../../public";
+@import "@radix-ui/themes/styles.css";
+
+@theme {
+    --color-primary: #695ab0;
+}
+
+@custom-variant dark (&:where(.dark, .dark *), &:where([data-theme=dark], [data-theme=dark] *));
+
+/* Chrome, Edge, Safari */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #101828; /* ← ARKA PLAN */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #4a5565; /* ← SCROLL RENGİ */
+    border-radius: 10px;
+    border: 2px solid #101828; /* track ile uyum için */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #4a5565 #101828; /* thumb | track */
+}
+
+button {
+    cursor: pointer;
+}
+
+a {
+    cursor: pointer;
+}
+
+@layer utilities {
+    @keyframes fade-in {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    @keyframes pop {
+        from {
+            opacity: 0;
+            transform: scale(0.98);
+        }
+        to {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fade-in 150ms ease forwards;
+    }
+
+    .animate-pop {
+        animation: pop 160ms ease forwards;
+    }
+}

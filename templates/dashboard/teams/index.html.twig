@@ -1,0 +1,87 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Teams - Pushify{% endblock %}
+{% block page_title %}Teams{% endblock %}
+{% block page_subtitle %}Collaborate with your team{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_team_new') }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+    </svg>
+    New Team
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Pending Invitations -->
+    {% if pendingInvitations|length > 0 %}
+    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
+        <h3 class="text-lg font-semibold text-yellow-400 mb-4">Pending Invitations</h3>
+        <div class="space-y-3">
+            {% for invitation in pendingInvitations %}
+            <div class="flex items-center justify-between p-4 bg-gray-800/50 rounded-lg">
+                <div>
+                    <p class="text-white font-medium">{{ invitation.team.name }}</p>
+                    <p class="text-sm text-gray-400">Invited by {{ invitation.invitedBy.name }} as {{ invitation.roleLabel }}</p>
+                </div>
+                <a href="{{ path('app_team_invitation_respond', {token: invitation.token}) }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-colors">
+                    View Invitation
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Teams List -->
+    {% if teams|length > 0 %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% for team in teams %}
+        <a href="{{ path('app_team_show', {slug: team.slug}) }}" class="block bg-gray-800/50 border border-gray-700/50 rounded-xl p-6 hover:border-primary/50 transition-colors group">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-12 h-12 bg-primary/20 rounded-lg flex items-center justify-center text-primary text-xl font-bold">
+                    {{ team.name|slice(0, 1)|upper }}
+                </div>
+                <div>
+                    <h3 class="text-white font-semibold group-hover:text-primary transition-colors">{{ team.name }}</h3>
+                    <p class="text-sm text-gray-400">{{ team.memberCount }} member{{ team.memberCount != 1 ? 's' : '' }}</p>
+                </div>
+            </div>
+            {% if team.description %}
+            <p class="text-gray-400 text-sm mb-4 line-clamp-2">{{ team.description }}</p>
+            {% endif %}
+            <div class="flex items-center justify-between text-sm">
+                <span class="text-gray-500">
+                    {% if team.owner == app.user %}
+                        <span class="text-primary">Owner</span>
+                    {% else %}
+                        {{ team.getMember(app.user).roleLabel ?? 'Member' }}
+                    {% endif %}
+                </span>
+                <span class="text-gray-500">{{ team.projects|length }} project{{ team.projects|length != 1 ? 's' : '' }}</span>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+    {% else %}
+    <!-- Empty State -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-12 text-center">
+        <div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+            </svg>
+        </div>
+        <h3 class="text-xl font-semibold text-white mb-2">No Teams Yet</h3>
+        <p class="text-gray-400 mb-6 max-w-md mx-auto">Create a team to collaborate with others on your projects.</p>
+        <a href="{{ path('app_team_new') }}" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Create Your First Team
+        </a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,38 @@
+# RabbitMQ Configuration
+old_sound_rabbit_mq:
+    connections:
+        default:
+            host: '%env(RABBITMQ_HOST)%'
+            port: '%env(int:RABBITMQ_PORT)%'
+            user: '%env(RABBITMQ_USER)%'
+            password: '%env(RABBITMQ_PASSWORD)%'
+            vhost: '%env(RABBITMQ_VHOST)%'
+            lazy: true
+            connection_timeout: 3
+            read_write_timeout: 3
+            keepalive: false
+            heartbeat: 0
+
+    producers:
+        email_producer:
+            connection: default
+            exchange_options:
+                name: 'pushify_emails'
+                type: direct
+                durable: true
+
+    consumers:
+        email_consumer:
+            connection: default
+            exchange_options:
+                name: 'pushify_emails'
+                type: direct
+                durable: true
+            queue_options:
+                name: 'email_queue'
+                durable: true
+            callback: App\MessageHandler\SendEmailMessageHandler
+            qos_options:
+                prefetch_size: 0
+                prefetch_count: 1
+                global: false

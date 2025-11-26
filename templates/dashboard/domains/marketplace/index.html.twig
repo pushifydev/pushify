@@ -1,0 +1,81 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Domain Marketplace - Pushify{% endblock %}
+{% block page_title %}Domain Marketplace{% endblock %}
+{% block page_subtitle %}Search and register domains{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_my_domains') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"></path>
+    </svg>
+    My Domains
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    {% if not isConfigured %}
+    <div class="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-6">
+        <div class="flex items-center gap-3">
+            <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div>
+                <h3 class="font-medium text-yellow-500">Demo Mode - API Not Configured</h3>
+                <p class="text-sm text-yellow-500/80">Search results are simulated. Configure Namecheap API credentials to enable actual domain registration.</p>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- React Domain Search Component -->
+    <div {{ react_component('domains/DomainSearch', {
+        searchUrl: path('app_domain_search'),
+        purchaseUrl: path('app_domain_purchase'),
+        userEmail: app.user.email,
+        isConfigured: isConfigured
+    }) }}></div>
+
+    <!-- Recent Purchases -->
+    {% if purchases|length > 0 %}
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-white mb-4">Recent Purchases</h3>
+        <div class="space-y-3">
+            {% for purchase in purchases|slice(0, 5) %}
+            <div class="flex items-center justify-between p-4 bg-gray-900/50 rounded-lg">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-lg flex items-center justify-center {{ purchase.statusBadgeClass }}">
+                        {% if purchase.isCompleted %}
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        {% elseif purchase.isFailed %}
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                        {% else %}
+                        <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"></path>
+                        </svg>
+                        {% endif %}
+                    </div>
+                    <div>
+                        <p class="font-mono font-medium text-white">{{ purchase.domain }}</p>
+                        <p class="text-sm text-gray-400">{{ purchase.createdAt|date('M d, Y') }}</p>
+                    </div>
+                </div>
+                <div class="text-right">
+                    <span class="px-2 py-1 text-xs rounded-full {{ purchase.statusBadgeClass }}">
+                        {{ purchase.status|capitalize }}
+                    </span>
+                    <p class="text-sm text-gray-400 mt-1">${{ purchase.price }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

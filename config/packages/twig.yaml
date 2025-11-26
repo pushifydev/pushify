@@ -1,0 +1,8 @@
+twig:
+    file_name_pattern: '*.twig'
+    globals:
+        app_version: '@App\Twig\Runtime\VersionRuntime'
+
+when@test:
+    twig:
+        strict_variables: true

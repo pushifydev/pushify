@@ -1,0 +1,190 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Deployments - {{ project.name }} - Pushify{% endblock %}
+{% block page_title %}Deployment History{% endblock %}
+
+{% block topbar_actions %}
+<div class="flex items-center gap-3">
+    <a href="{{ path('app_project_show', {slug: project.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+        </svg>
+        Back to Project
+    </a>
+    <form method="post" action="{{ path('app_project_deploy', {slug: project.slug}) }}" class="inline">
+        <input type="hidden" name="_token" value="{{ csrf_token('deploy-' ~ project.id) }}">
+        <button type="submit" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            New Deploy
+        </button>
+    </form>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="space-y-6">
+    <!-- Project Header -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <div class="flex items-center gap-4">
+            <div class="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center">
+                <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                </svg>
+            </div>
+            <div>
+                <h2 class="text-xl font-semibold text-white">{{ project.name }}</h2>
+                <p class="text-gray-400">{{ project.repositoryName }} · {{ project.branch }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Deployments List -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-700/50">
+            <h3 class="text-lg font-semibold text-white">All Deployments</h3>
+            <p class="text-sm text-gray-400">{{ deployments|length }} deployment{{ deployments|length != 1 ? 's' : '' }}</p>
+        </div>
+
+        {% if deployments is empty %}
+        <div class="text-center py-12 text-gray-400">
+            <svg class="w-12 h-12 mx-auto mb-4 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+            </svg>
+            <p>No deployments yet</p>
+            <p class="text-sm mt-1">Push to your repository or click "New Deploy" to start</p>
+        </div>
+        {% else %}
+        <div class="divide-y divide-gray-700/50">
+            {% for deployment in deployments %}
+            <div class="px-6 py-4 hover:bg-gray-700/20 transition-colors">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <!-- Status Icon -->
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center {{ deployment.statusBadgeClass }}">
+                            {% if deployment.isRunning %}
+                            <svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            {% elseif deployment.isSuccess %}
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                            {% elseif deployment.isFailed %}
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                            {% else %}
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                            {% endif %}
+                        </div>
+
+                        <!-- Deployment Info -->
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <a href="{{ path('app_deployment_show', {slug: project.slug, id: deployment.id}) }}" class="font-medium text-white hover:text-primary">
+                                    #{{ deployment.id }}
+                                </a>
+                                <span class="px-2 py-0.5 text-xs rounded-full {{ deployment.statusBadgeClass }}">
+                                    {{ deployment.status|capitalize }}
+                                </span>
+                                {% if deployment.trigger == 'rollback' %}
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-purple-500/20 text-purple-400">
+                                    Rollback
+                                </span>
+                                {% elseif deployment.trigger == 'redeploy' %}
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-blue-500/20 text-blue-400">
+                                    Redeploy
+                                </span>
+                                {% elseif deployment.trigger == 'git_push' %}
+                                <span class="px-2 py-0.5 text-xs rounded-full bg-gray-500/20 text-gray-400">
+                                    Auto
+                                </span>
+                                {% endif %}
+                            </div>
+                            <div class="flex items-center gap-3 mt-1 text-sm text-gray-400">
+                                {% if deployment.shortCommitHash %}
+                                <span class="font-mono">{{ deployment.shortCommitHash }}</span>
+                                {% endif %}
+                                {% if deployment.commitMessage %}
+                                <span class="truncate max-w-xs">{{ deployment.commitMessage|slice(0, 50) }}{% if deployment.commitMessage|length > 50 %}...{% endif %}</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-4">
+                        <!-- Duration & Time -->
+                        <div class="text-right text-sm">
+                            {% if deployment.totalDuration %}
+                            <p class="text-white">{{ deployment.totalDuration }}s</p>
+                            {% endif %}
+                            <p class="text-gray-500">{{ deployment.createdAt|date('M d, H:i') }}</p>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="flex items-center gap-2">
+                            <a href="{{ path('app_deployment_show', {slug: project.slug, id: deployment.id}) }}"
+                               class="p-2 text-gray-400 hover:text-white hover:bg-gray-700 rounded-lg transition"
+                               title="View Details">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                </svg>
+                            </a>
+
+                            {% if deployment.isSuccess %}
+                            <!-- Rollback Button -->
+                            <form method="post" action="{{ path('app_deployment_rollback', {slug: project.slug, id: deployment.id}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('rollback-' ~ deployment.id) }}">
+                                <button type="submit"
+                                        class="p-2 text-gray-400 hover:text-yellow-400 hover:bg-yellow-500/10 rounded-lg transition"
+                                        title="Rollback to this version"
+                                        onclick="return confirm('Roll back to deployment #{{ deployment.id }}?')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"></path>
+                                    </svg>
+                                </button>
+                            </form>
+
+                            <!-- Redeploy Button -->
+                            <form method="post" action="{{ path('app_deployment_redeploy', {slug: project.slug, id: deployment.id}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('redeploy-' ~ deployment.id) }}">
+                                <button type="submit"
+                                        class="p-2 text-gray-400 hover:text-blue-400 hover:bg-blue-500/10 rounded-lg transition"
+                                        title="Redeploy this version"
+                                        onclick="return confirm('Redeploy deployment #{{ deployment.id }}?')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                    </svg>
+                                </button>
+                            </form>
+                            {% endif %}
+
+                            {% if deployment.isRunning %}
+                            <!-- Cancel Button -->
+                            <form method="post" action="{{ path('app_deployment_cancel', {slug: project.slug, id: deployment.id}) }}" class="inline">
+                                <button type="submit"
+                                        class="p-2 text-gray-400 hover:text-red-400 hover:bg-red-500/10 rounded-lg transition"
+                                        title="Cancel deployment"
+                                        onclick="return confirm('Cancel this deployment?')">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                </button>
+                            </form>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

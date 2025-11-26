@@ -1,0 +1,427 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}{{ database.name }} - Database - Pushify{% endblock %}
+{% block page_title %}{{ database.name }}{% endblock %}
+{% block page_subtitle %}
+	<a href="{{ path('app_project_show', {slug: project.slug}) }}" class="text-primary hover:text-primary/80">{{ project.name }}</a>
+	/ Database Management
+{% endblock %}
+
+{% block content %}
+<!-- Database Modals Component -->
+<div {{ react_component('ConfigureDatabase', {
+    database: {
+        id: database.id,
+        memorySizeMb: database.memorySizeMb ?? 512,
+        cpuLimit: database.cpuLimit ?? 1.0,
+        diskSizeMb: database.diskSizeMb ?? 1024
+    },
+    projectSlug: project.slug
+}) }}></div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+	<!-- Left Column - Main Info -->
+	<div class="lg:col-span-2 space-y-6">
+		<!-- Database Info Card -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<div class="flex items-start justify-between mb-6">
+				<div class="flex items-start gap-4">
+					<div class="w-16 h-16 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+						</svg>
+					</div>
+					<div>
+						<h2 class="text-2xl font-bold text-white mb-2">{{ database.name }}</h2>
+						<div class="flex items-center gap-3 text-sm text-gray-400">
+							<span>{{ database.typeLabel }}</span>
+							{% if database.version %}
+								<span>•</span>
+								<span>v{{ database.version }}</span>
+							{% endif %}
+						</div>
+					</div>
+				</div>
+				<span class="px-4 py-2 rounded-full text-sm font-medium {{ database.statusBadgeClass }}">
+					{{ database.status|capitalize }}
+				</span>
+			</div>
+
+			<!-- Connection Details -->
+			<div class="grid md:grid-cols-2 gap-4 mb-6">
+				<div>
+					<label class="text-xs text-gray-500 mb-1 block">Host</label>
+					<div class="px-3 py-2 bg-gray-900/50 rounded-lg">
+						<code class="text-sm text-white">{{ database.server ? database.server.ipAddress : 'localhost' }}</code>
+					</div>
+				</div>
+				<div>
+					<label class="text-xs text-gray-500 mb-1 block">Port</label>
+					<div class="px-3 py-2 bg-gray-900/50 rounded-lg">
+						<code class="text-sm text-white">{{ database.port ?? database.defaultPort }}</code>
+					</div>
+				</div>
+				<div>
+					<label class="text-xs text-gray-500 mb-1 block">Username</label>
+					<div class="px-3 py-2 bg-gray-900/50 rounded-lg">
+						<code class="text-sm text-white">{{ database.username }}</code>
+					</div>
+				</div>
+				<div>
+					<label class="text-xs text-gray-500 mb-1 block">Database Name</label>
+					<div class="px-3 py-2 bg-gray-900/50 rounded-lg">
+						<code class="text-sm text-white">{{ database.databaseName ?? database.name }}</code>
+					</div>
+				</div>
+			</div>
+
+			<!-- Password (Hidden) -->
+			<div class="mb-6">
+				<label class="text-xs text-gray-500 mb-1 block">Password</label>
+				<div class="flex items-center gap-2">
+					<div class="flex-1 px-3 py-2 bg-gray-900/50 rounded-lg">
+						<code class="text-sm text-white" id="password-field">••••••••</code>
+					</div>
+					<button onclick="togglePassword()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-all">
+						Show
+					</button>
+					<button onclick="copyPassword()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-all">
+						Copy
+					</button>
+				</div>
+			</div>
+
+			<!-- Connection String -->
+			{% if database.connectionString %}
+			<div>
+				<label class="text-xs text-gray-500 mb-1 block">Connection String</label>
+				<div class="flex items-center gap-2">
+					<div class="flex-1 px-3 py-2 bg-gray-900/50 rounded-lg overflow-x-auto">
+						<code class="text-xs text-white">{{ database.connectionString }}</code>
+					</div>
+					<button onclick="navigator.clipboard.writeText('{{ database.connectionString }}')" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-lg transition-all">
+						Copy
+					</button>
+				</div>
+			</div>
+			{% endif %}
+		</div>
+
+		<!-- Resource Usage -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<h3 class="text-lg font-semibold text-white mb-4">Resource Usage</h3>
+			<div class="grid grid-cols-3 gap-4">
+				<div class="text-center p-4 bg-gray-900/50 rounded-lg">
+					<div class="text-2xl font-bold text-primary mb-1">{{ database.memorySizeMb ?? 'N/A' }}</div>
+					<div class="text-xs text-gray-500">Memory (MB)</div>
+				</div>
+				<div class="text-center p-4 bg-gray-900/50 rounded-lg">
+					<div class="text-2xl font-bold text-primary mb-1">{{ database.cpuLimit ?? 'N/A' }}</div>
+					<div class="text-xs text-gray-500">CPU Limit</div>
+				</div>
+				<div class="text-center p-4 bg-gray-900/50 rounded-lg">
+					<div class="text-2xl font-bold text-primary mb-1">{{ database.diskSizeMb ?? 'N/A' }}</div>
+					<div class="text-xs text-gray-500">Disk (MB)</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Error Message (if any) -->
+		{% if database.hasError and database.errorMessage %}
+		<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+			<div class="flex items-start gap-3">
+				<svg class="w-6 h-6 text-red-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+				</svg>
+				<div>
+					<h3 class="text-lg font-semibold text-red-400 mb-2">Error</h3>
+					<p class="text-sm text-gray-300">{{ database.errorMessage }}</p>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	</div>
+
+	<!-- Right Column - Actions & Info -->
+	<div class="space-y-6">
+		<!-- Quick Actions -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<h3 class="text-lg font-semibold text-white mb-4">Quick Actions</h3>
+			<div class="space-y-3">
+				{% if database.isRunning %}
+					<button onclick="stopDatabase()" class="w-full px-4 py-3 bg-red-600 hover:bg-red-700 text-white font-medium rounded-lg transition-all">
+						<div class="flex items-center justify-center gap-2">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 10a1 1 0 011-1h4a1 1 0 011 1v4a1 1 0 01-1 1h-4a1 1 0 01-1-1v-4z"></path>
+							</svg>
+							Stop Database
+						</div>
+					</button>
+					<button onclick="restartDatabase()" class="w-full px-4 py-3 bg-yellow-600 hover:bg-yellow-700 text-white font-medium rounded-lg transition-all">
+						<div class="flex items-center justify-center gap-2">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+							</svg>
+							Restart Database
+						</div>
+					</button>
+				{% elseif database.isStopped %}
+					<button onclick="startDatabase()" class="w-full px-4 py-3 bg-green-600 hover:bg-green-700 text-white font-medium rounded-lg transition-all">
+						<div class="flex items-center justify-center gap-2">
+							<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+							</svg>
+							Start Database
+						</div>
+					</button>
+				{% endif %}
+
+				<a href="{{ path('app_backup_list', {slug: project.slug, databaseId: database.id}) }}" class="block w-full px-4 py-3 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all text-center">
+					<div class="flex items-center justify-center gap-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+						</svg>
+						Manage Backups
+					</div>
+				</a>
+
+				<button onclick="openDatabaseConfigModal()" class="w-full px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all">
+					<div class="flex items-center justify-center gap-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+						</svg>
+						Configure
+					</div>
+				</button>
+
+				<button onclick="fixRemoteAccess()" class="w-full px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white font-medium rounded-lg transition-all">
+					<div class="flex items-center justify-center gap-2">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+						</svg>
+						Fix Remote Access
+					</div>
+				</button>
+			</div>
+
+			<hr class="my-4 border-gray-700">
+
+			<button onclick="deleteDatabase()" class="w-full px-4 py-3 bg-red-600/20 hover:bg-red-600/30 text-red-400 font-medium rounded-lg transition-all border border-red-600/30">
+				<div class="flex items-center justify-center gap-2">
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+					</svg>
+					Delete Database
+				</div>
+			</button>
+		</div>
+
+		<!-- Database Info -->
+		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+			<h3 class="text-lg font-semibold text-white mb-4">Information</h3>
+			<div class="space-y-3 text-sm">
+				<div>
+					<div class="text-gray-500 mb-1">Created</div>
+					<div class="text-white">{{ database.createdAt|date('M d, Y H:i') }}</div>
+				</div>
+				{% if database.startedAt %}
+				<div>
+					<div class="text-gray-500 mb-1">Started</div>
+					<div class="text-white">{{ database.startedAt|date('M d, Y H:i') }}</div>
+				</div>
+				{% endif %}
+				{% if database.uptime %}
+				<div>
+					<div class="text-gray-500 mb-1">Uptime</div>
+					<div class="text-white">{{ database.uptime }}</div>
+				</div>
+				{% endif %}
+				{% if database.containerName %}
+				<div>
+					<div class="text-gray-500 mb-1">Container</div>
+					<div class="text-white font-mono text-xs">{{ database.containerName }}</div>
+				</div>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+// Global function to open configure modal
+window.openDatabaseConfigModal = function() {
+	if (window.openConfigureModal) {
+		window.openConfigureModal({
+			id: {{ database.id }},
+			memorySizeMb: {{ database.memorySizeMb ?? 512 }},
+			cpuLimit: {{ database.cpuLimit ?? 1.0 }},
+			diskSizeMb: {{ database.diskSizeMb ?? 1024 }}
+		}, '{{ project.slug }}');
+	} else {
+		console.error('Modal system not initialized');
+	}
+};
+const actualPassword = '{{ database.password }}';
+let passwordVisible = false;
+
+function togglePassword() {
+	const field = document.getElementById('password-field');
+	const btn = event.target;
+
+	if (passwordVisible) {
+		field.textContent = '••••••••';
+		btn.textContent = 'Show';
+		passwordVisible = false;
+	} else {
+		field.textContent = actualPassword;
+		btn.textContent = 'Hide';
+		passwordVisible = true;
+	}
+}
+
+function copyPassword() {
+	navigator.clipboard.writeText(actualPassword);
+	const btn = event.target;
+	const originalText = btn.textContent;
+	btn.textContent = 'Copied!';
+	setTimeout(() => {
+		btn.textContent = originalText;
+	}, 2000);
+}
+
+function startDatabase() {
+	if (!confirm('Are you sure you want to start this database?')) {
+		return;
+	}
+
+	fetch('{{ path('app_database_start', {slug: project.slug, id: database.id}) }}', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Database started successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to start database: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while starting the database');
+		console.error(error);
+	});
+}
+
+function stopDatabase() {
+	if (!confirm('Are you sure you want to stop this database?')) {
+		return;
+	}
+
+	fetch('{{ path('app_database_stop', {slug: project.slug, id: database.id}) }}', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Database stopped successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to stop database: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while stopping the database');
+		console.error(error);
+	});
+}
+
+function restartDatabase() {
+	if (!confirm('Are you sure you want to restart this database?')) {
+		return;
+	}
+
+	fetch('{{ path('app_database_restart', {slug: project.slug, id: database.id}) }}', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Database restarted successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to restart database: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while restarting the database');
+		console.error(error);
+	});
+}
+
+function deleteDatabase() {
+	if (!confirm('Are you sure you want to delete this database? This action cannot be undone.')) {
+		return;
+	}
+
+	fetch('{{ path('app_database_delete', {slug: project.slug, id: database.id}) }}', {
+		method: 'DELETE',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Database deleted successfully!');
+			setTimeout(() => {
+				window.location.href = '{{ path('app_project_show', {slug: project.slug}) }}';
+			}, 1000);
+		} else {
+			window.toast.error('Error', 'Failed to delete database: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while deleting the database');
+		console.error(error);
+	});
+}
+
+function fixRemoteAccess() {
+	if (!confirm('This will reconfigure remote access for this database. Continue?')) {
+		return;
+	}
+
+	fetch('{{ path('app_database_fix_remote_access', {slug: project.slug, id: database.id}) }}', {
+		method: 'POST',
+		headers: {
+			'Content-Type': 'application/json',
+		}
+	})
+	.then(response => response.json())
+	.then(data => {
+		if (data.success) {
+			window.toast.success('Success', 'Remote access configured successfully!');
+			setTimeout(() => location.reload(), 1000);
+		} else {
+			window.toast.error('Error', 'Failed to configure remote access: ' + data.message);
+		}
+	})
+	.catch(error => {
+		window.toast.error('Error', 'An error occurred while configuring remote access');
+		console.error(error);
+	});
+}
+</script>
+{% endblock %}

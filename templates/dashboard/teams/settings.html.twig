@@ -1,0 +1,70 @@
+{% extends 'dashboard/base.html.twig' %}
+
+{% block title %}Settings - {{ team.name }} - Pushify{% endblock %}
+{% block page_title %}{{ team.name }} Settings{% endblock %}
+{% block page_subtitle %}Manage your team{% endblock %}
+
+{% block topbar_actions %}
+<a href="{{ path('app_team_show', {slug: team.slug}) }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+    </svg>
+    Back to Team
+</a>
+{% endblock %}
+
+{% block content %}
+<div class="max-w-2xl space-y-6">
+    <!-- General Settings -->
+    <form method="post" class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-white mb-6">General Settings</h3>
+
+        <div class="space-y-4">
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-300 mb-2">Team Name</label>
+                <input type="text" id="name" name="name" value="{{ team.name }}" required
+                       class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+            </div>
+
+            <div>
+                <label for="description" class="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                <textarea id="description" name="description" rows="3"
+                          class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary resize-none">{{ team.description }}</textarea>
+            </div>
+        </div>
+
+        <div class="mt-6 pt-6 border-t border-gray-700">
+            <button type="submit" class="px-6 py-3 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all">
+                Save Changes
+            </button>
+        </div>
+    </form>
+
+    <!-- Team URL -->
+    <div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-white mb-4">Team URL</h3>
+        <div class="flex gap-2">
+            <input type="text" value="{{ app.request.schemeAndHttpHost }}/dashboard/teams/{{ team.slug }}" readonly
+                   class="flex-1 px-4 py-3 bg-gray-900 border border-gray-700 rounded-lg text-gray-400 font-mono text-sm">
+            <button type="button" onclick="navigator.clipboard.writeText(this.previousElementSibling.value); this.textContent='Copied!'; setTimeout(() => this.textContent='Copy', 2000)"
+                    class="px-4 py-3 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-colors">
+                Copy
+            </button>
+        </div>
+    </div>
+
+    <!-- Danger Zone -->
+    {% if team.owner == app.user %}
+    <div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+        <h3 class="text-lg font-semibold text-red-400 mb-4">Danger Zone</h3>
+        <p class="text-gray-400 mb-4">Deleting your team will remove all members and unlink all projects. This action cannot be undone.</p>
+        <form method="post" action="{{ path('app_team_delete', {slug: team.slug}) }}" onsubmit="return confirm('Are you sure you want to delete this team? This action cannot be undone.');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete-team-' ~ team.id) }}">
+            <button type="submit" class="px-6 py-3 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-semibold rounded-lg transition-all border border-red-500/30">
+                Delete Team
+            </button>
+        </form>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}
