@@ -104,13 +104,6 @@ pipeline {
         }
 
         stage('Push Docker Image') {
-            when {
-                anyOf {
-                    branch 'master'
-                    branch 'beta'
-                    tag pattern: "v\\d+\\.\\d+\\.\\d+.*", comparator: "REGEXP"
-                }
-            }
             steps {
                 echo '📤 Pushing Docker image to registry...'
                 script {
@@ -126,12 +119,6 @@ pipeline {
         }
 
         stage('Deploy to Production') {
-            when {
-                anyOf {
-                    branch 'master'
-                    tag pattern: "v\\d+\\.\\d+\\.\\d+", comparator: "REGEXP"
-                }
-            }
             steps {
                 echo '🚀 Deploying to production...'
                 script {
@@ -154,12 +141,6 @@ pipeline {
         }
 
         stage('Health Check') {
-            when {
-                anyOf {
-                    branch 'master'
-                    tag pattern: "v\\d+\\.\\d+\\.\\d+", comparator: "REGEXP"
-                }
-            }
             steps {
                 echo '🏥 Running health check...'
                 script {
