@@ -7,7 +7,6 @@ pipeline {
         DOCKER_IMAGE = 'pushifydev/pushify'
 
         // Deployment server
-        PRODUCTION_SERVER = credentials('production-server-ssh')
         PRODUCTION_HOST = 'pushify.dev'
         PRODUCTION_USER = 'deploy'
 
@@ -196,50 +195,22 @@ pipeline {
     post {
         success {
             echo '✅ Pipeline completed successfully!'
-            script {
-                if (env.BRANCH_NAME == 'master' || env.TAG_NAME) {
-                    // Send success notification (Slack, Discord, Email, etc.)
-                    sh """
-                        curl -X POST https://your-webhook-url.com/notify \
-                            -H 'Content-Type: application/json' \
-                            -d '{
-                                "status": "success",
-                                "version": "${APP_VERSION}",
-                                "branch": "${GIT_BRANCH}",
-                                "commit": "${GIT_COMMIT}"
-                            }'
-                    """
-                }
-            }
         }
 
         failure {
             echo '❌ Pipeline failed!'
-            script {
-                // Send failure notification
-                sh """
-                    curl -X POST https://your-webhook-url.com/notify \
-                        -H 'Content-Type: application/json' \
-                        -d '{
-                            "status": "failure",
-                            "version": "${APP_VERSION}",
-                            "branch": "${GIT_BRANCH}",
-                            "commit": "${GIT_COMMIT}"
-                        }'
-                """
-            }
         }
 
         always {
             echo '🧹 Cleaning up...'
-            // Clean up Docker images
-            sh 'docker system prune -f || true'
-
-            // Archive test results
-            junit '**/build/test-results/**/*.xml' || true
-
-            // Clean workspace
-            cleanWs()
+            script {
+                try {
+                    // Clean up Docker images (optional)
+                    sh 'docker system prune -f || true'
+                } catch (Exception e) {
+                    echo "Cleanup warning: ${e.message}"
+                }
+            }
         }
     }
 }
