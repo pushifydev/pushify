@@ -93,6 +93,9 @@ pipeline {
                         echo "⚠️  WARNING: Using example .env.prod! Update with real credentials!"
                     fi
 
+                    # Stop and remove old containers to avoid ContainerConfig errors
+                    docker-compose -f docker-compose.prod.yml down || true
+
                     # Build and deploy using docker-compose
                     docker-compose -f docker-compose.prod.yml build
                     docker-compose -f docker-compose.prod.yml up -d --remove-orphans
