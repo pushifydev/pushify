@@ -81,6 +81,7 @@ RUN apk add --no-cache \
     oniguruma-dev \
     bash \
     curl \
+    curl-dev \
     linux-headers
 
 # Install PHP extensions
