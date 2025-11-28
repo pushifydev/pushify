@@ -91,7 +91,7 @@ class BillingController extends AbstractController
         $result = $this->subscriptionService->createPaymentWithCard(
             $user,
             $cardDetails,
-            $pricing['final_price_try'],
+            $pricing['final_price_eur'],
             $serverType
         );
 

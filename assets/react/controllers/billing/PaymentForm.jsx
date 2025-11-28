@@ -181,7 +181,7 @@ export default function PaymentForm({ serverType, amount, csrfToken }) {
                     </div>
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-400">Monthly Payment</span>
-                        <span className="text-lg font-bold text-white">₺{amount}</span>
+                        <span className="text-lg font-bold text-white">€{amount}</span>
                     </div>
                 </div>
 

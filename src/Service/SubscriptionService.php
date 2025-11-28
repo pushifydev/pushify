@@ -50,21 +50,16 @@ class SubscriptionService
 
         $costEur = $hetznerCosts[$serverType] ?? $hetznerCosts['cx22'];
 
-        // Convert EUR to TRY (use real exchange rate in production)
-        $eurToTry = 37.5; // Approximate rate
-        $costTry = $costEur * $eurToTry;
-
         // Add 60% markup
         $markup = 0.60;
-        $finalPrice = $costTry * (1 + $markup);
+        $finalPrice = $costEur * (1 + $markup);
 
         return [
             'server_type' => $serverType,
             'cost_eur' => $costEur,
-            'cost_try' => round($costTry, 2),
             'markup_percentage' => $markup * 100,
-            'final_price_try' => round($finalPrice, 2),
-            'final_price_usd' => round($finalPrice / 35, 2), // TRY to USD
+            'final_price_eur' => round($finalPrice, 2),
+            'final_price_usd' => round($finalPrice * 1.10, 2), // EUR to USD approximate
         ];
     }
 
@@ -79,11 +74,11 @@ class SubscriptionService
     ): array {
         try {
             $request = new CreatePaymentRequest();
-            $request->setLocale(Locale::TR);
+            $request->setLocale(Locale::EN);
             $request->setConversationId($this->generateConversationId());
             $request->setPrice($amount);
             $request->setPaidPrice($amount);
-            $request->setCurrency(\Iyzipay\Model\Currency::TL);
+            $request->setCurrency(\Iyzipay\Model\Currency::EUR);
             $request->setInstallment(1);
             $request->setPaymentChannel(\Iyzipay\Model\PaymentChannel::WEB);
             $request->setPaymentGroup(PaymentGroup::SUBSCRIPTION);
@@ -191,7 +186,7 @@ class SubscriptionService
         $subscription->setIyzicoCustomerReferenceCode($payment->getCardUserKey());
         $subscription->setStatus(Subscription::STATUS_ACTIVE);
         $subscription->setAmount((string) $amount);
-        $subscription->setCurrency('TRY');
+        $subscription->setCurrency('EUR');
         $subscription->setBillingCycle('monthly');
 
         $now = new \DateTime();

@@ -14,7 +14,7 @@
 
 				<div data-controller="react" data-react-component-value="billing/PaymentForm" data-react-props-value="{{ {
 					serverType: server_type,
-					amount: pricing.final_price_try,
+					amount: pricing.final_price_eur,
 					csrfToken: csrf_token('checkout')
 				}|json_encode|e('html_attr') }}"></div>
 			</div>
@@ -71,12 +71,12 @@
 							<span class="text-gray-300">€{{ pricing.cost_eur }}</span>
 						</div>
 						<div class="flex items-center justify-between text-sm">
-							<span class="text-gray-400">Platform Fee (60%)</span>
-							<span class="text-gray-300">₺{{ (pricing.final_price_try - pricing.cost_try)|number_format(2, '.', ',') }}</span>
+							<span class="text-gray-400">Platform Fee ({{ pricing.markup_percentage }}%)</span>
+							<span class="text-gray-300">€{{ (pricing.final_price_eur - pricing.cost_eur)|number_format(2, '.', ',') }}</span>
 						</div>
 						<div class="flex items-center justify-between text-lg font-bold">
 							<span class="text-white">Total (Monthly)</span>
-							<span class="text-primary">₺{{ pricing.final_price_try }}</span>
+							<span class="text-primary">€{{ pricing.final_price_eur }}</span>
 						</div>
 						<div class="text-xs text-gray-500 text-center">
 							≈ ${{ pricing.final_price_usd }} USD

@@ -71,7 +71,7 @@ class Subscription
     {
         $this->createdAt = new \DateTime();
         $this->status = self::STATUS_PENDING;
-        $this->currency = 'TRY';
+        $this->currency = 'EUR';
         $this->billingCycle = 'monthly';
     }
 
