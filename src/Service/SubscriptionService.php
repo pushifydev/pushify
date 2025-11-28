@@ -23,6 +23,7 @@ class SubscriptionService
     public function __construct(
         private EntityManagerInterface $entityManager,
         private LoggerInterface $logger,
+        private HetznerService $hetznerService,
         private string $iyzicoApiKey,
         private string $iyzicoSecretKey,
         private string $iyzicoBaseUrl
@@ -38,17 +39,57 @@ class SubscriptionService
      */
     public function calculateServerCost(string $serverType): array
     {
-        // Hetzner costs in EUR (monthly)
-        $hetznerCosts = [
-            'cx11' => 4.15,   // 2 vCPU, 4GB RAM, 40GB SSD
-            'cx21' => 6.40,   // 2 vCPU, 8GB RAM, 80GB SSD
-            'cx22' => 8.00,   // 2 vCPU, 8GB RAM, 160GB SSD
-            'cx31' => 12.50,  // 2 vCPU, 16GB RAM, 160GB SSD
-            'cx41' => 20.00,  // 4 vCPU, 32GB RAM, 240GB SSD
-            'cx51' => 36.00,  // 8 vCPU, 64GB RAM, 360GB SSD
-        ];
+        try {
+            // Get real-time pricing from Hetzner API
+            $serverTypes = $this->hetznerService->getServerTypes();
 
-        $costEur = $hetznerCosts[$serverType] ?? $hetznerCosts['cx22'];
+            $foundType = null;
+            foreach ($serverTypes as $type) {
+                if ($type['name'] === $serverType) {
+                    $foundType = $type;
+                    break;
+                }
+            }
+
+            if (!$foundType) {
+                // Fallback to default if type not found
+                throw new \RuntimeException("Server type not found: {$serverType}");
+            }
+
+            // Get monthly price from Hetzner
+            // prices[0] is location-based pricing, we'll use 'monthly' price
+            $monthlyPrice = null;
+            foreach ($foundType['prices'] as $priceData) {
+                if (isset($priceData['price_monthly']['gross'])) {
+                    $monthlyPrice = (float) $priceData['price_monthly']['gross'];
+                    break;
+                }
+            }
+
+            if (!$monthlyPrice) {
+                throw new \RuntimeException("Could not find monthly price for {$serverType}");
+            }
+
+            $costEur = $monthlyPrice;
+
+        } catch (\Exception $e) {
+            // Fallback to hard-coded prices if API fails
+            $this->logger->warning('Using fallback pricing', [
+                'server_type' => $serverType,
+                'error' => $e->getMessage(),
+            ]);
+
+            $hetznerCosts = [
+                'cx11' => 4.15,
+                'cx21' => 6.40,
+                'cx22' => 8.00,
+                'cx31' => 12.50,
+                'cx41' => 20.00,
+                'cx51' => 36.00,
+            ];
+
+            $costEur = $hetznerCosts[$serverType] ?? $hetznerCosts['cx22'];
+        }
 
         // Add 60% markup
         $markup = 0.60;
@@ -56,7 +97,7 @@ class SubscriptionService
 
         return [
             'server_type' => $serverType,
-            'cost_eur' => $costEur,
+            'cost_eur' => round($costEur, 2),
             'markup_percentage' => $markup * 100,
             'final_price_eur' => round($finalPrice, 2),
             'final_price_usd' => round($finalPrice * 1.10, 2), // EUR to USD approximate

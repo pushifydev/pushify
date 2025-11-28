@@ -47,6 +47,22 @@ class ServerController extends AbstractController
         /** @var User $user */
         $user = $this->getUser();
 
+        // Check if user has active subscription
+        if (!$user->canCreateServer()) {
+            if ($request->isMethod('POST')) {
+                $this->addFlash('error', 'You need an active subscription to create servers.');
+                return $this->redirectToRoute('app_billing_checkout_page', [
+                    'server_type' => $request->request->get('server_type', 'cx22'),
+                ]);
+            }
+
+            // Redirect to checkout page with message
+            $this->addFlash('warning', 'Subscribe to start creating servers. Choose your server type below.');
+            return $this->redirectToRoute('app_billing_checkout_page', [
+                'server_type' => 'cx22',
+            ]);
+        }
+
         if ($request->isMethod('POST')) {
             $type = $request->request->get('type', 'manual');
 
