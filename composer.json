@@ -11,6 +11,7 @@
         "doctrine/doctrine-bundle": "^2.18.1",
         "doctrine/doctrine-migrations-bundle": "^3.7",
         "doctrine/orm": "^3.5",
+        "iyzico/iyzipay-php": "^2.0",
         "knpuniversity/oauth2-client-bundle": "*",
         "league/oauth2-github": ">=3.1.1",
         "php-amqplib/rabbitmq-bundle": "^2.17",

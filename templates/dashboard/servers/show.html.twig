@@ -1,246 +1,263 @@
 {% extends 'dashboard/base.html.twig' %}
 
-{% block title %}{{ server.name }} - Servers - Pushify{% endblock %}
-{% block page_title %}{{ server.name }}{% endblock %}
-{% block page_subtitle %}{{ server.ipAddress }}{% endblock %}
+{% block title %}
+	{{ server.name }}
+	- Servers - Pushify
+{% endblock %}
+{% block page_title %}
+	{{ server.name }}
+{% endblock %}
+{% block page_subtitle %}
+	{{ server.ipAddress }}
+{% endblock %}
 
 {% block topbar_actions %}
-<div class="flex items-center gap-3">
-	<button type="button" onclick="testConnection()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
-		<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-			<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-		</svg>
-		Test Connection
-	</button>
-	<a href="{{ path('app_servers') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all">
-		Back to Servers
-	</a>
-</div>
+	<div class="flex items-center gap-3">
+		<button type="button" onclick="testConnection()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all inline-flex items-center gap-2">
+			<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+			</svg>
+			Test Connection
+		</button>
+		<a href="{{ path('app_servers') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-lg transition-all">
+			Back to Servers
+		</a>
+	</div>
 {% endblock %}
 
 {% block content %}
-<div class="grid grid-cols-3 gap-6">
-	<div class="col-span-2 space-y-6">
-		<!-- Server Status -->
-		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
-			<div class="flex items-center justify-between mb-6">
-				<div class="flex items-center gap-4">
-					<div class="w-14 h-14 rounded-xl flex items-center justify-center {{ server.statusBadgeClass }}">
-						<svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2"></path>
-						</svg>
-					</div>
-					<div>
-						<h2 class="text-xl font-semibold text-white">{{ server.name }}</h2>
-						<div class="flex items-center gap-3 mt-1">
-							<span class="px-3 py-1 rounded-full text-sm font-medium {{ server.statusBadgeClass }}">{{ server.status|capitalize }}</span>
-							{% if server.provider != 'custom' %}
-							<span class="text-gray-400">{{ server.providerLabel }}</span>
-							{% endif %}
+	<div class="grid grid-cols-3 gap-6">
+		<div
+			class="col-span-2 space-y-6">
+			<!-- Server Status -->
+			<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+				<div class="flex items-center justify-between mb-6">
+					<div class="flex items-center gap-4">
+						<div class="w-14 h-14 rounded-xl flex items-center justify-center {{ server.statusBadgeClass }}">
+							<svg class="w-7 h-7" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M5 12a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v4a2 2 0 01-2 2"></path>
+							</svg>
+						</div>
+						<div>
+							<h2 class="text-xl font-semibold text-white">{{ server.name }}</h2>
+							<div class="flex items-center gap-3 mt-1">
+								<span class="px-3 py-1 rounded-full text-sm font-medium {{ server.statusBadgeClass }}">{{ server.status|capitalize }}</span>
+								{% if server.provider != 'custom' %}
+									<span class="text-gray-400">{{ server.providerLabel }}</span>
+								{% endif %}
+							</div>
 						</div>
 					</div>
+					{% if server.provider == 'hetzner' %}
+						<div class="flex items-center gap-2">
+							<button onclick="powerAction('reboot')" class="px-3 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 rounded-lg transition-colors text-sm">Reboot</button>
+						</div>
+					{% endif %}
 				</div>
-				{% if server.provider == 'hetzner' %}
-				<div class="flex items-center gap-2">
-					<button onclick="powerAction('reboot')" class="px-3 py-2 bg-yellow-500/20 hover:bg-yellow-500/30 text-yellow-400 rounded-lg transition-colors text-sm">Reboot</button>
-				</div>
+
+				{% if server.status == 'pending' %}
+					<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
+						<div class="flex items-center gap-3">
+							<svg class="animate-spin h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24">
+								<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+								<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+							</svg>
+							<div>
+								<h4 class="text-sm font-medium text-blue-400 mb-1">Server is Being Provisioned</h4>
+								<p class="text-sm text-blue-300">The server is starting up and SSH service is being initialized. This usually takes 2-5 minutes. The page will auto-refresh when ready.</p>
+							</div>
+						</div>
+					</div>
+				{% elseif server.lastError %}
+					<div class="p-4 bg-red-500/10 border border-red-500/30 rounded-lg mb-6">
+						<h4 class="text-sm font-medium text-red-400 mb-1">Last Error</h4>
+						<p class="text-sm text-red-300">{{ server.lastError }}</p>
+					</div>
 				{% endif %}
+
+				<div class="grid grid-cols-4 gap-4">
+					<div class="p-4 bg-gray-900/50 rounded-lg text-center">
+						<p class="text-2xl font-bold text-white">{{ server.cpuCores ?? '-' }}</p>
+						<p class="text-sm text-gray-400">CPU Cores</p>
+					</div>
+					<div class="p-4 bg-gray-900/50 rounded-lg text-center">
+						<p class="text-2xl font-bold text-white">{{ server.memoryGb ?? '-' }}</p>
+						<p class="text-sm text-gray-400">GB RAM</p>
+					</div>
+					<div class="p-4 bg-gray-900/50 rounded-lg text-center">
+						<p class="text-2xl font-bold text-white">{{ server.diskGb ?? '-' }}</p>
+						<p class="text-sm text-gray-400">GB Disk</p>
+					</div>
+					<div class="p-4 bg-gray-900/50 rounded-lg text-center">
+						<p class="text-2xl font-bold {{ server.dockerInstalled ? 'text-green-400' : 'text-gray-500' }}">
+							{{ server.dockerInstalled ? server.dockerVersion : 'No' }}
+						</p>
+						<p class="text-sm text-gray-400">Docker</p>
+					</div>
+				</div>
 			</div>
 
-			{% if server.status == 'pending' %}
-			<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg mb-6">
-				<div class="flex items-center gap-3">
-					<svg class="animate-spin h-5 w-5 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-						<circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-						<path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-					</svg>
+			{% if server.dockerInstalled == false %}
+				<!-- Docker Section -->
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+					<h3 class="text-lg font-semibold text-white mb-4">Docker</h3>
+					{% if server.dockerInstalled %}
+						<div class="flex items-center gap-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+							<svg class="w-8 h-8 text-green-400" viewbox="0 0 24 24" fill="currentColor">
+								<path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186"/>
+							</svg>
+							<div>
+								<p class="text-green-400 font-medium">Docker Installed</p>
+								<p class="text-sm text-gray-400">Version
+									{{ server.dockerVersion }}</p>
+							</div>
+						</div>
+					{% else %}
+						<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
+							<div class="flex items-center justify-between">
+								<div class="flex-1">
+									<p class="text-blue-400 font-medium">Docker Installation in Progress</p>
+									<p class="text-sm text-gray-400 mt-1">Docker is automatically installed during server creation. This may take 2-3 minutes.</p>
+									<p class="text-xs text-gray-500 mt-2">If the server was just created, please wait and check the status again.</p>
+								</div>
+								<button onclick="checkDockerStatus()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors whitespace-nowrap">
+									Check Status
+								</button>
+							</div>
+						</div>
+					{% endif %}
+				</div>
+			{% endif %}
+		</div>
+
+
+		<!-- Sidebar -->
+		<div
+			class="space-y-6">
+			<!-- Connection Info -->
+			<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
+				<h3 class="text-lg font-semibold text-white mb-4">Connection Details</h3>
+				<div class="space-y-4">
 					<div>
-						<h4 class="text-sm font-medium text-blue-400 mb-1">Server is Being Provisioned</h4>
-						<p class="text-sm text-blue-300">The server is starting up and SSH service is being initialized. This usually takes 2-5 minutes. The page will auto-refresh when ready.</p>
+						<p class="text-xs text-gray-500 uppercase mb-1">IP Address</p>
+						<p class="text-white font-mono">{{ server.ipAddress }}</p>
 					</div>
-				</div>
-			</div>
-			{% elseif server.lastError %}
-			<div class="p-4 bg-red-500/10 border border-red-500/30 rounded-lg mb-6">
-				<h4 class="text-sm font-medium text-red-400 mb-1">Last Error</h4>
-				<p class="text-sm text-red-300">{{ server.lastError }}</p>
-			</div>
-			{% endif %}
-
-			<div class="grid grid-cols-4 gap-4">
-				<div class="p-4 bg-gray-900/50 rounded-lg text-center">
-					<p class="text-2xl font-bold text-white">{{ server.cpuCores ?? '-' }}</p>
-					<p class="text-sm text-gray-400">CPU Cores</p>
-				</div>
-				<div class="p-4 bg-gray-900/50 rounded-lg text-center">
-					<p class="text-2xl font-bold text-white">{{ server.memoryGb ?? '-' }}</p>
-					<p class="text-sm text-gray-400">GB RAM</p>
-				</div>
-				<div class="p-4 bg-gray-900/50 rounded-lg text-center">
-					<p class="text-2xl font-bold text-white">{{ server.diskGb ?? '-' }}</p>
-					<p class="text-sm text-gray-400">GB Disk</p>
-				</div>
-				<div class="p-4 bg-gray-900/50 rounded-lg text-center">
-					<p class="text-2xl font-bold {{ server.dockerInstalled ? 'text-green-400' : 'text-gray-500' }}">
-						{{ server.dockerInstalled ? server.dockerVersion : 'No' }}
-					</p>
-					<p class="text-sm text-gray-400">Docker</p>
-				</div>
-			</div>
-		</div>
-
-		<!-- Docker Section -->
-		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
-			<h3 class="text-lg font-semibold text-white mb-4">Docker</h3>
-			{% if server.dockerInstalled %}
-			<div class="flex items-center gap-4 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-				<svg class="w-8 h-8 text-green-400" viewBox="0 0 24 24" fill="currentColor">
-					<path d="M13.983 11.078h2.119a.186.186 0 00.186-.185V9.006a.186.186 0 00-.186-.186h-2.119a.185.185 0 00-.185.185v1.888c0 .102.083.185.185.185m-2.954-5.43h2.118a.186.186 0 00.186-.186V3.574a.186.186 0 00-.186-.185h-2.118a.185.185 0 00-.185.185v1.888c0 .102.082.185.185.186"/>
-				</svg>
-				<div>
-					<p class="text-green-400 font-medium">Docker Installed</p>
-					<p class="text-sm text-gray-400">Version {{ server.dockerVersion }}</p>
-				</div>
-			</div>
-			{% else %}
-			<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
-				<div class="flex items-center justify-between">
-					<div class="flex-1">
-						<p class="text-blue-400 font-medium">Docker Installation in Progress</p>
-						<p class="text-sm text-gray-400 mt-1">Docker is automatically installed during server creation. This may take 2-3 minutes.</p>
-						<p class="text-xs text-gray-500 mt-2">If the server was just created, please wait and check the status again.</p>
+					<div>
+						<p class="text-xs text-gray-500 uppercase mb-1">SSH Port</p>
+						<p class="text-white">{{ server.sshPort }}</p>
 					</div>
-					<button onclick="checkDockerStatus()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors whitespace-nowrap">
-						Check Status
+					<div>
+						<p class="text-xs text-gray-500 uppercase mb-1">SSH User</p>
+						<p class="text-white">{{ server.sshUser }}</p>
+					</div>
+					{% if server.os %}
+						<div>
+							<p class="text-xs text-gray-500 uppercase mb-1">OS</p>
+							<p class="text-white">{{ server.os }}</p>
+						</div>
+					{% endif %}
+					{% if server.region %}
+						<div>
+							<p class="text-xs text-gray-500 uppercase mb-1">Region</p>
+							<p class="text-white">{{ server.region }}</p>
+						</div>
+					{% endif %}
+					{% if server.lastConnectedAt %}
+						<div>
+							<p class="text-xs text-gray-500 uppercase mb-1">Last Connected</p>
+							<p class="text-white">{{ server.lastConnectedAt|date('M d, Y H:i') }}</p>
+						</div>
+					{% endif %}
+				</div>
+			</div>
+
+			<!-- Delete -->
+			<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
+				<h3 class="text-lg font-semibold text-red-400 mb-2">Danger Zone</h3>
+				<p class="text-sm text-gray-400 mb-4">
+					{% if server.provider == 'hetzner' %}
+						This will delete the server from both Pushify and Hetzner.
+					{% else %}
+						This will remove the server from Pushify (server itself won't be affected).
+					{% endif %}
+				</p>
+				<form method="post" action="{{ path('app_server_delete', {id: server.id}) }}" onsubmit="return confirm('Are you sure?')">
+					<input type="hidden" name="_token" value="{{ csrf_token('delete-server-' ~ server.id) }}">
+					<button type="submit" class="w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg border border-red-500/30">
+						Delete Server
 					</button>
-				</div>
+				</form>
 			</div>
-			{% endif %}
 		</div>
 	</div>
 
-	<!-- Sidebar -->
-	<div class="space-y-6">
-		<!-- Connection Info -->
-		<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-6">
-			<h3 class="text-lg font-semibold text-white mb-4">Connection Details</h3>
-			<div class="space-y-4">
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">IP Address</p>
-					<p class="text-white font-mono">{{ server.ipAddress }}</p>
-				</div>
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">SSH Port</p>
-					<p class="text-white">{{ server.sshPort }}</p>
-				</div>
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">SSH User</p>
-					<p class="text-white">{{ server.sshUser }}</p>
-				</div>
-				{% if server.os %}
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">OS</p>
-					<p class="text-white">{{ server.os }}</p>
-				</div>
-				{% endif %}
-				{% if server.region %}
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">Region</p>
-					<p class="text-white">{{ server.region }}</p>
-				</div>
-				{% endif %}
-				{% if server.lastConnectedAt %}
-				<div>
-					<p class="text-xs text-gray-500 uppercase mb-1">Last Connected</p>
-					<p class="text-white">{{ server.lastConnectedAt|date('M d, Y H:i') }}</p>
-				</div>
-				{% endif %}
-			</div>
-		</div>
+	<div id="toast" class="fixed bottom-4 right-4 px-4 py-3 rounded-lg hidden transition-all"></div>
 
-		<!-- Delete -->
-		<div class="bg-red-500/10 border border-red-500/30 rounded-xl p-6">
-			<h3 class="text-lg font-semibold text-red-400 mb-2">Danger Zone</h3>
-			<p class="text-sm text-gray-400 mb-4">
-				{% if server.provider == 'hetzner' %}
-				This will delete the server from both Pushify and Hetzner.
-				{% else %}
-				This will remove the server from Pushify (server itself won't be affected).
-				{% endif %}
-			</p>
-			<form method="post" action="{{ path('app_server_delete', {id: server.id}) }}" onsubmit="return confirm('Are you sure?')">
-				<input type="hidden" name="_token" value="{{ csrf_token('delete-server-' ~ server.id) }}">
-				<button type="submit" class="w-full px-4 py-2 bg-red-500/20 hover:bg-red-500/30 text-red-400 font-medium rounded-lg border border-red-500/30">
-					Delete Server
-				</button>
-			</form>
-		</div>
-	</div>
-</div>
-
-<div id="toast" class="fixed bottom-4 right-4 px-4 py-3 rounded-lg hidden transition-all"></div>
-
-<script>
-const serverId = {{ server.id }};
+	<script>
+		const serverId = {{ server.id }};
 const serverStatus = '{{ server.status }}';
 
 function showToast(message, type = 'info', duration = 3000) {
-	const toast = document.getElementById('toast');
-	toast.textContent = message;
-	toast.className = 'fixed bottom-4 right-4 px-4 py-3 rounded-lg transition-all ' +
-		(type === 'success' ? 'bg-green-500 text-white' : type === 'error' ? 'bg-red-500 text-white' : 'bg-gray-700 text-white');
-	toast.classList.remove('hidden');
-	if (duration > 0) setTimeout(() => toast.classList.add('hidden'), duration);
+const toast = document.getElementById('toast');
+toast.textContent = message;
+toast.className = 'fixed bottom-4 right-4 px-4 py-3 rounded-lg transition-all ' + (
+type === 'success' ? 'bg-green-500 text-white' : type === 'error' ? 'bg-red-500 text-white' : 'bg-gray-700 text-white'
+);
+toast.classList.remove('hidden');
+if (duration > 0) 
+setTimeout(() => toast.classList.add('hidden'), duration);
+
+
+
 }
 
 // Auto-refresh if pending
 if (serverStatus === 'pending') {
-	const checkStatus = () => {
-		fetch(`/dashboard/servers/${serverId}/status`)
-			.then(r => r.json())
-			.then(data => {
-				if (data.status !== 'pending') {
-					location.reload();
-				}
-			});
-	};
-	// Check every 5 seconds
-	setInterval(checkStatus, 5000);
-	showToast('Server is being provisioned... This page will auto-refresh when ready.', 'info', 0);
+const checkStatus = () => {
+fetch (`/dashboard/servers/${serverId}/status`).then(r => r.json()).then(data => {
+if (data.status !== 'pending') {
+location.reload();
+}
+});
+};
+// Check every 5 seconds
+setInterval(checkStatus, 5000);
+showToast('Server is being provisioned... This page will auto-refresh when ready.', 'info', 0);
 }
 
 function testConnection() {
-	showToast('Testing connection...', 'info');
-	fetch(`/dashboard/servers/${serverId}/test`, { method: 'POST' })
-		.then(r => r.json())
-		.then(data => {
-			showToast(data.success ? 'Connection successful!' : data.message, data.success ? 'success' : 'error');
-			if (data.success) setTimeout(() => location.reload(), 1500);
-		})
-		.catch(() => showToast('Connection test failed', 'error'));
+showToast('Testing connection...', 'info');
+fetch (`/dashboard/servers/${serverId}/test`, {method: 'POST'}).then(r => r.json()).then(data => {
+showToast(data.success ? 'Connection successful!' : data.message, data.success ? 'success' : 'error');
+if (data.success) 
+setTimeout(() => location.reload(), 1500);
+
+
+
+}).catch(() => showToast('Connection test failed', 'error'));
 }
 
 function checkDockerStatus() {
-	showToast('Checking Docker installation status...', 'info');
-	fetch(`/dashboard/servers/${serverId}/docker/check`)
-		.then(r => r.json())
-		.then(data => {
-			if (data.installed) {
-				showToast(`Docker ${data.version} is installed!`, 'success');
-				setTimeout(() => location.reload(), 1500);
-			} else {
-				showToast('Docker is still being installed. Please wait 1-2 minutes and try again.', 'warning');
-			}
-		})
-		.catch(() => showToast('Status check failed', 'error'));
+showToast('Checking Docker installation status...', 'info');
+fetch (`/dashboard/servers/${serverId}/docker/check`).then(r => r.json()).then(data => {
+if (data.installed) {
+showToast (`Docker ${
+data.version
+} is installed!`, 'success');
+setTimeout(() => location.reload(), 1500);
+} else {
+showToast('Docker is still being installed. Please wait 1-2 minutes and try again.', 'warning');
+}
+}).catch(() => showToast('Status check failed', 'error'));
 }
 
 function powerAction(action) {
-	if (!confirm(`Are you sure you want to ${action} this server?`)) return;
-	fetch(`/dashboard/servers/${serverId}/power/${action}`, { method: 'POST' })
-		.then(r => r.json())
-		.then(data => showToast(data.message || data.error, data.success ? 'success' : 'error'))
-		.catch(() => showToast('Action failed', 'error'));
+if (!confirm (`Are you sure you want to ${action} this server?`)) 
+return;
+
+
+
+fetch(`/dashboard/servers/${serverId}/power/${action}`, {method: 'POST'}).then(r => r.json()).then(data => showToast(data.message || data.error, data.success ? 'success' : 'error')).catch(() => showToast('Action failed', 'error'));
 }
-</script>
+	</script>
 {% endblock %}

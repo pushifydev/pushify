@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
@@ -59,9 +61,13 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: Types::JSON, nullable: true)]
     private ?array $notificationSettings = null;
 
+    #[ORM\OneToMany(targetEntity: Subscription::class, mappedBy: 'user', orphanRemoval: true)]
+    private Collection $subscriptions;
+
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->subscriptions = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -257,5 +263,68 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
             'server_online' => false,
             'ssl_expiring' => true,
         ];
+    }
+
+    /**
+     * @return Collection<int, Subscription>
+     */
+    public function getSubscriptions(): Collection
+    {
+        return $this->subscriptions;
+    }
+
+    public function addSubscription(Subscription $subscription): static
+    {
+        if (!$this->subscriptions->contains($subscription)) {
+            $this->subscriptions->add($subscription);
+            $subscription->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSubscription(Subscription $subscription): static
+    {
+        if ($this->subscriptions->removeElement($subscription)) {
+            if ($subscription->getUser() === $this) {
+                $subscription->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Check if user has an active subscription
+     */
+    public function hasActiveSubscription(): bool
+    {
+        foreach ($this->subscriptions as $subscription) {
+            if ($subscription->isActive()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Get user's active subscription
+     */
+    public function getActiveSubscription(): ?Subscription
+    {
+        foreach ($this->subscriptions as $subscription) {
+            if ($subscription->isActive()) {
+                return $subscription;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Check if user can create servers (has active subscription)
+     */
+    public function canCreateServer(): bool
+    {
+        return $this->hasActiveSubscription();
     }
 }
