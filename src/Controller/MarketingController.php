@@ -178,4 +178,94 @@ class MarketingController extends AbstractController
             'faqs' => $faqs,
         ]);
     }
+
+    #[Route('/features/databases', name: 'features_databases')]
+    public function databases(): Response
+    {
+        return $this->render('features/databases.html.twig');
+    }
+
+    #[Route('/features/ssl', name: 'features_ssl')]
+    public function ssl(): Response
+    {
+        return $this->render('features/ssl.html.twig');
+    }
+
+    #[Route('/features/monitoring', name: 'features_monitoring')]
+    public function monitoring(): Response
+    {
+        return $this->render('features/monitoring.html.twig');
+    }
+
+    #[Route('/docs', name: 'docs_home')]
+    public function docs(): Response
+    {
+        return $this->render('docs/index.html.twig');
+    }
+
+    #[Route('/docs/getting-started', name: 'docs_getting_started')]
+    public function gettingStarted(): Response
+    {
+        return $this->render('docs/getting-started.html.twig');
+    }
+
+    #[Route('/docs/api', name: 'docs_api')]
+    public function api(): Response
+    {
+        return $this->render('docs/api.html.twig');
+    }
+
+    #[Route('/docs/server-setup', name: 'docs_server_setup')]
+    public function serverSetup(): Response
+    {
+        return $this->render('docs/server-setup.html.twig');
+    }
+
+    #[Route('/docs/cli', name: 'docs_cli')]
+    public function cli(): Response
+    {
+        return $this->render('docs/cli.html.twig');
+    }
+
+    #[Route('/docs/github', name: 'docs_github')]
+    public function github(): Response
+    {
+        return $this->render('docs/github.html.twig');
+    }
+
+    #[Route('/changelog', name: 'changelog')]
+    public function changelog(): Response
+    {
+        return $this->render('docs/changelog.html.twig');
+    }
+
+    #[Route('/features/backups', name: 'features_backups')]
+    public function backups(): Response
+    {
+        return $this->render('features/backups.html.twig');
+    }
+
+    #[Route('/features/preview', name: 'features_preview')]
+    public function preview(): Response
+    {
+        return $this->render('features/preview.html.twig');
+    }
+
+    #[Route('/features/domains', name: 'features_domains')]
+    public function domains(): Response
+    {
+        return $this->render('features/domains.html.twig');
+    }
+
+    #[Route('/features/teams', name: 'features_teams')]
+    public function teams(): Response
+    {
+        return $this->render('features/teams.html.twig');
+    }
+
+    #[Route('/features/self-hosted', name: 'features_self_hosted')]
+    public function selfHosted(): Response
+    {
+        return $this->render('features/self-hosted.html.twig');
+    }
 }

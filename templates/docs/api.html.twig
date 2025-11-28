@@ -1,0 +1,180 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}API Reference - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-6xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            API <span class="bg-gradient-to-r from-purple-400 to-pink-500 bg-clip-text text-transparent">Reference</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Complete API documentation for automation and integrations.
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <h3 class="text-lg font-bold mb-2">Authentication</h3>
+                <p class="text-gray-400 text-sm mb-4">Generate and use API tokens to authenticate your requests.</p>
+                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+                    Authorization: Bearer your-api-token
+                </div>
+            </div>
+
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <h3 class="text-lg font-bold mb-2">Base URL</h3>
+                <p class="text-gray-400 text-sm mb-4">All API requests should be made to this endpoint.</p>
+                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+                    https://api.pushify.io/v1
+                </div>
+            </div>
+        </div>
+
+        <div class="space-y-8">
+            <section>
+                <h2 class="text-2xl font-bold mb-6">Projects</h2>
+
+                <div class="space-y-4">
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold">GET</span>
+                            <code class="text-sm text-gray-300">/projects</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">List all your projects</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "data": [
+    {
+      "id": "proj_abc123",
+      "name": "My Application",
+      "repository": "username/repo",
+      "status": "running",
+      "url": "https://myapp.com"
+    }
+  ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-blue-500/20 text-blue-400 text-xs font-bold">POST</span>
+                            <code class="text-sm text-gray-300">/projects</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Create a new project</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "name": "My New Project",
+  "repository": "username/repo",
+  "server_id": "server_xyz789",
+  "branch": "main"
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-orange-500/20 text-orange-400 text-xs font-bold">POST</span>
+                            <code class="text-sm text-gray-300">/projects/{id}/deploy</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Trigger a new deployment</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "deployment_id": "deploy_def456",
+  "status": "building"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-6">Servers</h2>
+
+                <div class="space-y-4">
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold">GET</span>
+                            <code class="text-sm text-gray-300">/servers</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">List all your servers</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "data": [
+    {
+      "id": "server_xyz789",
+      "name": "Production Server",
+      "type": "cx22",
+      "ip": "192.168.1.100",
+      "status": "running"
+    }
+  ]
+}</pre>
+                        </div>
+                    </div>
+
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold">GET</span>
+                            <code class="text-sm text-gray-300">/servers/{id}/metrics</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Get server performance metrics</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "cpu_usage": 45.2,
+  "memory_usage": 62.8,
+  "disk_usage": 35.1,
+  "network_in": 1024,
+  "network_out": 2048
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-6">Deployments</h2>
+
+                <div class="space-y-4">
+                    <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                        <div class="flex items-center gap-3 mb-3">
+                            <span class="px-2 py-1 rounded bg-green-500/20 text-green-400 text-xs font-bold">GET</span>
+                            <code class="text-sm text-gray-300">/deployments/{id}</code>
+                        </div>
+                        <p class="text-gray-400 text-sm mb-4">Get deployment status and logs</p>
+                        <div class="p-4 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300 overflow-x-auto">
+<pre>{
+  "id": "deploy_def456",
+  "status": "success",
+  "commit": "abc123def456",
+  "started_at": "2024-01-01T12:00:00Z",
+  "completed_at": "2024-01-01T12:02:30Z"
+}</pre>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <section class="mt-12">
+            <div class="relative rounded-2xl bg-gradient-to-br from-purple-600/20 via-pink-600/20 to-orange-600/20 p-8 border border-white/10">
+                <h2 class="text-2xl font-bold mb-4">Need More Information?</h2>
+                <p class="text-gray-300 mb-6">
+                    This is a quick reference. For detailed API documentation with all endpoints, parameters, and examples, visit our complete API docs.
+                </p>
+                <a href="mailto:support@pushify.io" class="inline-block px-6 py-3 bg-white text-gray-900 font-semibold rounded-lg hover:bg-gray-100 transition-colors">
+                    Contact Support for Full API Docs
+                </a>
+            </div>
+        </section>
+    </div>
+</div>
+{% endblock %}

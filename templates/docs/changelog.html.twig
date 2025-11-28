@@ -1,0 +1,269 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Changelog - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            <span class="bg-gradient-to-r from-pink-400 to-purple-500 bg-clip-text text-transparent">Changelog</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Track all the updates, improvements, and bug fixes across Pushify versions.
+        </p>
+
+        <div class="space-y-8">
+            <section>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block px-4 py-2 rounded-full bg-purple-500/20 border border-purple-500/50 text-purple-300 font-bold text-sm">v1.2.0</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex items-baseline justify-between mb-3">
+                            <h2 class="text-2xl font-bold">Major Feature Update</h2>
+                            <span class="text-gray-500 text-sm">December 15, 2024</span>
+                        </div>
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h3 class="font-bold text-purple-300 mb-3">New Features</h3>
+                            <ul class="space-y-2 text-gray-300 mb-5">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Pull Request Previews - Automatically deploy PRs to preview URLs</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Database Backups - Automated PostgreSQL and MySQL backups with S3 integration</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>CLI Enhancement - New <code class="bg-gray-900 px-2 py-0.5 rounded text-sm text-purple-400">pushify rollback</code> command</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Team Collaboration - Invite team members and manage permissions</span>
+                                </li>
+                            </ul>
+
+                            <h3 class="font-bold text-purple-300 mb-3">Improvements</h3>
+                            <ul class="space-y-2 text-gray-300 mb-5">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>30% faster deployment initialization</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Improved log streaming with real-time filtering</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Better error messages and debugging information</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Dashboard performance optimizations</span>
+                                </li>
+                            </ul>
+
+                            <h3 class="font-bold text-purple-300 mb-3">Bug Fixes</h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span>Fixed intermittent webhook delivery issues</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-purple-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span>Fixed SSL certificate renewal delays</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/50 text-pink-300 font-bold text-sm">v1.1.0</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex items-baseline justify-between mb-3">
+                            <h2 class="text-2xl font-bold">Deployment Enhancements</h2>
+                            <span class="text-gray-500 text-sm">November 28, 2024</span>
+                        </div>
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h3 class="font-bold text-pink-300 mb-3">New Features</h3>
+                            <ul class="space-y-2 text-gray-300 mb-5">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Health Checks - Configure custom health check endpoints</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Multi-Domain Support - Host multiple domains on one project</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m0 0h6"></path>
+                                    </svg>
+                                    <span>Deployment Strategies - Support for blue-green and canary deployments</span>
+                                </li>
+                            </ul>
+
+                            <h3 class="font-bold text-pink-300 mb-3">Improvements</h3>
+                            <ul class="space-y-2 text-gray-300 mb-5">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Deployment timeout increased from 30 to 60 minutes</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Enhanced webhook retry logic with exponential backoff</span>
+                                </li>
+                            </ul>
+
+                            <h3 class="font-bold text-pink-300 mb-3">Bug Fixes</h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span>Fixed environment variable ordering issues</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span>Fixed log retention policies</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                    </svg>
+                                    <span>Fixed server connectivity check timeout</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <div class="flex items-start gap-4">
+                    <div class="flex-shrink-0">
+                        <span class="inline-block px-4 py-2 rounded-full bg-pink-500/20 border border-pink-500/50 text-pink-300 font-bold text-sm">v1.0.0</span>
+                    </div>
+                    <div class="flex-grow">
+                        <div class="flex items-baseline justify-between mb-3">
+                            <h2 class="text-2xl font-bold">Initial Release</h2>
+                            <span class="text-gray-500 text-sm">October 15, 2024</span>
+                        </div>
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h3 class="font-bold text-pink-300 mb-3">Core Features</h3>
+                            <ul class="space-y-2 text-gray-300">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Deploy Docker applications with zero configuration</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>GitHub integration with automatic deployments</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Managed PostgreSQL and MySQL databases</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Automatic SSL certificates with Let's Encrypt</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Real-time logs and monitoring</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>Command-line interface for deployment management</span>
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-pink-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    <span>REST API for automation and integrations</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12">
+                <div class="relative rounded-2xl bg-gradient-to-br from-pink-500/20 via-purple-600/20 to-indigo-600/20 p-8 border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4">Stay Updated</h2>
+                    <p class="text-gray-300 mb-6">
+                        Follow our GitHub releases page or subscribe to release notifications to stay informed about the latest updates and features.
+                    </p>
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="https://github.com/pushify/pushify/releases" class="inline-flex items-center gap-2 px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white font-semibold rounded-lg transition-colors">
+                            View on GitHub
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                        <a href="mailto:updates@pushify.io" class="inline-flex items-center gap-2 px-6 py-3 border border-purple-500/50 text-white font-semibold rounded-lg hover:bg-purple-500/10 transition-colors">
+                            Subscribe to Updates
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

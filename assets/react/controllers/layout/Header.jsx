@@ -67,8 +67,7 @@ const Header = () => {
                                                 title="Managed Databases"
                                             >
                                                 PostgreSQL, MySQL, MongoDB,
-                                                Redis - deploy with one click.
-                                                Automated backups included.
+                                                Redis with automated backups.
                                             </ListItem>
                                             <ListItem
                                                 href="/features/backups"

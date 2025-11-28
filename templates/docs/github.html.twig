@@ -1,0 +1,276 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}GitHub Integration - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            GitHub <span class="bg-gradient-to-r from-orange-400 to-red-500 bg-clip-text text-transparent">Integration</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Connect your GitHub repositories and enable automatic deployments on every push.
+        </p>
+
+        <div class="space-y-12">
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white text-sm font-bold">1</span>
+                    Connect Your GitHub Account
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Link your GitHub account to Pushify to access your repositories and enable seamless deployments.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <ol class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">1</span>
+                                <span>Go to your account settings in Pushify</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">2</span>
+                                <span>Click "Connect GitHub" under Integrations</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">3</span>
+                                <span>You'll be redirected to GitHub's authorization page</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">4</span>
+                                <span>Review the permissions and click "Authorize"</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">5</span>
+                                <span>You're now connected! Select which repositories to grant access to</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                        <p class="text-sm text-orange-200">
+                            <span class="font-bold">Tip:</span> You can control repository access anytime by modifying the GitHub App permissions in your GitHub settings.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white text-sm font-bold">2</span>
+                    Enable Auto-Deploy
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Configure your projects to deploy automatically when you push changes to GitHub.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">In the Pushify Dashboard</h4>
+                        <ol class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">1</span>
+                                <span>Navigate to your project settings</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">2</span>
+                                <span>Find the "GitHub Integration" section</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">3</span>
+                                <span>Select your GitHub repository</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">4</span>
+                                <span>Choose which branch to deploy (e.g., main, master)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">5</span>
+                                <span>Toggle "Auto-Deploy on Push" to ON</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">6</span>
+                                <span>Save and you're done!</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                        <p class="text-sm text-orange-200">
+                            <span class="font-bold">Pro tip:</span> You can deploy from multiple branches to different servers. Set up staging and production deployments easily!
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white text-sm font-bold">3</span>
+                    Webhook Setup
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Webhooks allow Pushify to receive real-time notifications from GitHub about repository events.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Automatic Webhook Configuration</h4>
+                        <p class="text-sm text-gray-400 mb-4">When you connect your GitHub account and enable auto-deploy, Pushify automatically:</p>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Creates a webhook on your GitHub repository
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Configures it to trigger on push events
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Points to your deployment endpoint
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Enables secret verification for security
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Manual Webhook Setup</h4>
+                        <p class="text-sm text-gray-400 mb-4">If you prefer, you can manually configure webhooks:</p>
+                        <ol class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">1</span>
+                                <span>Go to your GitHub repository Settings &gt; Webhooks</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">2</span>
+                                <span>Click "Add webhook"</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">3</span>
+                                <span>Set Payload URL to your Pushify webhook endpoint</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">4</span>
+                                <span>Choose "application/json" as Content type</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">5</span>
+                                <span>Select "Just the push event" for events to trigger</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">6</span>
+                                <span>Check "Active" and save</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-orange-500 text-white text-sm font-bold">4</span>
+                    Pull Request Previews
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Automatically deploy pull requests to preview URLs for testing before merging.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Enable PR Previews</h4>
+                        <ol class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">1</span>
+                                <span>In project settings, find "Pull Request Previews"</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">2</span>
+                                <span>Toggle "Deploy PR previews" to ON</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">3</span>
+                                <span>Configure subdomain pattern (e.g., pr-{id}.example.com)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-orange-500/20 text-orange-400 text-xs font-bold flex-shrink-0">4</span>
+                                <span>Save changes</span>
+                            </li>
+                        </ol>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">How PR Previews Work</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Pull requests trigger automatic deployments to preview URLs
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Test your changes with a live URL before merging
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Pushify posts a comment on your PR with the preview URL
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                                Preview is cleaned up automatically after PR is merged or closed
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-lg bg-orange-500/10 border border-orange-500/20">
+                        <p class="text-sm text-orange-200">
+                            <span class="font-bold">Note:</span> PR previews use the same environment variables as your main deployment by default, but you can override them if needed.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12">
+                <div class="relative rounded-2xl bg-gradient-to-br from-orange-500/20 via-red-600/20 to-pink-600/20 p-8 border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4">GitHub Integration Tips</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ path('docs_home') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-orange-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Back to Docs</h3>
+                            <p class="text-sm text-gray-400">Return to documentation home</p>
+                        </a>
+                        <a href="{{ path('docs_cli') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-orange-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">CLI Tool</h3>
+                            <p class="text-sm text-gray-400">Manage deployments from terminal</p>
+                        </a>
+                        <a href="https://github.com" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-orange-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">GitHub Docs</h3>
+                            <p class="text-sm text-gray-400">Learn more about GitHub webhooks</p>
+                        </a>
+                        <a href="mailto:support@pushify.io" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-orange-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Get Support</h3>
+                            <p class="text-sm text-gray-400">Contact our support team</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

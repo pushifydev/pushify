@@ -3,152 +3,243 @@
 {% block title %}Managed Databases - Pushify{% endblock %}
 
 {% block body %}
-<div class="py-20">
-	<div class="max-w-6xl mx-auto px-4">
-		<!-- Hero -->
-		<div class="text-center mb-16">
-			<div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 mb-6">
-				<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
-				</svg>
-				<span>Managed Databases</span>
-			</div>
-			<h1 class="text-4xl md:text-6xl font-bold mb-6">
-				Production-Ready Databases<br/>
-				<span class="text-primary">In One Click</span>
-			</h1>
-			<p class="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
-				Deploy PostgreSQL, MySQL, MongoDB, or Redis with automated backups, monitoring, and scaling.
-				No configuration required.
-			</p>
-			<a href="/register" class="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all">
-				<span>Get Started Free</span>
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-				</svg>
-			</a>
-		</div>
+<div class="py-12 md:py-20 overflow-hidden">
+    <!-- Hero Section -->
+    <section class="text-center mb-20 animate-fade-in">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium border border-primary/20 mb-6">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+            </svg>
+            <span>Managed Databases</span>
+        </div>
 
-		<!-- Supported Databases -->
-		<div class="mb-20">
-			<h2 class="text-3xl font-bold text-center mb-12">Supported Databases</h2>
-			<div class="grid md:grid-cols-4 gap-6">
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 text-center">
-					<div class="w-16 h-16 mx-auto mb-4 rounded-lg bg-primary/20 flex items-center justify-center">
-						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">PostgreSQL</h3>
-					<p class="text-gray-400 text-sm">Most advanced open-source database</p>
-				</div>
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 text-center">
-					<div class="w-16 h-16 mx-auto mb-4 rounded-lg bg-primary/20 flex items-center justify-center">
-						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">MySQL</h3>
-					<p class="text-gray-400 text-sm">Popular relational database</p>
-				</div>
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 text-center">
-					<div class="w-16 h-16 mx-auto mb-4 rounded-lg bg-primary/20 flex items-center justify-center">
-						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">MongoDB</h3>
-					<p class="text-gray-400 text-sm">NoSQL document database</p>
-				</div>
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 text-center">
-					<div class="w-16 h-16 mx-auto mb-4 rounded-lg bg-primary/20 flex items-center justify-center">
-						<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Redis</h3>
-					<p class="text-gray-400 text-sm">In-memory data structure store</p>
-				</div>
-			</div>
-		</div>
+        <h1 class="text-4xl md:text-6xl font-bold mb-6">
+            Production-Ready <span class="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Databases</span>
+        </h1>
 
-		<!-- Features -->
-		<div class="mb-20">
-			<h2 class="text-3xl font-bold text-center mb-12">Everything You Need</h2>
-			<div class="grid md:grid-cols-3 gap-8">
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Automated Backups</h3>
-					<p class="text-gray-400">Daily automated backups with point-in-time recovery. Never lose your data.</p>
-				</div>
+        <p class="text-xl text-gray-400 max-w-3xl mx-auto mb-8">
+            Deploy enterprise-grade PostgreSQL, MySQL, MongoDB, or Redis instances in seconds.
+            Automated backups, point-in-time recovery, and performance monitoring included.
+        </p>
 
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Performance Monitoring</h3>
-					<p class="text-gray-400">Real-time metrics, query performance, and resource usage monitoring.</p>
-				</div>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <a href="{{ path('app_register') }}" class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all hover:scale-105 shadow-lg shadow-primary/25">
+                Get Started Free
+            </a>
+            <a href="{{ path('app_pricing') }}" class="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl border border-gray-700 transition-all">
+                View Pricing
+            </a>
+        </div>
+    </section>
 
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Secure by Default</h3>
-					<p class="text-gray-400">Encrypted connections, automatic security updates, and isolated environments.</p>
-				</div>
+    <!-- Supported Databases -->
+    <section class="max-w-6xl mx-auto mb-20">
+        <h2 class="text-3xl font-bold text-center mb-12">Supported Database Systems</h2>
 
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Easy Scaling</h3>
-					<p class="text-gray-400">Scale your database resources up or down with a single click.</p>
-				</div>
+        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <!-- PostgreSQL -->
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-all hover:scale-105">
+                <div class="w-16 h-16 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">PostgreSQL</h3>
+                <p class="text-sm text-gray-400 mb-4">Version 15 - Advanced open source database</p>
+                <ul class="text-sm text-gray-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        ACID compliance
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        JSON support
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Full-text search
+                    </li>
+                </ul>
+            </div>
 
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">Direct Access</h3>
-					<p class="text-gray-400">Connect with standard tools. Full SQL access and admin privileges.</p>
-				</div>
+            <!-- MySQL -->
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-all hover:scale-105">
+                <div class="w-16 h-16 bg-orange-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">MySQL</h3>
+                <p class="text-sm text-gray-400 mb-4">Version 8.0 - World's most popular database</p>
+                <ul class="text-sm text-gray-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        High performance
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Replication support
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Wide compatibility
+                    </li>
+                </ul>
+            </div>
 
-				<div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
-					<div class="w-12 h-12 rounded-lg bg-primary/20 flex items-center justify-center mb-4">
-						<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-						</svg>
-					</div>
-					<h3 class="text-xl font-bold mb-2">99.9% Uptime</h3>
-					<p class="text-gray-400">High availability with automatic failover and redundancy.</p>
-				</div>
-			</div>
-		</div>
+            <!-- MongoDB -->
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-all hover:scale-105">
+                <div class="w-16 h-16 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">MongoDB</h3>
+                <p class="text-sm text-gray-400 mb-4">Version 7.0 - Document database</p>
+                <ul class="text-sm text-gray-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Flexible schema
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Horizontal scaling
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Rich queries
+                    </li>
+                </ul>
+            </div>
 
-		<!-- CTA -->
-		<div class="text-center p-12 rounded-2xl bg-primary">
-			<h2 class="text-3xl font-bold text-white mb-4">Ready to Deploy Your Database?</h2>
-			<p class="text-xl text-white/90 mb-6">Get started in minutes. No credit card required.</p>
-			<a href="/register" class="inline-flex items-center gap-2 px-8 py-4 bg-white text-primary font-semibold rounded-xl transition-all hover:bg-gray-100">
-				<span>Create Free Account</span>
-				<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-				</svg>
-			</a>
-		</div>
-	</div>
+            <!-- Redis -->
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-all hover:scale-105">
+                <div class="w-16 h-16 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+                    <svg class="w-10 h-10 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold mb-2">Redis</h3>
+                <p class="text-sm text-gray-400 mb-4">Version 7.2 - In-memory data store</p>
+                <ul class="text-sm text-gray-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Sub-millisecond latency
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Pub/Sub messaging
+                    </li>
+                    <li class="flex items-center gap-2">
+                        <svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        Caching & sessions
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Key Features -->
+    <section class="max-w-6xl mx-auto mb-20">
+        <h2 class="text-3xl font-bold text-center mb-12">Enterprise Features Included</h2>
+
+        <div class="grid md:grid-cols-2 gap-8">
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Automated Daily Backups</h3>
+                        <p class="text-gray-400">Automatic daily backups with point-in-time recovery. Restore your database to any backup point with one click.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Secure & Isolated</h3>
+                        <p class="text-gray-400">SSL/TLS encrypted connections. Each database runs in an isolated Docker container for maximum security and resource control.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">Performance Monitoring</h3>
+                        <p class="text-gray-400">Real-time metrics dashboard. Monitor connection pools, query performance, memory usage, and disk I/O.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 rounded-xl bg-gray-800/50 border border-gray-700">
+                <div class="flex items-start gap-4">
+                    <div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center shrink-0">
+                        <svg class="w-6 h-6 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">One-Click Deployment</h3>
+                        <p class="text-gray-400">Deploy new database instances in under 60 seconds. Automatic configuration, optimization, and security hardening.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="max-w-4xl mx-auto text-center">
+        <div class="p-12 rounded-2xl bg-gradient-to-br from-primary/20 via-purple-500/10 to-transparent border border-primary/30">
+            <h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Deploy Your Database?</h2>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+                Start with a free trial. Deploy your first managed database in under 2 minutes.
+            </p>
+            <a href="{{ path('app_register') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all hover:scale-105 shadow-lg shadow-primary/25">
+                <span>Get Started Free</span>
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                </svg>
+            </a>
+        </div>
+    </section>
 </div>
 {% endblock %}

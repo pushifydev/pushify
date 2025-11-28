@@ -1,0 +1,254 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}CLI Tool - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            CLI <span class="bg-gradient-to-r from-green-400 to-emerald-500 bg-clip-text text-transparent">Tool</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Manage your deployments directly from your terminal with the Pushify CLI.
+        </p>
+
+        <div class="space-y-12">
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white text-sm font-bold">1</span>
+                    Installation
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Install the Pushify CLI using npm or download the binary directly.
+                    </p>
+                    <div class="space-y-3">
+                        <div>
+                            <h4 class="font-bold mb-2 text-sm">Using npm:</h4>
+                            <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 overflow-x-auto">
+                                <code class="text-green-400 font-mono text-sm">npm install -g pushify-cli</code>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2 text-sm">Verify Installation:</h4>
+                            <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 overflow-x-auto">
+                                <code class="text-green-400 font-mono text-sm">pushify --version</code>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold mb-2 text-sm">Get Help:</h4>
+                            <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 overflow-x-auto">
+                                <code class="text-green-400 font-mono text-sm">pushify help</code>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white text-sm font-bold">2</span>
+                    Authentication
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Authenticate with Pushify to manage your projects and deployments.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Login to Your Account</h4>
+                        <div class="space-y-3">
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto">
+                                pushify login
+                            </div>
+                            <p class="text-sm text-gray-400">This will open your browser to authenticate and save your API token locally.</p>
+                        </div>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Using API Token</h4>
+                        <div class="space-y-3">
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto">
+                                pushify config set-token &lt;your-api-token&gt;
+                            </div>
+                            <p class="text-sm text-gray-400">Or set the PUSHIFY_TOKEN environment variable.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white text-sm font-bold">3</span>
+                    Common Commands
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Learn the most commonly used CLI commands for managing your projects.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-emerald-400">Deploy Command</h4>
+                            <p class="text-sm text-gray-400 mb-3">Trigger a deployment for your project.</p>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto mb-3">
+                                pushify deploy &lt;project-id&gt; [options]
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-xs text-gray-400"><span class="font-bold">Options:</span></p>
+                                <ul class="text-xs text-gray-400 space-y-1">
+                                    <li>--branch &lt;name&gt; - Deploy from specific branch (default: main)</li>
+                                    <li>--wait - Wait for deployment to complete</li>
+                                    <li>--force - Force deployment without confirmations</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-emerald-400">View Logs Command</h4>
+                            <p class="text-sm text-gray-400 mb-3">Stream deployment and application logs in real-time.</p>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto mb-3">
+                                pushify logs &lt;project-id&gt; [options]
+                            </div>
+                            <div class="space-y-2">
+                                <p class="text-xs text-gray-400"><span class="font-bold">Options:</span></p>
+                                <ul class="text-xs text-gray-400 space-y-1">
+                                    <li>--lines &lt;number&gt; - Show last N lines (default: 50)</li>
+                                    <li>--follow - Follow log output in real-time</li>
+                                    <li>--deployment &lt;id&gt; - Show logs for specific deployment</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-emerald-400">Status Command</h4>
+                            <p class="text-sm text-gray-400 mb-3">Check the status of your project and recent deployments.</p>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto mb-3">
+                                pushify status &lt;project-id&gt;
+                            </div>
+                            <p class="text-xs text-gray-400">Displays deployment status, resource usage, and recent activity.</p>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-emerald-400">Environment Variables Command</h4>
+                            <p class="text-sm text-gray-400 mb-3">Manage environment variables for your project.</p>
+                            <div class="space-y-2 mb-3">
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto">
+                                    pushify env:set &lt;project-id&gt; KEY=value
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto">
+                                    pushify env:list &lt;project-id&gt;
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto">
+                                    pushify env:unset &lt;project-id&gt; KEY
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-green-500 text-white text-sm font-bold">4</span>
+                    Examples
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Practical examples of using the Pushify CLI in your workflow.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3">Example 1: Deploy and Monitor</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto whitespace-pre-wrap break-words">
+# Deploy your project and wait for completion
+pushify deploy my-project --wait
+
+# Follow the logs
+pushify logs my-project --follow
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3">Example 2: Setup Environment Variables</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto whitespace-pre-wrap break-words">
+# Set multiple environment variables
+pushify env:set my-project DATABASE_URL="postgres://..."
+pushify env:set my-project API_KEY="secret-key"
+pushify env:set my-project NODE_ENV="production"
+
+# Verify they're set
+pushify env:list my-project
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3">Example 3: Deploy from Specific Branch</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto whitespace-pre-wrap break-words">
+# Deploy from staging branch and wait
+pushify deploy my-project --branch staging --wait
+
+# Check status
+pushify status my-project
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3">Example 4: View Recent Logs</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto whitespace-pre-wrap break-words">
+# Show last 100 lines of logs
+pushify logs my-project --lines 100
+
+# Show logs from specific deployment
+pushify logs my-project --deployment deploy_abc123
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3">Example 5: List All Projects</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-green-400 overflow-x-auto whitespace-pre-wrap break-words">
+# List all your projects
+pushify projects:list
+
+# Get detailed status of all projects
+pushify projects:list --detailed
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12">
+                <div class="relative rounded-2xl bg-gradient-to-br from-green-500/20 via-emerald-600/20 to-teal-600/20 p-8 border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4">Need More Help?</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ path('docs_home') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-green-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Getting Started</h3>
+                            <p class="text-sm text-gray-400">Learn the basics of Pushify</p>
+                        </a>
+                        <a href="{{ path('docs_api') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-green-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">API Reference</h3>
+                            <p class="text-sm text-gray-400">Automate with the Pushify API</p>
+                        </a>
+                        <a href="mailto:support@pushify.io" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-green-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Contact Support</h3>
+                            <p class="text-sm text-gray-400">Get help from our team</p>
+                        </a>
+                        <a href="https://github.com/pushify/cli" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-green-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">GitHub Repository</h3>
+                            <p class="text-sm text-gray-400">View source and contribute</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

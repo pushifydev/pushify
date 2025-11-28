@@ -1,0 +1,311 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Server Setup - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            Server <span class="bg-gradient-to-r from-blue-400 to-cyan-500 bg-clip-text text-transparent">Setup</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Get your server up and running with Pushify in minutes.
+        </p>
+
+        <div class="space-y-12">
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-bold">1</span>
+                    System Requirements
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Ensure your server meets these minimum requirements.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Operating System</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Ubuntu 20.04 LTS or newer
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Debian 11 or newer
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    CentOS 8 or newer
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Hardware</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li><span class="font-semibold">CPU:</span> 2+ cores recommended</li>
+                                <li><span class="font-semibold">RAM:</span> 2GB minimum, 4GB+ recommended</li>
+                                <li><span class="font-semibold">Storage:</span> 20GB SSD minimum</li>
+                                <li><span class="font-semibold">Network:</span> 100 Mbps upload/download</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Software</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Docker 20.10+
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    Docker Compose 1.29+
+                                </li>
+                                <li class="flex items-start gap-2">
+                                    <svg class="w-5 h-5 text-cyan-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                    </svg>
+                                    OpenSSH server (SSH enabled)
+                                </li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Network</h4>
+                            <ul class="space-y-2 text-sm text-gray-300">
+                                <li><span class="font-semibold">Port 22:</span> SSH access</li>
+                                <li><span class="font-semibold">Port 80:</span> HTTP traffic</li>
+                                <li><span class="font-semibold">Port 443:</span> HTTPS/SSL</li>
+                                <li><span class="font-semibold">Public IP:</span> Static IP recommended</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-bold">2</span>
+                    Installation Script
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Use our automated installation script to set up a server in seconds.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">One-Line Installation</h4>
+                        <p class="text-sm text-gray-400 mb-3">SSH into your server and run this command:</p>
+                        <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                            curl -sSL https://install.pushify.io | bash
+                        </div>
+                        <p class="text-xs text-gray-400 mt-3">The script will:</p>
+                        <ul class="text-xs text-gray-400 space-y-1 mt-2">
+                            <li>Install Docker and Docker Compose</li>
+                            <li>Configure firewall rules</li>
+                            <li>Set up Nginx reverse proxy</li>
+                            <li>Configure SSL certificate support</li>
+                            <li>Initialize Pushify agent</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 rounded-lg bg-blue-500/10 border border-blue-500/20">
+                        <p class="text-sm text-blue-200">
+                            <span class="font-bold">Installation time:</span> Approximately 3-5 minutes depending on server specs.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-bold">3</span>
+                    Manual Setup
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        If you prefer manual control, follow these steps to set up your server.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Step 1: Update System</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                sudo apt update && sudo apt upgrade -y
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Step 2: Install Docker</h4>
+                            <div class="space-y-2">
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    curl -fsSL https://get.docker.com -o get-docker.sh
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo sh get-docker.sh
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo usermod -aG docker $USER
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Step 3: Install Docker Compose</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                            </div>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto mt-2">
+                                sudo chmod +x /usr/local/bin/docker-compose
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Step 4: Configure Firewall</h4>
+                            <div class="space-y-2">
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo ufw allow 22/tcp
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo ufw allow 80/tcp
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo ufw allow 443/tcp
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo ufw enable
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">Step 5: Download Pushify Agent</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                mkdir -p /opt/pushify && cd /opt/pushify
+                            </div>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto mt-2">
+                                sudo curl -sSL https://agent.pushify.io/install.tar.gz | tar xz
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-bold">4</span>
+                    Configuration
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Configure your server after installation.
+                    </p>
+
+                    <div class="space-y-4">
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">1. Add Server to Pushify</h4>
+                            <ol class="space-y-2 text-sm text-gray-300">
+                                <li class="flex items-start gap-3">
+                                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex-shrink-0">A</span>
+                                    <span>Go to the Pushify dashboard</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex-shrink-0">B</span>
+                                    <span>Click "Add Server" and select "Manual Setup"</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex-shrink-0">C</span>
+                                    <span>Enter your server's IP address and SSH credentials</span>
+                                </li>
+                                <li class="flex items-start gap-3">
+                                    <span class="flex items-center justify-center w-5 h-5 rounded-full bg-blue-500/20 text-blue-400 text-xs font-bold flex-shrink-0">D</span>
+                                    <span>Pushify will verify connectivity and setup</span>
+                                </li>
+                            </ol>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">2. Configure Environment Variables</h4>
+                            <p class="text-sm text-gray-400 mb-3">Edit the server configuration file:</p>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                sudo nano /opt/pushify/config.env
+                            </div>
+                            <p class="text-sm text-gray-400 mt-3">Key variables to configure:</p>
+                            <ul class="text-xs text-gray-400 space-y-1 mt-2">
+                                <li><span class="font-bold">PUSHIFY_TOKEN:</span> Your Pushify API token</li>
+                                <li><span class="font-bold">PUSHIFY_SERVER_NAME:</span> Display name for your server</li>
+                                <li><span class="font-bold">DOCKER_STORAGE_DRIVER:</span> Usually 'overlay2'</li>
+                                <li><span class="font-bold">LOG_LEVEL:</span> 'info' or 'debug'</li>
+                            </ul>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">3. Start Pushify Services</h4>
+                            <div class="space-y-2">
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo systemctl start pushify-agent
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo systemctl enable pushify-agent
+                                </div>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                    sudo systemctl status pushify-agent
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h4 class="font-bold mb-3 text-cyan-400">4. Verify Installation</h4>
+                            <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-cyan-400 overflow-x-auto">
+                                docker --version && docker-compose --version
+                            </div>
+                            <p class="text-sm text-gray-400 mt-3">Both commands should return version information if installed correctly.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12">
+                <div class="relative rounded-2xl bg-gradient-to-br from-blue-500/20 via-cyan-600/20 to-teal-600/20 p-8 border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4">Troubleshooting & Support</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ path('docs_home') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-blue-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Documentation Home</h3>
+                            <p class="text-sm text-gray-400">Return to main documentation</p>
+                        </a>
+                        <a href="{{ path('docs_cli') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-blue-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">CLI Commands</h3>
+                            <p class="text-sm text-gray-400">Manage servers via CLI</p>
+                        </a>
+                        <a href="mailto:support@pushify.io" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-blue-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Contact Support</h3>
+                            <p class="text-sm text-gray-400">Get help from our team</p>
+                        </a>
+                        <a href="https://community.pushify.io" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-blue-500/50 transition-colors">
+                            <h3 class="font-bold mb-1">Community Forum</h3>
+                            <p class="text-sm text-gray-400">Ask questions and share tips</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

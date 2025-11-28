@@ -1,0 +1,224 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Getting Started - Pushify{% endblock %}
+
+{% block body %}
+<div class="py-12 md:py-20 overflow-hidden">
+    <div class="max-w-4xl mx-auto">
+        <a href="{{ path('docs_home') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white mb-8 transition-colors">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back to Documentation
+        </a>
+
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">
+            Getting <span class="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Started</span>
+        </h1>
+
+        <p class="text-xl text-gray-400 mb-12">
+            Deploy your first application in under 5 minutes.
+        </p>
+
+        <div class="space-y-12">
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">1</span>
+                    Create Your Account
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Sign up for a free Pushify account and connect your GitHub account to get started.
+                    </p>
+                    <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <a href="{{ path('app_register') }}" class="inline-flex items-center gap-2 text-primary hover:text-primary/80 font-semibold">
+                            Create Free Account
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">2</span>
+                    Choose Your Plan
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Select a server type based on your application's requirements. You can change this later.
+                    </p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div class="p-4 rounded-lg bg-gray-800/50 border border-gray-700">
+                            <h3 class="font-bold mb-1">CX11 - Starter</h3>
+                            <p class="text-sm text-gray-400 mb-2">1 vCPU " 2GB RAM " 20GB SSD</p>
+                            <p class="text-primary font-bold">¬6.64/month</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-gray-800/50 border border-primary">
+                            <div class="flex items-center justify-between mb-1">
+                                <h3 class="font-bold">CX22 - Popular</h3>
+                                <span class="text-xs bg-primary px-2 py-1 rounded-full">Most Popular</span>
+                            </div>
+                            <p class="text-sm text-gray-400 mb-2">2 vCPU " 4GB RAM " 40GB SSD</p>
+                            <p class="text-primary font-bold">¬12.80/month</p>
+                        </div>
+                    </div>
+                    <a href="{{ path('app_pricing') }}" class="inline-flex items-center gap-2 text-gray-400 hover:text-white text-sm">
+                        View all plans
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                        </svg>
+                    </a>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">3</span>
+                    Create a Server
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Let Pushify create a server on Hetzner Cloud for you, or connect your own existing server via SSH.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Option A: Automatic Server Creation</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Connect your Hetzner Cloud API token
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Click "Create Server" and wait 60 seconds
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Server is ready with Docker, Nginx, and all dependencies pre-installed
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <h4 class="font-bold mb-3">Option B: Connect Existing Server</h4>
+                        <ul class="space-y-2 text-sm text-gray-300">
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Select "Manual Connection" when creating server
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Enter your server's SSH credentials
+                            </li>
+                            <li class="flex items-start gap-2">
+                                <svg class="w-5 h-5 text-green-400 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                Pushify will configure the server automatically
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">4</span>
+                    Deploy Your Application
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Connect your GitHub repository and deploy with a single click.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <ol class="space-y-3 text-sm text-gray-300">
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex-shrink-0">1</span>
+                                <span>Click "New Project" and select your GitHub repository</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex-shrink-0">2</span>
+                                <span>Choose which server to deploy to</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex-shrink-0">3</span>
+                                <span>Configure environment variables (optional)</span>
+                            </li>
+                            <li class="flex items-start gap-3">
+                                <span class="flex items-center justify-center w-6 h-6 rounded-full bg-primary/20 text-primary text-xs font-bold flex-shrink-0">4</span>
+                                <span>Click "Deploy" and watch your application go live!</span>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <section>
+                <h2 class="text-2xl font-bold mb-4 flex items-center gap-3">
+                    <span class="flex items-center justify-center w-8 h-8 rounded-full bg-primary text-white text-sm font-bold">5</span>
+                    Configure Your Domain
+                </h2>
+                <div class="pl-11 space-y-4">
+                    <p class="text-gray-300">
+                        Add a custom domain and get free SSL certificates automatically.
+                    </p>
+                    <div class="p-6 rounded-lg bg-gray-800/50 border border-gray-700">
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="font-bold mb-2 text-sm">Add Your Domain</h4>
+                                <p class="text-sm text-gray-400 mb-3">Go to your project settings and add your custom domain (e.g., example.com)</p>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2 text-sm">Update DNS Records</h4>
+                                <p class="text-sm text-gray-400 mb-3">Point your domain's A record to your server's IP address</p>
+                                <div class="p-3 rounded bg-gray-900 border border-gray-600 font-mono text-xs text-gray-300">
+                                    A @ your-server-ip
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold mb-2 text-sm">Wait for SSL</h4>
+                                <p class="text-sm text-gray-400">SSL certificate will be automatically generated and installed within minutes</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12">
+                <div class="relative rounded-2xl bg-gradient-to-br from-primary/20 via-purple-600/20 to-pink-600/20 p-8 border border-white/10">
+                    <h2 class="text-2xl font-bold mb-4">What's Next?</h2>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <a href="{{ path('docs_github') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-colors">
+                            <h3 class="font-bold mb-1">GitHub Integration</h3>
+                            <p class="text-sm text-gray-400">Set up automatic deployments on git push</p>
+                        </a>
+                        <a href="{{ path('features_databases') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-colors">
+                            <h3 class="font-bold mb-1">Add a Database</h3>
+                            <p class="text-sm text-gray-400">Deploy PostgreSQL, MySQL, or MongoDB</p>
+                        </a>
+                        <a href="{{ path('docs_cli') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-colors">
+                            <h3 class="font-bold mb-1">Use the CLI</h3>
+                            <p class="text-sm text-gray-400">Manage deployments from your terminal</p>
+                        </a>
+                        <a href="{{ path('features_monitoring') }}" class="p-4 rounded-lg bg-gray-800/50 border border-gray-700 hover:border-primary/50 transition-colors">
+                            <h3 class="font-bold mb-1">Monitor Your Apps</h3>
+                            <p class="text-sm text-gray-400">Set up alerts and view real-time logs</p>
+                        </a>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}
