@@ -90,14 +90,15 @@
 				</div>
 			</div>
 			{% else %}
-			<div class="p-4 bg-yellow-500/10 border border-yellow-500/30 rounded-lg">
+			<div class="p-4 bg-blue-500/10 border border-blue-500/30 rounded-lg">
 				<div class="flex items-center justify-between">
-					<div>
-						<p class="text-yellow-400 font-medium">Docker Not Installed</p>
-						<p class="text-sm text-gray-400">Docker is required for deployments</p>
+					<div class="flex-1">
+						<p class="text-blue-400 font-medium">Docker Installation in Progress</p>
+						<p class="text-sm text-gray-400 mt-1">Docker is automatically installed during server creation. This may take 2-3 minutes.</p>
+						<p class="text-xs text-gray-500 mt-2">If the server was just created, please wait and check the status again.</p>
 					</div>
-					<button onclick="installDocker()" class="px-4 py-2 bg-yellow-500 hover:bg-yellow-600 text-black font-medium rounded-lg transition-colors">
-						Install Docker
+					<button onclick="checkDockerStatus()" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white font-medium rounded-lg transition-colors whitespace-nowrap">
+						Check Status
 					</button>
 				</div>
 			</div>
@@ -206,15 +207,19 @@ function testConnection() {
 		.catch(() => showToast('Connection test failed', 'error'));
 }
 
-function installDocker() {
-	showToast('Installing Docker... This may take a few minutes', 'info');
-	fetch(`/dashboard/servers/${serverId}/docker/install`, { method: 'POST' })
+function checkDockerStatus() {
+	showToast('Checking Docker installation status...', 'info');
+	fetch(`/dashboard/servers/${serverId}/docker/check`)
 		.then(r => r.json())
 		.then(data => {
-			showToast(data.installed ? 'Docker installed!' : data.message, data.installed ? 'success' : 'error');
-			if (data.installed) setTimeout(() => location.reload(), 1500);
+			if (data.installed) {
+				showToast(`Docker ${data.version} is installed!`, 'success');
+				setTimeout(() => location.reload(), 1500);
+			} else {
+				showToast('Docker is still being installed. Please wait 1-2 minutes and try again.', 'warning');
+			}
 		})
-		.catch(() => showToast('Installation failed', 'error'));
+		.catch(() => showToast('Status check failed', 'error'));
 }
 
 function powerAction(action) {

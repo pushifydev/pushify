@@ -156,10 +156,37 @@ class ServerService
     public function installDocker(Server $server): array
     {
         try {
+            // First check if Docker is already installed (from cloud-init)
+            $dockerCheck = $this->checkDocker($server);
+            if ($dockerCheck['installed']) {
+                return [
+                    'installed' => true,
+                    'version' => $dockerCheck['version'],
+                    'message' => 'Docker is already installed',
+                ];
+            }
+
             $keyFile = $this->createTempKeyFile($server);
 
-            // Docker install script for Ubuntu/Debian
+            // Docker install script for Ubuntu/Debian with retry logic
             $installScript = <<<'BASH'
+# Wait for cloud-init to finish (max 5 minutes)
+echo "Waiting for cloud-init to complete..."
+timeout 300 bash -c 'while [ ! -f /var/lib/cloud/instance/boot-finished ]; do sleep 2; done' || true
+
+# Wait for apt lock to be released (max 3 minutes)
+echo "Waiting for apt lock to be released..."
+timeout 180 bash -c 'while fuser /var/lib/dpkg/lock-frontend >/dev/null 2>&1 || fuser /var/lib/dpkg/lock >/dev/null 2>&1; do sleep 5; done' || true
+
+# Check if Docker is already installed by cloud-init
+if command -v docker >/dev/null 2>&1; then
+    echo "Docker already installed by cloud-init"
+    docker --version
+    exit 0
+fi
+
+# Install Docker if not present
+echo "Installing Docker..."
 curl -fsSL https://get.docker.com -o get-docker.sh &&
 sh get-docker.sh &&
 systemctl enable docker &&
@@ -175,7 +202,7 @@ BASH;
                 $server->getSshUser() . '@' . $server->getIpAddress(),
                 $installScript
             ]);
-            $process->setTimeout(300); // 5 minutes for installation
+            $process->setTimeout(600); // 10 minutes (cloud-init wait + install)
             $process->run();
 
             @unlink($keyFile);
