@@ -63,3 +63,9 @@ services:
     App\Service\BackupService:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\Service\SubscriptionService:
+        arguments:
+            $iyzicoApiKey: '%env(IYZICO_API_KEY)%'
+            $iyzicoSecretKey: '%env(IYZICO_SECRET_KEY)%'
+            $iyzicoBaseUrl: '%env(IYZICO_BASE_URL)%'
