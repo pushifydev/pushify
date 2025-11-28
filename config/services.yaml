@@ -40,6 +40,13 @@ services:
         arguments:
             $emailProducer: '@old_sound_rabbit_mq.email_producer_producer'
 
+    # Force NativeHttpClient instead of CurlHttpClient
+    Symfony\Component\HttpClient\HttpClient:
+        class: Symfony\Component\HttpClient\NativeHttpClient
+
+    Symfony\Contracts\HttpClient\HttpClientInterface:
+        alias: Symfony\Component\HttpClient\HttpClient
+
     App\MessageHandler\SendEmailMessageHandler:
         arguments:
             $fromEmail: 'noreply@pushify.app'
