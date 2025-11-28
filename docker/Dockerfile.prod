@@ -93,8 +93,7 @@ RUN docker-php-ext-install \
     intl \
     zip \
     bcmath \
-    sockets \
-    curl
+    sockets
 
 # Install Redis extension
 RUN apk add --no-cache --virtual .build-deps $PHPIZE_DEPS \

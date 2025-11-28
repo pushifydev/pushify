@@ -12,6 +12,11 @@ framework:
         cookie_samesite: lax
         handler_id: null
 
+    # HTTP Client - use native transport (no curl dependency)
+    http_client:
+        default_options:
+            max_redirects: 7
+
     #esi: true
     #fragments: true
 
