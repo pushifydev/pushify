@@ -65,7 +65,8 @@ export default function PaymentForm({ serverType, amount, csrfToken }) {
                 setError(data.error || 'Payment failed. Please try again.');
             }
         } catch (err) {
-            setError('An error occurred. Please try again.');
+            console.error('Payment error:', err);
+            setError(`An error occurred: ${err.message}. Please try again.`);
         } finally {
             setLoading(false);
         }
@@ -177,7 +178,7 @@ export default function PaymentForm({ serverType, amount, csrfToken }) {
                 <div className="p-4 bg-gray-800/50 border border-gray-700/50 rounded-lg">
                     <div className="flex items-center justify-between mb-2">
                         <span className="text-sm text-gray-400">Server Type</span>
-                        <span className="text-sm font-medium text-white">{serverType}</span>
+                        <span className="text-sm font-medium text-white">{serverType.toUpperCase()}</span>
                     </div>
                     <div className="flex items-center justify-between">
                         <span className="text-sm text-gray-400">Monthly Payment</span>

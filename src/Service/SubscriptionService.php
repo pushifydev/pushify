@@ -11,9 +11,11 @@ use Iyzipay\Model\CheckoutFormInitialize;
 use Iyzipay\Model\Locale;
 use Iyzipay\Model\PaymentCard;
 use Iyzipay\Model\PaymentGroup;
+use Iyzipay\Model\ThreedsInitialize;
 use Iyzipay\Options;
 use Iyzipay\Request\CreateCheckoutFormInitializeRequest;
 use Iyzipay\Request\CreatePaymentRequest;
+use Iyzipay\Request\CreateThreedsInitializeRequest;
 use Psr\Log\LoggerInterface;
 
 class SubscriptionService
@@ -35,31 +37,17 @@ class SubscriptionService
     }
 
     /**
-     * Calculate server monthly cost with markup
+     * Calculate server monthly cost with markup from server type data
+     * Use this when you already have the server type data to avoid redundant API calls
      */
-    public function calculateServerCost(string $serverType): array
+    public function calculateServerCostFromData(array $serverTypeData): array
     {
+        $serverType = $serverTypeData['name'];
+
         try {
-            // Get real-time pricing from Hetzner API
-            $serverTypes = $this->hetznerService->getServerTypes();
-
-            $foundType = null;
-            foreach ($serverTypes as $type) {
-                if ($type['name'] === $serverType) {
-                    $foundType = $type;
-                    break;
-                }
-            }
-
-            if (!$foundType) {
-                // Fallback to default if type not found
-                throw new \RuntimeException("Server type not found: {$serverType}");
-            }
-
-            // Get monthly price from Hetzner
-            // prices[0] is location-based pricing, we'll use 'monthly' price
+            // Get monthly price from provided data
             $monthlyPrice = null;
-            foreach ($foundType['prices'] as $priceData) {
+            foreach ($serverTypeData['prices'] as $priceData) {
                 if (isset($priceData['price_monthly']['gross'])) {
                     $monthlyPrice = (float) $priceData['price_monthly']['gross'];
                     break;
@@ -73,7 +61,7 @@ class SubscriptionService
             $costEur = $monthlyPrice;
 
         } catch (\Exception $e) {
-            // Fallback to hard-coded prices if API fails
+            // Fallback to hard-coded prices if parsing fails
             $this->logger->warning('Using fallback pricing', [
                 'server_type' => $serverType,
                 'error' => $e->getMessage(),
@@ -102,6 +90,62 @@ class SubscriptionService
             'final_price_eur' => round($finalPrice, 2),
             'final_price_usd' => round($finalPrice * 1.10, 2), // EUR to USD approximate
         ];
+    }
+
+    /**
+     * Calculate server monthly cost with markup
+     */
+    public function calculateServerCost(string $serverType): array
+    {
+        try {
+            // Get real-time pricing from Hetzner API
+            $serverTypes = $this->hetznerService->getServerTypes();
+
+            $foundType = null;
+            foreach ($serverTypes as $type) {
+                if ($type['name'] === $serverType) {
+                    $foundType = $type;
+                    break;
+                }
+            }
+
+            if (!$foundType) {
+                // Fallback to default if type not found
+                throw new \RuntimeException("Server type not found: {$serverType}");
+            }
+
+            return $this->calculateServerCostFromData($foundType);
+
+        } catch (\Exception $e) {
+            // Fallback to hard-coded prices if API fails
+            $this->logger->warning('Using fallback pricing', [
+                'server_type' => $serverType,
+                'error' => $e->getMessage(),
+            ]);
+
+            $hetznerCosts = [
+                'cx11' => 4.15,
+                'cx21' => 6.40,
+                'cx22' => 8.00,
+                'cx31' => 12.50,
+                'cx41' => 20.00,
+                'cx51' => 36.00,
+            ];
+
+            $costEur = $hetznerCosts[$serverType] ?? $hetznerCosts['cx22'];
+
+            // Add 60% markup
+            $markup = 0.60;
+            $finalPrice = $costEur * (1 + $markup);
+
+            return [
+                'server_type' => $serverType,
+                'cost_eur' => round($costEur, 2),
+                'markup_percentage' => $markup * 100,
+                'final_price_eur' => round($finalPrice, 2),
+                'final_price_usd' => round($finalPrice * 1.10, 2),
+            ];
+        }
     }
 
     /**
@@ -238,7 +282,6 @@ class SubscriptionService
             'server_type' => $serverType,
             'payment_id' => $payment->getPaymentId(),
             'card_token' => $payment->getCardToken(),
-            'card_last_four' => substr($payment->getCardNumber() ?? '', -4),
         ]);
 
         $this->entityManager->persist($subscription);

@@ -109,19 +109,19 @@
 
 				<!-- Subheadline -->
 				<p class="text-xl md:text-2xl text-gray-300 max-w-4xl mx-auto leading-relaxed">
-					Deploy, manage, and scale your applications with confidence. From Git push to production in seconds,
-					with <span class="text-white font-semibold">managed databases</span>,
-					<span class="text-white font-semibold">automated backups</span>,
-					<span class="text-white font-semibold">SSL certificates</span>, and
-					<span class="text-white font-semibold">real-time monitoring</span> —
-					all on infrastructure you control.
+					Deploy <span class="text-white font-semibold">unlimited projects</span> with confidence. From Git push to production in seconds,
+					with <span class="text-white font-semibold">automatic SSL</span>,
+					<span class="text-white font-semibold">database backups</span>,
+					<span class="text-white font-semibold">Docker support</span>, and
+					<span class="text-white font-semibold">24/7 monitoring</span> —
+					starting from just <span class="text-primary font-semibold">€{{ minPrice|number_format(2, '.', ',') }}/month</span>.
 				</p>
 
 				<!-- CTA Buttons -->
 				<div class="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-					<a href="{{ path('app_register') }}"
+					<a href="{{ path('app_pricing') }}"
 					   class="group px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all hover:scale-105 hover:shadow-2xl hover:shadow-primary/50 flex items-center gap-2">
-						<span>Start Deploying Free</span>
+						<span>View Pricing</span>
 						<svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
 							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
 						</svg>
@@ -359,138 +359,152 @@
 		<div class="max-w-6xl mx-auto px-4">
 			<div class="text-center mb-12">
 				<h2 class="text-3xl md:text-5xl font-bold mb-6">
-					Transparent <span class="text-primary">Flat-Rate Pricing</span>
+					Simple <span class="text-primary">Server-Based Pricing</span>
 				</h2>
 				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
-					Simple, predictable pricing with no hidden fees or usage-based surprises. One flat monthly rate includes
-					unlimited projects, bandwidth, and all platform features.
+					Subscribe to a server type and create <span class="text-white font-semibold">unlimited servers</span> of that type.
+					Deploy <span class="text-white font-semibold">unlimited projects</span> on each server.
+					Pricing starts from just <span class="text-primary font-semibold">€{{ minPrice|number_format(2, '.', ',') }}/month</span>.
 				</p>
 			</div>
 
-			{% if plans|length > 0 %}
-				<div class="grid md:grid-cols-{{ plans|length > 2 ? '3' : plans|length }} gap-8 max-w-5xl mx-auto">
-					{% for plan in plans %}
-						<div class="relative p-8 rounded-2xl border transition-all hover:scale-105
-							{% if plan.isPopular %}
-								bg-gray-800 border-2 border-primary
-							{% else %}
-								bg-gray-800/50 border border-gray-700
-							{% endif %}
-						">
-							{% if plan.badge %}
-								<div class="absolute -top-4 left-1/2 -translate-x-1/2">
-									<span class="px-4 py-1 bg-primary text-white text-sm font-bold rounded-full">
-										{{ plan.badge }}
-									</span>
-								</div>
-							{% endif %}
-
-							<div class="text-center mb-6">
-								<h3 class="text-2xl font-bold mb-2">{{ plan.name }}</h3>
-								{% if plan.description %}
-									<p class="text-gray-400 text-sm">{{ plan.description }}</p>
-								{% endif %}
-								<div class="text-5xl font-bold text-primary my-4">${{ plan.price|number_format(0) }}</div>
-								<p class="text-gray-400 text-sm">/{{ plan.billingCycle }}</p>
-							</div>
-
-							<ul class="space-y-3 text-sm text-gray-300 mb-6">
-								{% for feature in plan.features %}
-									<li class="flex items-center gap-2">
-										<svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-											<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-										</svg>
-										<span>{{ feature }}</span>
-									</li>
-								{% endfor %}
-							</ul>
-
-							<div class="pt-6 border-t border-gray-700 text-center">
-								<a href="{{ path('app_register') }}" class="block w-full px-6 py-3 font-bold rounded-xl transition-all
-									{% if plan.isPopular %}
-										bg-primary hover:bg-primary/90 text-white
-									{% else %}
-										bg-gray-700 hover:bg-gray-600 text-white
-									{% endif %}
-								">
-									Get Started Free
-								</a>
-							</div>
-						</div>
-					{% endfor %}
-				</div>
-			{% else %}
-				<!-- Fallback pricing -->
-				<div class="max-w-md mx-auto">
-					<div class="relative p-8 rounded-2xl bg-gray-800 border-2 border-primary">
-						<div class="absolute -top-4 left-1/2 -translate-x-1/2">
-							<span class="px-4 py-1 bg-primary text-white text-sm font-bold rounded-full">
-								BEST VALUE
-							</span>
-						</div>
-						<div class="text-center mb-6">
-							<h3 class="text-2xl font-bold mb-2">Pushify Pro</h3>
-							<div class="text-5xl font-bold text-primary mb-2">$29</div>
-							<p class="text-gray-400 text-sm">/month</p>
-						</div>
-						<ul class="space-y-3 text-sm text-gray-300">
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Everything included</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Unlimited projects</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Unlimited bandwidth</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Managed databases</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Automated backups</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>Preview deployments</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>SSL certificates</span>
-							</li>
-							<li class="flex items-center gap-2">
-								<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-								</svg>
-								<span>No surprise charges</span>
-							</li>
-						</ul>
-						<div class="mt-6 pt-6 border-t border-gray-700 text-center">
-							<a href="{{ path('app_register') }}" class="block w-full px-6 py-3 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all">
-								Get Started Free
-							</a>
-						</div>
+			<!-- Pricing Cards Overview -->
+			<div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto mb-12">
+				<!-- Starter Server -->
+				<div class="p-8 rounded-2xl border bg-gray-800/50 border-gray-700 transition-all hover:scale-105">
+					<div class="text-center mb-6">
+						<h3 class="text-2xl font-bold mb-2">Entry Level</h3>
+						<p class="text-gray-400 text-sm">1-2 vCPU • 2-4GB RAM</p>
+						<div class="text-5xl font-bold text-primary my-4">€{{ minPrice|number_format(2, '.', ',') }}</div>
+						<p class="text-gray-400 text-sm">/month</p>
+					</div>
+					<ul class="space-y-3 text-sm text-gray-300 mb-6">
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited servers (this type)</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited projects</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Automatic SSL certificates</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Database backups</span>
+						</li>
+					</ul>
+					<div class="pt-6 border-t border-gray-700 text-center">
+						<p class="text-xs text-gray-500 mb-3">Perfect for small projects</p>
 					</div>
 				</div>
-			{% endif %}
+
+				<!-- Popular Server -->
+				<div class="relative p-8 rounded-2xl border-2 border-primary bg-gray-800 transition-all hover:scale-105">
+					<div class="absolute -top-4 left-1/2 -translate-x-1/2">
+						<span class="px-4 py-1 bg-primary text-white text-sm font-bold rounded-full">
+							MOST POPULAR
+						</span>
+					</div>
+					<div class="text-center mb-6">
+						<h3 class="text-2xl font-bold mb-2">Standard</h3>
+						<p class="text-gray-400 text-sm">2-4 vCPU • 4-8GB RAM</p>
+						<div class="text-5xl font-bold text-primary my-4">€12-€20</div>
+						<p class="text-gray-400 text-sm">/month</p>
+					</div>
+					<ul class="space-y-3 text-sm text-gray-300 mb-6">
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited servers (this type)</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited projects</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Automatic SSL certificates</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Database backups</span>
+						</li>
+					</ul>
+					<div class="pt-6 border-t border-gray-700 text-center">
+						<p class="text-xs text-gray-500 mb-3">Great for production apps</p>
+					</div>
+				</div>
+
+				<!-- Enterprise Server -->
+				<div class="p-8 rounded-2xl border bg-gray-800/50 border-gray-700 transition-all hover:scale-105">
+					<div class="text-center mb-6">
+						<h3 class="text-2xl font-bold mb-2">Performance</h3>
+						<p class="text-gray-400 text-sm">4-8 vCPU • 16-32GB RAM</p>
+						<div class="text-5xl font-bold text-primary my-4">€32+</div>
+						<p class="text-gray-400 text-sm">/month</p>
+					</div>
+					<ul class="space-y-3 text-sm text-gray-300 mb-6">
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited servers (this type)</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Unlimited projects</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Automatic SSL certificates</span>
+						</li>
+						<li class="flex items-center gap-2">
+							<svg class="w-4 h-4 text-green-500 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span>Database backups</span>
+						</li>
+					</ul>
+					<div class="pt-6 border-t border-gray-700 text-center">
+						<p class="text-xs text-gray-500 mb-3">High-traffic applications</p>
+					</div>
+				</div>
+			</div>
+
+			<!-- View All Pricing CTA -->
+			<div class="text-center">
+				<a href="{{ path('app_pricing') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-primary hover:bg-primary/90 text-white font-bold rounded-xl transition-all hover:scale-105">
+					<span>View All Server Types & Pricing</span>
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+					</svg>
+				</a>
+				<p class="text-sm text-gray-500 mt-4">
+					Each subscription includes unlimited servers (of the selected type) and unlimited projects. Prices updated in real-time based on infrastructure costs.
+				</p>
+			</div>
 		</div>
 	</section>
 

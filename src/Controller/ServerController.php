@@ -63,11 +63,19 @@ class ServerController extends AbstractController
             ]);
         }
 
+        // Get user's subscribed server type
+        $subscription = $user->getActiveSubscription();
+        $subscribedServerType = null;
+        if ($subscription) {
+            $metadata = $subscription->getMetadata();
+            $subscribedServerType = $metadata['server_type'] ?? null;
+        }
+
         if ($request->isMethod('POST')) {
             $type = $request->request->get('type', 'manual');
 
             if ($type === 'hetzner') {
-                return $this->createHetznerServer($request, $user);
+                return $this->createHetznerServer($request, $user, $subscribedServerType);
             }
 
             return $this->createManualServer($request, $user);
@@ -97,6 +105,7 @@ class ServerController extends AbstractController
             'hetznerConnected' => $hetznerConfigured,
             'hetznerOptions' => $hetznerOptions,
             'publicKey' => $keyPair['public'],
+            'subscribedServerType' => $subscribedServerType,
         ]);
     }
 
@@ -131,10 +140,18 @@ class ServerController extends AbstractController
         return $this->redirectToRoute('app_server_show', ['id' => $server->getId()]);
     }
 
-    private function createHetznerServer(Request $request, User $user): Response
+    private function createHetznerServer(Request $request, User $user, ?string $subscribedServerType): Response
     {
         if (!$this->hetznerService->isConfigured()) {
             $this->addFlash('error', 'Hetzner API is not configured');
+            return $this->redirectToRoute('app_server_new');
+        }
+
+        $requestedServerType = $request->request->get('server_type', 'cx22');
+
+        // Validate that user is trying to create the server type they purchased
+        if ($subscribedServerType && $requestedServerType !== $subscribedServerType) {
+            $this->addFlash('error', "You can only create {$subscribedServerType} servers with your current subscription. Please upgrade or change your subscription to create other server types.");
             return $this->redirectToRoute('app_server_new');
         }
 
@@ -142,7 +159,7 @@ class ServerController extends AbstractController
             $server = $this->hetznerService->createServer(
                 $user,
                 $request->request->get('name'),
-                $request->request->get('server_type', 'cx22'),
+                $requestedServerType,
                 $request->request->get('location', 'nbg1'),
                 $request->request->get('image', 'ubuntu-22.04')
             );

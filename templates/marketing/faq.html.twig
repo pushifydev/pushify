@@ -1,0 +1,154 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}FAQ - Frequently Asked Questions | Pushify{% endblock %}
+
+{% block meta_description %}Frequently asked questions about Pushify's deployment platform, pricing, features, and support.{% endblock %}
+
+{% block body %}
+<div class="overflow-hidden">
+	<!-- Hero Section -->
+	<section class="relative py-20 md:py-32">
+		<div class="max-w-6xl mx-auto px-4">
+			<div class="text-center space-y-6">
+				<h1 class="text-4xl md:text-6xl font-bold">
+					Frequently Asked
+					<span class="bg-gradient-to-r from-primary to-purple-500 bg-clip-text text-transparent">Questions</span>
+				</h1>
+				<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+					Everything you need to know about Pushify. Can't find what you're looking for?
+					<a href="mailto:support@pushify.dev" class="text-primary hover:text-primary/80 underline">Contact us</a>.
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- FAQ Categories -->
+	<section class="max-w-4xl mx-auto px-4 pb-20">
+		{% for category in faqs %}
+			<div class="mb-16">
+				<h2 class="text-2xl md:text-3xl font-bold mb-8 pb-3 border-b border-gray-800">{{ category.category }}</h2>
+
+				<div class="space-y-4">
+					{% for item in category.questions %}
+						<details class="group bg-gray-900/50 border border-gray-800 rounded-xl p-6 hover:border-primary/30 transition-all">
+							<summary class="cursor-pointer font-semibold text-white flex items-start justify-between gap-4 list-none">
+								<span class="flex-1">{{ item.question }}</span>
+								<svg class="w-5 h-5 text-gray-400 group-open:rotate-180 transition-transform flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+								</svg>
+							</summary>
+							<div class="mt-4 text-gray-400 leading-relaxed">
+								{{ item.answer }}
+							</div>
+						</details>
+					{% endfor %}
+				</div>
+			</div>
+		{% endfor %}
+	</section>
+
+	<!-- Still Have Questions CTA -->
+	<section class="max-w-4xl mx-auto px-4 pb-20">
+		<div class="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 via-purple-500/10 to-transparent border border-primary/30 p-12 text-center">
+			<div class="relative z-10">
+				<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6 border-2 border-primary/50">
+					<svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+				</div>
+				<h2 class="text-3xl font-bold mb-4">Still Have Questions?</h2>
+				<p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+					Can't find the answer you're looking for? Our support team is here to help.
+				</p>
+				<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+					<a href="mailto:support@pushify.dev" class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-xl transition-all inline-flex items-center gap-2 shadow-lg shadow-primary/25">
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+						</svg>
+						<span>Contact Support</span>
+					</a>
+					<a href="{{ path('app_pricing') }}" class="px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-xl transition-all border border-gray-700">
+						View Pricing
+					</a>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Popular Help Topics -->
+	<section class="max-w-6xl mx-auto px-4 pb-20">
+		<div class="text-center mb-12">
+			<h2 class="text-3xl font-bold mb-4">Popular Help Topics</h2>
+			<p class="text-gray-400">Quick guides to get you started</p>
+		</div>
+
+		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<!-- Topic 1 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-primary transition-colors">Getting Started Guide</h3>
+				<p class="text-sm text-gray-400">Learn how to deploy your first application in minutes</p>
+			</a>
+
+			<!-- Topic 2 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-green-500/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-green-500 transition-colors">SSL Setup</h3>
+				<p class="text-sm text-gray-400">Configure automatic SSL certificates for your domains</p>
+			</a>
+
+			<!-- Topic 3 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-blue-500/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-blue-500 transition-colors">Environment Variables</h3>
+				<p class="text-sm text-gray-400">Manage secrets and configuration for your applications</p>
+			</a>
+
+			<!-- Topic 4 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-purple-500/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-purple-500 transition-colors">Database Backups</h3>
+				<p class="text-sm text-gray-400">Restore your database from automatic backups</p>
+			</a>
+
+			<!-- Topic 5 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-yellow-500/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-yellow-500 transition-colors">Monitoring & Logs</h3>
+				<p class="text-sm text-gray-400">Track performance and debug issues with logs</p>
+			</a>
+
+			<!-- Topic 6 -->
+			<a href="#" class="group p-6 bg-gray-900/50 border border-gray-800 rounded-xl hover:border-primary/50 hover:shadow-lg hover:shadow-primary/10 transition-all">
+				<div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4 group-hover:bg-red-500/30 group-hover:scale-110 transition-all">
+					<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold text-white mb-2 group-hover:text-red-500 transition-colors">Custom Domains</h3>
+				<p class="text-sm text-gray-400">Configure your own domain names and DNS settings</p>
+			</a>
+		</div>
+	</section>
+</div>
+{% endblock %}

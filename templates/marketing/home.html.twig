@@ -1,0 +1,213 @@
+{% extends 'marketing/base.html.twig' %}
+
+{% block title %}Pushify - Deploy Your Apps in Minutes
+{% endblock %}
+
+{% block body %}
+	<!-- Hero Section -->
+	<section class="relative overflow-hidden">
+		<!-- Background gradient -->
+		<div class="absolute inset-0 bg-gradient-to-br from-primary/10 via-purple-500/5 to-transparent"></div>
+
+		<div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32">
+			<div class="text-center max-w-4xl mx-auto">
+				<!-- Badge -->
+				<div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full mb-8">
+					<span class="w-2 h-2 bg-primary rounded-full animate-pulse"></span>
+					<span class="text-sm text-primary font-medium">Simple, Powerful Platform-as-a-Service</span>
+				</div>
+
+				<!-- Heading -->
+				<h1 class="text-5xl md:text-7xl font-bold mb-6">
+					Deploy Your Apps
+					<br>
+					<span class="gradient-text">in Minutes</span>
+				</h1>
+
+				<!-- Subheading -->
+				<p class="text-xl md:text-2xl text-gray-400 mb-10 max-w-3xl mx-auto">
+					Deploy unlimited projects with automatic SSL certificates, Git-based deployments, and Docker support. Starting from just
+					<span class="text-white font-semibold">€12.80/month</span>.
+				</p>
+
+				<!-- CTA Buttons -->
+				<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+					<a href="{{ path('app_pricing') }}" class="w-full sm:w-auto px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center justify-center gap-2 shadow-lg shadow-primary/25">
+						<span>View Pricing</span>
+						<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+						</svg>
+					</a>
+					<a href="{{ path('app_register') }}" class="w-full sm:w-auto px-8 py-4 bg-gray-800 hover:bg-gray-700 text-white font-semibold rounded-lg transition-all border border-gray-700">
+						Sign Up Free
+					</a>
+				</div>
+
+				<!-- Trust Indicators -->
+				<div class="mt-12 flex flex-wrap items-center justify-center gap-8 text-sm text-gray-500">
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+						</svg>
+						<span>7-day money-back guarantee</span>
+					</div>
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+						</svg>
+						<span>Cancel anytime</span>
+					</div>
+					<div class="flex items-center gap-2">
+						<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+						</svg>
+						<span>No credit card required</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Features Grid -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+		<div class="text-center mb-16">
+			<h2 class="text-3xl md:text-4xl font-bold mb-4">Everything You Need to Deploy</h2>
+			<p class="text-xl text-gray-400">Powerful features that make deployment simple and hassle-free</p>
+		</div>
+
+		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+			<!-- Feature 1 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-primary/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">Git-Based Deployments</h3>
+				<p class="text-gray-400">Connect your GitHub, GitLab, or Bitbucket repository and deploy with a single push.</p>
+			</div>
+
+			<!-- Feature 2 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-green-500/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">Automatic SSL</h3>
+				<p class="text-gray-400">Free SSL certificates with automatic renewal. Your apps are secure by default.</p>
+			</div>
+
+			<!-- Feature 3 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-blue-500/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">Docker Support</h3>
+				<p class="text-gray-400">Deploy any application that runs in a Docker container. Full flexibility.</p>
+			</div>
+
+			<!-- Feature 4 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-purple-500/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-purple-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">Database Backups</h3>
+				<p class="text-gray-400">Automated backups for all your databases. Restore to any point in time.</p>
+			</div>
+
+			<!-- Feature 5 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-yellow-500/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">24/7 Monitoring</h3>
+				<p class="text-gray-400">We monitor your servers around the clock. Get notified of any issues instantly.</p>
+			</div>
+
+			<!-- Feature 6 -->
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl hover:border-primary/50 transition-all">
+				<div class="w-12 h-12 bg-red-500/20 rounded-xl flex items-center justify-center mb-4">
+					<svg class="w-6 h-6 text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+					</svg>
+				</div>
+				<h3 class="text-xl font-semibold mb-2">Unlimited Projects</h3>
+				<p class="text-gray-400">Deploy as many projects as you want. No limits on the number of applications.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- How It Works -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+		<div class="text-center mb-16">
+			<h2 class="text-3xl md:text-4xl font-bold mb-4">How It Works</h2>
+			<p class="text-xl text-gray-400">Get started in 4 simple steps</p>
+		</div>
+
+		<div class="grid md:grid-cols-4 gap-8">
+			<!-- Step 1 -->
+			<div class="text-center">
+				<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary">
+					<span class="text-2xl font-bold text-primary">1</span>
+				</div>
+				<h3 class="text-lg font-semibold mb-2">Choose Server Type</h3>
+				<p class="text-gray-400 text-sm">Select the server size that matches your needs. We recommend CX22 for most applications.</p>
+			</div>
+
+			<!-- Step 2 -->
+			<div class="text-center">
+				<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary">
+					<span class="text-2xl font-bold text-primary">2</span>
+				</div>
+				<h3 class="text-lg font-semibold mb-2">Subscribe</h3>
+				<p class="text-gray-400 text-sm">Secure payment with instant activation. 7-day money-back guarantee included.</p>
+			</div>
+
+			<!-- Step 3 -->
+			<div class="text-center">
+				<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary">
+					<span class="text-2xl font-bold text-primary">3</span>
+				</div>
+				<h3 class="text-lg font-semibold mb-2">Create Servers</h3>
+				<p class="text-gray-400 text-sm">Create unlimited servers of your subscribed type. Automatic or manual setup available.</p>
+			</div>
+
+			<!-- Step 4 -->
+			<div class="text-center">
+				<div class="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4 border-2 border-primary">
+					<span class="text-2xl font-bold text-primary">4</span>
+				</div>
+				<h3 class="text-lg font-semibold mb-2">Deploy Projects</h3>
+				<p class="text-gray-400 text-sm">Connect your Git repository and deploy. Automatic SSL and monitoring included.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA Section -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+		<div class="bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/50 rounded-2xl p-12 text-center">
+			<h2 class="text-3xl md:text-4xl font-bold mb-4">Ready to Get Started?</h2>
+			<p class="text-xl text-gray-300 mb-8 max-w-2xl mx-auto">
+				Join developers who are deploying faster and more reliably with Pushify.
+			</p>
+			<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+				<a href="{{ path('app_pricing') }}" class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+					<span>View Pricing</span>
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+					</svg>
+				</a>
+				<a href="{{ path('marketing_features') }}" class="px-8 py-4 bg-transparent border-2 border-white/20 hover:border-white/40 text-white font-semibold rounded-lg transition-all">
+					Learn More
+				</a>
+			</div>
+		</div>
+	</section>
+{% endblock %}

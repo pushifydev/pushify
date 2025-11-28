@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>
+			{% block title %}Pushify - Deploy Your Apps in Minutes
+			{% endblock %}
+		</title>
+
+		<meta name="description" content="{% block meta_description %}Deploy unlimited projects with automatic SSL, Git integration, and Docker support. Starting from €12.80/month.{% endblock %}">
+
+		{% block stylesheets %}
+			{{ encore_entry_link_tags('app') }}
+		{% endblock %}
+
+		<style>
+			.gradient-text {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				-webkit-background-clip: text;
+				-webkit-text-fill-color: transparent;
+				background-clip: text;
+			}
+		</style>
+	</head>
+	<body class="bg-gray-950 text-white">
+		<!-- Navigation -->
+		<nav class="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm sticky top-0 z-50">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+				<div class="flex items-center justify-between h-16">
+					<!-- Logo -->
+					<div class="flex items-center">
+						<a href="{{ path('app_home') }}" class="flex items-center gap-2">
+							<div class="w-8 h-8 bg-gradient-to-br from-primary to-purple-600 rounded-lg flex items-center justify-center">
+								<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+								</svg>
+							</div>
+							<span class="text-xl font-bold">Pushify</span>
+						</a>
+					</div>
+
+					<!-- Desktop Navigation -->
+					<div class="hidden md:flex items-center gap-6">
+						<a href="{{ path('app_home') }}" class="text-gray-300 hover:text-white transition-colors">Home</a>
+						<a href="{{ path('app_pricing') }}" class="text-gray-300 hover:text-white transition-colors">Pricing</a>
+						<a href="{{ path('marketing_features') }}" class="text-gray-300 hover:text-white transition-colors">Features</a>
+						<a href="{{ path('marketing_faq') }}" class="text-gray-300 hover:text-white transition-colors">FAQ</a>
+					</div>
+
+					<!-- Auth Buttons -->
+					<div class="flex items-center gap-3">
+						{% if app.user %}
+							<a href="{{ path('app_dashboard') }}" class="px-4 py-2 text-gray-300 hover:text-white transition-colors">Dashboard</a>
+						{% else %}
+							<a href="{{ path('app_login') }}" class="px-4 py-2 text-gray-300 hover:text-white transition-colors">Login</a>
+							<a href="{{ path('app_register') }}" class="px-4 py-2 bg-primary hover:bg-primary/90 text-white font-medium rounded-lg transition-all">Sign Up</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<!-- Main Content -->
+		<main>
+			{% block body %}{% endblock %}
+		</main>
+
+		<!-- Footer -->
+		<footer class="border-t border-gray-800 bg-gray-900/50 mt-20">
+			<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+				<div class="grid md:grid-cols-4 gap-8">
+					<!-- Brand -->
+					<div>
+						<div class="flex items-center gap-2 mb-4">
+							<div class="w-8 h-8 bg-gradient-to-br from-primary to-purple-600 rounded-lg flex items-center justify-center">
+								<svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+								</svg>
+							</div>
+							<span class="text-xl font-bold">Pushify</span>
+						</div>
+						<p class="text-sm text-gray-400">Deploy your apps in minutes with automatic SSL, Git integration, and more.</p>
+					</div>
+
+					<!-- Product -->
+					<div>
+						<h3 class="font-semibold mb-4">Product</h3>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li>
+								<a href="{{ path('app_pricing') }}" class="hover:text-white transition-colors">Pricing</a>
+							</li>
+							<li>
+								<a href="{{ path('marketing_features') }}" class="hover:text-white transition-colors">Features</a>
+							</li>
+							<li>
+								<a href="{{ path('marketing_faq') }}" class="hover:text-white transition-colors">FAQ</a>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Company -->
+					<div>
+						<h3 class="font-semibold mb-4">Company</h3>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li>
+								<a href="#" class="hover:text-white transition-colors">About</a>
+							</li>
+							<li>
+								<a href="#" class="hover:text-white transition-colors">Contact</a>
+							</li>
+							<li>
+								<a href="#" class="hover:text-white transition-colors">Privacy</a>
+							</li>
+							<li>
+								<a href="#" class="hover:text-white transition-colors">Terms</a>
+							</li>
+						</ul>
+					</div>
+
+					<!-- Connect -->
+					<div>
+						<h3 class="font-semibold mb-4">Connect</h3>
+						<ul class="space-y-2 text-sm text-gray-400">
+							<li>
+								<a href="#" class="hover:text-white transition-colors">GitHub</a>
+							</li>
+							<li>
+								<a href="#" class="hover:text-white transition-colors">Twitter</a>
+							</li>
+							<li>
+								<a href="#" class="hover:text-white transition-colors">Discord</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
+					<p>&copy; {{ "now"|date("Y") }} Pushify. All rights reserved.</p>
+				</div>
+			</div>
+		</footer>
+
+		{% block javascripts %}
+			{{ encore_entry_script_tags('app') }}
+		{% endblock %}
+	</body>
+</html>

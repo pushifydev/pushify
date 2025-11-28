@@ -1,22 +1,27 @@
 import * as React from "react";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
+import * as Dialog from "@radix-ui/react-dialog";
 import classNames from "classnames";
-import { CaretDownIcon } from "@radix-ui/react-icons";
+import { CaretDownIcon, HamburgerMenuIcon, Cross2Icon } from "@radix-ui/react-icons";
 
 const Header = () => {
+    const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
+
     return (
         <div className="mt-8">
             <div className="container mx-auto max-w-7xl px-4">
                 <div className="w-full">
                     <NavigationMenu.Root className="relative z-10 w-full">
-                        <NavigationMenu.List className=" backdrop-blur-md flex w-full max-w-none list-none px-10 items-center justify-between gap-2 rounded-full border border-white/10 bg-slate-900/80 p-2.5 shadow-[0_10px_35px_rgba(0,0,0,0.35)]">
+                        <NavigationMenu.List className="backdrop-blur-md flex w-full max-w-none list-none px-4 md:px-10 items-center justify-between gap-2 rounded-full border border-white/10 bg-slate-900/80 p-2.5 shadow-[0_10px_35px_rgba(0,0,0,0.35)]">
                             <a
                                 href="/"
-                                className="text-2xl font-bold cursor-pointer"
+                                className="text-xl md:text-2xl font-bold cursor-pointer"
                             >
                                 Pushify
                             </a>
-                            <div className="flex items-center gap-5">
+
+                            {/* Desktop Navigation */}
+                            <div className="hidden lg:flex items-center gap-5">
                                 <NavigationMenu.Item>
                                     <NavigationMenu.Trigger className="group inline-flex items-center gap-1.5 rounded-lg px-3.5 py-2.5 font-semibold text-slate-200 transition-colors hover:bg-white/10 hover:text-white data-[state=open]:bg-indigo-600/20 data-[state=open]:text-white focus:outline-none focus:ring-2 focus:ring-indigo-400/60 focus:ring-offset-0">
                                         Features{" "}
@@ -197,12 +202,109 @@ const Header = () => {
                                     <div className="relative top-3 h-3 w-3 rotate-45 rounded-sm border-l border-t border-white/10 bg-slate-900" />
                                 </NavigationMenu.Indicator>
                             </div>
+
+                            {/* Desktop CTA */}
                             <a
                                 href="/register"
-                                className="bg-primary px-7 py-2 rounded-full font-semibold cursor-pointer hover:bg-primary/90 transition-colors"
+                                className="hidden lg:block bg-primary px-7 py-2 rounded-full font-semibold cursor-pointer hover:bg-primary/90 transition-colors"
                             >
                                 Get Started
                             </a>
+
+                            {/* Mobile Menu Button */}
+                            <Dialog.Root open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                                <Dialog.Trigger asChild>
+                                    <button className="lg:hidden p-2 rounded-lg hover:bg-white/10 transition-colors">
+                                        <HamburgerMenuIcon className="h-6 w-6 text-white" />
+                                    </button>
+                                </Dialog.Trigger>
+                                <Dialog.Portal>
+                                    <Dialog.Overlay className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50" />
+                                    <Dialog.Content className="fixed top-0 right-0 h-full w-full max-w-md bg-slate-900 border-l border-white/10 shadow-2xl z-50 p-6 overflow-y-auto">
+                                        <div className="flex items-center justify-between mb-8">
+                                            <Dialog.Title className="text-2xl font-bold text-white">
+                                                Menu
+                                            </Dialog.Title>
+                                            <Dialog.Close asChild>
+                                                <button className="p-2 rounded-lg hover:bg-white/10 transition-colors">
+                                                    <Cross2Icon className="h-6 w-6 text-white" />
+                                                </button>
+                                            </Dialog.Close>
+                                        </div>
+
+                                        <nav className="space-y-6">
+                                            {/* Features Section */}
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-slate-400 mb-3">Features</h3>
+                                                <div className="space-y-2">
+                                                    <MobileNavItem href="/features/databases" title="Managed Databases">
+                                                        PostgreSQL, MySQL, MongoDB, Redis
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/features/backups" title="Automated Backups">
+                                                        Point-in-time recovery
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/features/preview" title="Preview Deployments">
+                                                        Auto-deploy every PR
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/features/ssl" title="Auto SSL Certificates">
+                                                        Free SSL with Let's Encrypt
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/features/domains" title="Custom Domains">
+                                                        Unlimited domains & DNS
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/features/monitoring" title="Monitoring & Alerts">
+                                                        Real-time logs & uptime
+                                                    </MobileNavItem>
+                                                </div>
+                                            </div>
+
+                                            {/* Resources Section */}
+                                            <div>
+                                                <h3 className="text-sm font-semibold text-slate-400 mb-3">Resources</h3>
+                                                <div className="space-y-2">
+                                                    <MobileNavItem href="/docs/getting-started" title="Getting Started">
+                                                        Deploy in 5 minutes
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/docs/api" title="API Reference">
+                                                        Complete API docs
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/docs/cli" title="CLI Tool">
+                                                        Terminal management
+                                                    </MobileNavItem>
+                                                    <MobileNavItem href="/changelog" title="Changelog">
+                                                        Latest updates
+                                                    </MobileNavItem>
+                                                </div>
+                                            </div>
+
+                                            {/* Direct Links */}
+                                            <div className="pt-4 border-t border-white/10 space-y-3">
+                                                <a
+                                                    href="/pricing"
+                                                    className="block px-4 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold transition-colors"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                    Pricing
+                                                </a>
+                                                <a
+                                                    href="/docs"
+                                                    className="block px-4 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold transition-colors"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                    Documentation
+                                                </a>
+                                                <a
+                                                    href="/register"
+                                                    className="block px-4 py-3 rounded-lg bg-primary hover:bg-primary/90 text-white font-semibold text-center transition-colors"
+                                                    onClick={() => setMobileMenuOpen(false)}
+                                                >
+                                                    Get Started
+                                                </a>
+                                            </div>
+                                        </nav>
+                                    </Dialog.Content>
+                                </Dialog.Portal>
+                            </Dialog.Root>
                         </NavigationMenu.List>
 
                         <div className="absolute left-0 top-[calc(100%+12px)] flex w-full justify-center">
@@ -235,6 +337,16 @@ const ListItem = React.forwardRef(
             </NavigationMenu.Link>
         </li>
     )
+);
+
+const MobileNavItem = ({ href, title, children }) => (
+    <a
+        href={href}
+        className="block px-3 py-2 rounded-lg hover:bg-slate-800 transition-colors"
+    >
+        <div className="font-semibold text-white text-sm">{title}</div>
+        <p className="text-xs text-slate-400 mt-0.5">{children}</p>
+    </a>
 );
 
 export default Header;

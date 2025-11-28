@@ -1,0 +1,389 @@
+{% extends 'marketing/base.html.twig' %}
+
+{% block title %}Features - Pushify{% endblock %}
+
+{% block meta_description %}Powerful features for modern deployments. Git integration, automatic SSL, Docker support, and more.{% endblock %}
+
+{% block body %}
+	<!-- Hero -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 text-center">
+		<h1 class="text-4xl md:text-5xl font-bold mb-4">
+			Everything You Need to
+			<span class="gradient-text">Deploy with Confidence</span>
+		</h1>
+		<p class="text-xl text-gray-400 max-w-3xl mx-auto">
+			Powerful features that make deploying and managing your applications simple, secure, and scalable.
+		</p>
+	</section>
+
+	<!-- Main Features -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+		<div class="space-y-24">
+			<!-- Feature 1: Git Deployments -->
+			<div class="grid md:grid-cols-2 gap-12 items-center">
+				<div>
+					<div class="inline-flex items-center gap-2 px-4 py-2 bg-primary/10 border border-primary/30 rounded-full mb-6">
+						<svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+						</svg>
+						<span class="text-sm text-primary font-medium">Deployment</span>
+					</div>
+					<h2 class="text-3xl font-bold mb-4">Git-Based Deployments</h2>
+					<p class="text-lg text-gray-400 mb-6">
+						Connect your GitHub, GitLab, or Bitbucket repository and deploy with a single
+						<code class="px-2 py-1 bg-gray-800 rounded text-primary">git push</code>. No complex CI/CD setup required.
+					</p>
+					<ul class="space-y-3">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Automatic deployments on push to main branch</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Deploy from any branch with one click</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Real-time deployment logs and status updates</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Rollback to previous deployments instantly</span>
+						</li>
+					</ul>
+				</div>
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-8">
+					<pre class="text-sm text-gray-300 overflow-x-auto"><code>git add .
+git commit -m "Deploy new feature"
+git push origin main
+
+# ✅ Pushify automatically:
+# - Pulls your changes
+# - Builds your app
+# - Deploys to production
+# - Updates SSL if needed</code></pre>
+				</div>
+			</div>
+
+			<!-- Feature 2: Automatic SSL -->
+			<div class="grid md:grid-cols-2 gap-12 items-center">
+				<div class="order-2 md:order-1 bg-gray-800/50 border border-gray-700/50 rounded-xl p-8">
+					<div class="space-y-4">
+						<div class="flex items-center gap-3 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
+							<svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+							</svg>
+							<div>
+								<p class="font-semibold text-green-400">SSL Certificate Active</p>
+								<p class="text-xs text-green-300">Auto-renews in 60 days</p>
+							</div>
+						</div>
+						<div class="text-xs text-gray-400 space-y-1">
+							<p>
+								<span class="text-gray-500">Issuer:</span>
+								Let's Encrypt
+							</p>
+							<p>
+								<span class="text-gray-500">Encryption:</span>
+								TLS 1.3 (256-bit)
+							</p>
+							<p>
+								<span class="text-gray-500">Domains:</span>
+								yourapp.com, www.yourapp.com
+							</p>
+						</div>
+					</div>
+				</div>
+				<div class="order-1 md:order-2">
+					<div class="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 border border-green-500/30 rounded-full mb-6">
+						<svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+						</svg>
+						<span class="text-sm text-green-500 font-medium">Security</span>
+					</div>
+					<h2 class="text-3xl font-bold mb-4">Automatic SSL Certificates</h2>
+					<p class="text-lg text-gray-400 mb-6">
+						Free SSL certificates with automatic provisioning and renewal. Your applications are secure by default, with zero configuration required.
+					</p>
+					<ul class="space-y-3">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Instant SSL provisioning with Let's Encrypt</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Automatic renewal 30 days before expiry</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Support for multiple domains and subdomains</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Wildcard SSL support</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<!-- Feature 3: Docker Support -->
+			<div class="grid md:grid-cols-2 gap-12 items-center">
+				<div>
+					<div class="inline-flex items-center gap-2 px-4 py-2 bg-blue-500/10 border border-blue-500/30 rounded-full mb-6">
+						<svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+						</svg>
+						<span class="text-sm text-blue-500 font-medium">Containers</span>
+					</div>
+					<h2 class="text-3xl font-bold mb-4">Full Docker Support</h2>
+					<p class="text-lg text-gray-400 mb-6">
+						Deploy any application that runs in a Docker container. Node.js, Python, PHP, Ruby, Go, Rust - if it runs in Docker, it runs on Pushify.
+					</p>
+					<ul class="space-y-3">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Automatic Docker image building</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Support for docker-compose configurations</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Environment variables and secrets management</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Container logs and resource monitoring</span>
+						</li>
+					</ul>
+				</div>
+				<div class="bg-gray-800/50 border border-gray-700/50 rounded-xl p-8">
+					<div class="space-y-4">
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">Node.js</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">Python / Django / Flask</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">PHP / Laravel / Symfony</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">Ruby / Rails</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">Go / Rust / Java</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+						<div class="flex items-center justify-between p-3 bg-gray-900/50 rounded-lg">
+							<span class="text-sm text-gray-400">Static Sites / Next.js</span>
+							<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- Feature 4: Database Backups -->
+			<div class="grid md:grid-cols-2 gap-12 items-center">
+				<div class="order-2 md:order-1 bg-gray-800/50 border border-gray-700/50 rounded-xl p-8">
+					<div class="space-y-3">
+						<div class="p-4 bg-gray-900/50 rounded-lg">
+							<div class="flex items-center justify-between mb-2">
+								<span class="text-sm text-gray-400">Latest Backup</span>
+								<span class="text-xs text-green-400">2 hours ago</span>
+							</div>
+							<div class="flex items-center gap-2">
+								<div class="flex-1 bg-gray-800 rounded-full h-2">
+									<div class="bg-green-500 h-2 rounded-full" style="width: 100%"></div>
+								</div>
+								<span class="text-xs text-gray-500">125 MB</span>
+							</div>
+						</div>
+						<div class="grid grid-cols-3 gap-2 text-center text-xs">
+							<div class="p-3 bg-gray-900/50 rounded-lg">
+								<p class="text-gray-500">Daily</p>
+								<p class="text-white font-semibold mt-1">7 days</p>
+							</div>
+							<div class="p-3 bg-gray-900/50 rounded-lg">
+								<p class="text-gray-500">Weekly</p>
+								<p class="text-white font-semibold mt-1">4 weeks</p>
+							</div>
+							<div class="p-3 bg-gray-900/50 rounded-lg">
+								<p class="text-gray-500">Monthly</p>
+								<p class="text-white font-semibold mt-1">12 months</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="order-1 md:order-2">
+					<div class="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 border border-purple-500/30 rounded-full mb-6">
+						<svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+							<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4"></path>
+						</svg>
+						<span class="text-sm text-purple-500 font-medium">Data Protection</span>
+					</div>
+					<h2 class="text-3xl font-bold mb-4">Automated Database Backups</h2>
+					<p class="text-lg text-gray-400 mb-6">
+						Your data is automatically backed up with configurable retention policies. Restore to any point in time with a single click.
+					</p>
+					<ul class="space-y-3">
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Automatic daily, weekly, and monthly backups</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">One-click restore from any backup point</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Encrypted and secure storage</span>
+						</li>
+						<li class="flex items-start gap-3">
+							<svg class="w-5 h-5 text-green-500 mt-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+							</svg>
+							<span class="text-gray-300">Download backups for local storage</span>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+
+	<!-- Additional Features Grid -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+		<div class="text-center mb-12">
+			<h2 class="text-3xl font-bold mb-4">And Much More</h2>
+			<p class="text-gray-400">Everything you need for production-ready deployments</p>
+		</div>
+
+		<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-yellow-500/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-yellow-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Real-Time Monitoring</h3>
+				<p class="text-sm text-gray-400">Monitor CPU, memory, disk usage, and application health in real-time.</p>
+			</div>
+
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-green-500/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-green-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Email Support</h3>
+				<p class="text-sm text-gray-400">Get help from our team via email. We respond within 24 hours on weekdays.</p>
+			</div>
+
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-blue-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Environment Variables</h3>
+				<p class="text-sm text-gray-400">Securely manage environment variables and secrets for your applications.</p>
+			</div>
+
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-purple-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Deployment Logs</h3>
+				<p class="text-sm text-gray-400">Real-time logs for all deployments. Debug issues quickly with detailed output.</p>
+			</div>
+
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-red-500/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-red-500" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Custom Domains</h3>
+				<p class="text-sm text-gray-400">Use your own domain names with automatic DNS configuration.</p>
+			</div>
+
+			<div class="p-6 bg-gray-800/50 border border-gray-700/50 rounded-xl">
+				<div class="w-10 h-10 bg-primary/20 rounded-lg flex items-center justify-center mb-4">
+					<svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+					</svg>
+				</div>
+				<h3 class="font-semibold mb-2">Zero-Downtime Deploys</h3>
+				<p class="text-sm text-gray-400">Deploy updates without downtime using rolling deployment strategy.</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- CTA -->
+	<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
+		<div class="bg-gradient-to-br from-primary/20 to-purple-500/20 border border-primary/50 rounded-2xl p-12 text-center">
+			<h2 class="text-3xl font-bold mb-4">Ready to Experience These Features?</h2>
+			<p class="text-xl text-gray-300 mb-8">Start deploying in minutes with our recommended plan</p>
+			<div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+				<a href="{{ path('app_pricing') }}" class="px-8 py-4 bg-primary hover:bg-primary/90 text-white font-semibold rounded-lg transition-all inline-flex items-center gap-2">
+					<span>View Pricing</span>
+					<svg class="w-5 h-5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+					</svg>
+				</a>
+				<a href="{{ path('marketing_faq') }}" class="px-8 py-4 bg-transparent border-2 border-white/20 hover:border-white/40 text-white font-semibold rounded-lg transition-all">
+					Read FAQ
+				</a>
+			</div>
+		</div>
+	</section>
+{% endblock %}
