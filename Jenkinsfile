@@ -108,6 +108,9 @@ pipeline {
 
                     # Clear production cache
                     timeout 30 docker-compose -f docker-compose.prod.yml exec -T app php bin/console cache:clear --env=prod || echo "⚠️  Cache clear skipped or timed out"
+
+                    # Restart app container to apply all changes
+                    docker-compose -f docker-compose.prod.yml restart app
                 '''
             }
         }
