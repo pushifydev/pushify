@@ -8,3 +8,5 @@ when@prod:
     framework:
         router:
             strict_requirements: null
+            # Force HTTPS in production
+            default_uri: 'https://pushify.dev'
