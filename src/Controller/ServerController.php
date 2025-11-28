@@ -172,6 +172,18 @@ class ServerController extends AbstractController
                 if ($result['success']) {
                     $this->serverService->checkDocker($server);
                     $this->serverService->getSystemInfo($server);
+                } else {
+                    // If server was created recently (less than 5 minutes ago), clear the error
+                    // SSH might not be ready yet - this is normal
+                    $createdAt = $server->getCreatedAt();
+                    $now = new \DateTime();
+                    $minutesAgo = ($now->getTimestamp() - $createdAt->getTimestamp()) / 60;
+
+                    if ($minutesAgo < 5) {
+                        $server->setLastError(null);
+                        $server->setStatus(Server::STATUS_PENDING);
+                        $this->entityManager->flush();
+                    }
                 }
             }
         } catch (\Exception $e) {
