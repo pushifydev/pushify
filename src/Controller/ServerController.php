@@ -241,6 +241,21 @@ class ServerController extends AbstractController
         return $this->json($result);
     }
 
+    #[Route('/{id}/docker/check', name: 'app_server_docker_check', methods: ['GET'])]
+    public function checkDocker(int $id): JsonResponse
+    {
+        /** @var User $user */
+        $user = $this->getUser();
+        $server = $this->serverRepository->findByOwnerAndId($user, $id);
+
+        if (!$server) {
+            return $this->json(['error' => 'Server not found'], 404);
+        }
+
+        $result = $this->serverService->checkDocker($server);
+        return $this->json($result);
+    }
+
     #[Route('/{id}/docker/install', name: 'app_server_docker_install', methods: ['POST'])]
     public function installDocker(Request $request, int $id): JsonResponse
     {
