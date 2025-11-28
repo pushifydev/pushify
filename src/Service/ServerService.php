@@ -319,7 +319,13 @@ BASH;
         $process->run();
 
         if (!$process->isSuccessful()) {
-            throw new \RuntimeException('Failed to generate SSH key');
+            $error = $process->getErrorOutput() ?: $process->getOutput();
+            $this->logger->error('SSH key generation failed', [
+                'exit_code' => $process->getExitCode(),
+                'error' => $error,
+                'command' => $process->getCommandLine(),
+            ]);
+            throw new \RuntimeException('Failed to generate SSH key: ' . $error);
         }
 
         $privateKey = file_get_contents($keyDir . '/key');

@@ -82,6 +82,7 @@ RUN apk add --no-cache \
     bash \
     curl \
     curl-dev \
+    openssh-client \
     linux-headers
 
 # Install PHP extensions
