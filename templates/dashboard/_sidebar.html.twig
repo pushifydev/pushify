@@ -1,5 +1,18 @@
+<!-- Mobile Menu Button -->
+<button id="mobile-menu-button" class="lg:hidden fixed top-4 left-4 z-50 p-2 bg-gray-900 border border-gray-800 rounded-lg text-white hover:bg-gray-800 transition-colors">
+	<svg id="menu-open-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+	</svg>
+	<svg id="menu-close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+		<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+	</svg>
+</button>
+
+<!-- Mobile Overlay -->
+<div id="mobile-overlay" class="lg:hidden fixed inset-0 bg-black/50 backdrop-blur-sm z-40 hidden"></div>
+
 <!-- Sidebar -->
-<aside class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col fixed h-full z-50">
+<aside id="sidebar" class="w-64 bg-gray-900 border-r border-gray-800 flex flex-col fixed h-full z-50 -translate-x-full lg:translate-x-0 transition-transform duration-300">
 	<!-- Logo -->
 	<div class="p-6 border-b border-gray-800 pb-7">
 		<a href="{{ path('app_dashboard') }}" class="text-xl font-bold text-white">Pushify</a>
@@ -164,3 +177,43 @@
 		</div>
 	</div>
 </aside>
+
+<script>
+	// Mobile menu toggle
+	const mobileMenuButton = document.getElementById('mobile-menu-button');
+	const sidebar = document.getElementById('sidebar');
+	const mobileOverlay = document.getElementById('mobile-overlay');
+	const menuOpenIcon = document.getElementById('menu-open-icon');
+	const menuCloseIcon = document.getElementById('menu-close-icon');
+
+	function toggleMobileMenu() {
+		const isOpen = !sidebar.classList.contains('-translate-x-full');
+
+		if (isOpen) {
+			// Close menu
+			sidebar.classList.add('-translate-x-full');
+			mobileOverlay.classList.add('hidden');
+			menuOpenIcon.classList.remove('hidden');
+			menuCloseIcon.classList.add('hidden');
+		} else {
+			// Open menu
+			sidebar.classList.remove('-translate-x-full');
+			mobileOverlay.classList.remove('hidden');
+			menuOpenIcon.classList.add('hidden');
+			menuCloseIcon.classList.remove('hidden');
+		}
+	}
+
+	mobileMenuButton.addEventListener('click', toggleMobileMenu);
+	mobileOverlay.addEventListener('click', toggleMobileMenu);
+
+	// Close menu when clicking a link
+	const sidebarLinks = sidebar.querySelectorAll('a');
+	sidebarLinks.forEach(link => {
+		link.addEventListener('click', () => {
+			if (window.innerWidth < 1024) {
+				toggleMobileMenu();
+			}
+		});
+	});
+</script>
