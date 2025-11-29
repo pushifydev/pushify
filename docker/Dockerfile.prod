@@ -117,9 +117,10 @@ COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 # Configure Supervisor
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Create application user
+# Create application user and add to docker group for Docker-in-Docker
 RUN addgroup -g 1000 pushify && \
-    adduser -D -u 1000 -G pushify pushify
+    adduser -D -u 1000 -G pushify pushify && \
+    addgroup pushify docker
 
 # Set working directory
 WORKDIR /var/www/html
