@@ -752,7 +752,6 @@ DOCKERFILE;
         $dockerBuildCmd = [
             'docker', 'build',
             '--platform', 'linux/amd64',  // Build for x86_64 servers
-            '--progress=plain',  // Plain output for better streaming
             '-t', $imageName,
         ];
 
