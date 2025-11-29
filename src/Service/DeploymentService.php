@@ -349,15 +349,8 @@ class DeploymentService
 
     private function getNextJsDockerfile(string $installCommand, string $buildCommand, string $startCommand, array $envVars = []): string
     {
-        // Generate ARG and ENV declarations for build-time variables (especially NEXT_PUBLIC_*)
-        $argDeclarations = '';
-        $envDeclarations = '';
-        $runtimeEnvDeclarations = '';
-        foreach ($envVars as $key => $value) {
-            $argDeclarations .= "ARG {$key}\n";
-            $envDeclarations .= "ENV {$key}=\${$key}\n";
-            $runtimeEnvDeclarations .= "ENV {$key}=\${$key}\n";
-        }
+        // Environment variables (including NEXT_PUBLIC_*) are passed at runtime via docker run -e flags
+        // Not defined in Dockerfile to avoid issues with special characters and multiline values
 
         // Parse start command for CMD (split by spaces, respecting quoted strings)
         preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $startCommand, $matches);
@@ -374,14 +367,14 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
-{$argDeclarations}{$envDeclarations}ENV NEXT_TELEMETRY_DISABLED=1
+ENV NEXT_TELEMETRY_DISABLED=1
 RUN $buildCommand
 
 FROM node:20-alpine AS runner
 WORKDIR /app
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
-{$runtimeEnvDeclarations}
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
@@ -400,12 +393,8 @@ DOCKERFILE;
 
     private function getStaticSiteDockerfile(string $installCommand, string $buildCommand, string $outputDir, array $envVars = []): string
     {
-        $argDeclarations = '';
-        $envDeclarations = '';
-        foreach ($envVars as $key => $value) {
-            $argDeclarations .= "ARG {$key}\n";
-            $envDeclarations .= "ENV {$key}=\${$key}\n";
-        }
+        // Environment variables are passed at runtime via docker run -e flags
+        // Not defined in Dockerfile to avoid issues with special characters and multiline values
 
         return <<<DOCKERFILE
 FROM node:20-alpine AS builder
@@ -413,7 +402,7 @@ WORKDIR /app
 COPY package*.json ./
 RUN $installCommand
 COPY . .
-{$argDeclarations}{$envDeclarations}RUN $buildCommand
+RUN $buildCommand
 
 FROM nginx:alpine
 COPY --from=builder /app/$outputDir /usr/share/nginx/html
@@ -440,14 +429,8 @@ DOCKERFILE;
 
     private function getNuxtDockerfile(string $installCommand, string $buildCommand, string $startCommand, array $envVars = []): string
     {
-        $argDeclarations = '';
-        $envDeclarations = '';
-        $runtimeEnvDeclarations = '';
-        foreach ($envVars as $key => $value) {
-            $argDeclarations .= "ARG {$key}\n";
-            $envDeclarations .= "ENV {$key}=\${$key}\n";
-            $runtimeEnvDeclarations .= "ENV {$key}=\${$key}\n";
-        }
+        // Environment variables are passed at runtime via docker run -e flags
+        // Not defined in Dockerfile to avoid issues with special characters and multiline values
 
         // Parse start command for CMD
         preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $startCommand, $matches);
@@ -460,23 +443,21 @@ WORKDIR /app
 COPY package*.json ./
 RUN $installCommand
 COPY . .
-{$argDeclarations}{$envDeclarations}RUN $buildCommand
+RUN $buildCommand
 
 FROM node:20-alpine
 WORKDIR /app
 COPY --from=builder /app/.output ./
 ENV HOST 0.0.0.0
-{$runtimeEnvDeclarations}EXPOSE 3000
+EXPOSE 3000
 CMD $cmdJson
 DOCKERFILE;
     }
 
     private function getNodeJsDockerfile(string $installCommand, string $buildCommand, string $startCommand, array $envVars = []): string
     {
-        $envDeclarations = '';
-        foreach ($envVars as $key => $value) {
-            $envDeclarations .= "ENV {$key}={$value}\n";
-        }
+        // Environment variables are passed at runtime via docker run -e flags
+        // Not defined in Dockerfile to avoid issues with special characters and multiline values
 
         // Parse start command for CMD
         preg_match_all('/"(?:\\\\.|[^\\\\"])*"|\S+/', $startCommand, $matches);
@@ -491,7 +472,7 @@ RUN $installCommand --production
 COPY . .
 RUN $buildCommand || true
 ENV NODE_ENV production
-{$envDeclarations}EXPOSE 3000
+EXPOSE 3000
 CMD $cmdJson
 DOCKERFILE;
     }
