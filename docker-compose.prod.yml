@@ -98,6 +98,7 @@ services:
     volumes:
       - ./var/deployments:/var/www/html/var/deployments
       - app_logs:/var/www/html/var/log
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - pushify
     depends_on:
