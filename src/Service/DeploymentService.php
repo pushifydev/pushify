@@ -1047,4 +1047,36 @@ DOCKERFILE;
         $this->entityManager->persist($deployment);
         $this->entityManager->flush();
     }
+
+    /**
+     * Cleanup (stop and remove) all containers for a project
+     */
+    public function cleanupProjectContainers(Project $project): void
+    {
+        $server = $project->getServer();
+        if (!$server) {
+            // No server assigned, nothing to cleanup
+            return;
+        }
+
+        $containerName = 'pushify-' . $project->getSlug();
+
+        // Create temporary SSH key file
+        $keyFile = tempnam(sys_get_temp_dir(), 'ssh_key_');
+        file_put_contents($keyFile, $server->getSshPrivateKey());
+        chmod($keyFile, 0600);
+
+        try {
+            // Stop and remove container
+            $this->executeRemoteCommand($server, $keyFile, "docker stop {$containerName} 2>/dev/null || true");
+            $this->executeRemoteCommand($server, $keyFile, "docker rm {$containerName} 2>/dev/null || true");
+
+            $this->logger->info('Cleaned up containers for project', [
+                'project' => $project->getSlug(),
+                'server' => $server->getIpAddress()
+            ]);
+        } finally {
+            @unlink($keyFile);
+        }
+    }
 }

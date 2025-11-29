@@ -14,6 +14,7 @@ use App\Service\ContainerLogsService;
 use App\Service\EnvironmentService;
 use App\Service\MonitoringService;
 use App\Service\AlertService;
+use App\Service\DeploymentService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -38,7 +39,8 @@ class ProjectController extends AbstractController
         private ContainerLogsService $containerLogsService,
         private EnvironmentService $environmentService,
         private MonitoringService $monitoringService,
-        private AlertService $alertService
+        private AlertService $alertService,
+        private DeploymentService $deploymentService
     ) {
     }
 
@@ -268,6 +270,14 @@ class ProjectController extends AbstractController
         }
 
         if ($this->isCsrfTokenValid('delete-project-' . $project->getId(), $request->request->get('_token'))) {
+            // Stop and remove container on remote server before deleting project
+            try {
+                $this->deploymentService->cleanupProjectContainers($project);
+            } catch (\Exception $e) {
+                // Log error but continue with deletion - container might already be gone
+                error_log('Failed to cleanup containers for project ' . $project->getSlug() . ': ' . $e->getMessage());
+            }
+
             $this->entityManager->remove($project);
             $this->entityManager->flush();
             $this->addFlash('success', 'Project deleted successfully');
