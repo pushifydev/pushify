@@ -900,14 +900,6 @@ DOCKERFILE;
         $this->executeRemoteCommand($server, $keyFile, "docker stop {$containerName} 2>/dev/null || true");
         $this->executeRemoteCommand($server, $keyFile, "docker rm {$containerName} 2>/dev/null || true");
 
-        // Step 5: Assign port (use project ID based or find available)
-        $port = $project->getContainerPort() ?? (3000 + $project->getId());
-        $project->setContainerPort($port);
-
-        // Step 6: Start new container
-        $deployment->appendDeployLog("🚀 Starting container...");
-        $this->save($deployment);
-
         // Build docker run command with environment variables
         $envVars = $this->environmentService->getProjectEnvVars($project);
         $envString = '';
@@ -917,13 +909,18 @@ DOCKERFILE;
             $envString .= " -e {$key}={$escapedValue}";
         }
 
+        // Step 5: Assign port - use user's PORT env var if available, otherwise auto-assign
+        $userPort = isset($envVars['PORT']) ? (int)$envVars['PORT'] : null;
+        $port = $project->getContainerPort() ?? $userPort ?? (3000 + $project->getId());
+        $project->setContainerPort($port);
+
+        // Step 6: Start new container
+        $deployment->appendDeployLog("🚀 Starting container...");
         $deployment->appendDeployLog("📦 Environment variables: " . count($envVars) . " configured");
         $this->save($deployment);
 
-        // Determine internal container port from user's PORT env var (default 3000)
-        $containerPort = $envVars['PORT'] ?? 3000;
-
-        $runCommand = "docker run -d --name {$containerName} -p {$port}:{$containerPort} --restart unless-stopped{$envString} {$localImageName}";
+        // Use same port for both external and internal (passthrough mode)
+        $runCommand = "docker run -d --name {$containerName} -p {$port}:{$port} --restart unless-stopped{$envString} {$localImageName}";
 
         $runResult = $this->executeRemoteCommand($server, $keyFile, $runCommand);
 
