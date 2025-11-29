@@ -28,6 +28,14 @@ class ContainerLogsService
         $containerName = 'pushify-' . $project->getSlug();
         $server = $project->getServer();
 
+        $this->logger->info('Getting container logs', [
+            'project' => $project->getSlug(),
+            'container_name' => $containerName,
+            'has_server' => $server !== null,
+            'server_active' => $server ? $server->isActive() : false,
+            'server_ip' => $server ? $server->getIpAddress() : null,
+        ]);
+
         if ($server && $server->isActive()) {
             return $this->getRemoteLogs($server, $containerName, $tail, $follow);
         } else {
@@ -110,6 +118,13 @@ class ContainerLogsService
     private function getRemoteLogs(Server $server, string $containerName, int $tail = 100, bool $follow = false): array
     {
         $keyFile = $this->createTempKeyFile($server);
+
+        $this->logger->info('Created temp SSH key file', [
+            'key_file' => $keyFile,
+            'key_exists' => file_exists($keyFile),
+            'key_size' => file_exists($keyFile) ? filesize($keyFile) : 0,
+            'key_perms' => file_exists($keyFile) ? substr(sprintf('%o', fileperms($keyFile)), -4) : null,
+        ]);
 
         try {
             $dockerCommand = "docker logs --tail {$tail} --timestamps {$containerName}";
