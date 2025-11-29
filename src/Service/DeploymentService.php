@@ -755,15 +755,13 @@ DOCKERFILE;
             '-t', $imageName,
         ];
 
-        // Add environment variables as build args
+        // Note: Environment variables are passed at runtime via docker run -e flags
+        // Build args are intentionally not used to avoid issues with special characters
+        // and multiline values (like FIREBASE_PRIVATE_KEY)
         $envVars = $this->environmentService->getProjectEnvVars($project);
-        foreach ($envVars as $key => $value) {
-            $dockerBuildCmd[] = '--build-arg';
-            $dockerBuildCmd[] = "{$key}={$value}";
-        }
 
         if (count($envVars) > 0) {
-            $deployment->appendBuildLog("📦 Injecting " . count($envVars) . " build-time environment variables...");
+            $deployment->appendBuildLog("📦 " . count($envVars) . " environment variables will be injected at runtime...");
             $this->save($deployment);
         }
 
