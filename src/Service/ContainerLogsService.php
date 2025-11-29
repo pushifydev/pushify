@@ -137,6 +137,14 @@ class ContainerLogsService
             if (!$process->isSuccessful()) {
                 $error = $process->getErrorOutput();
 
+                $this->logger->error('SSH command failed for remote logs', [
+                    'server' => $server->getIpAddress(),
+                    'container' => $containerName,
+                    'exit_code' => $process->getExitCode(),
+                    'error_output' => $error,
+                    'output' => $process->getOutput()
+                ]);
+
                 if (str_contains($error, 'No such container')) {
                     return [
                         'success' => false,
