@@ -89,9 +89,17 @@ class DomainController extends AbstractController
             return $this->redirectToRoute('app_project_domains', ['projectId' => $projectId]);
         }
 
+        // Get DNS provider selection (manual or pushify)
+        $dnsProvider = $request->request->get('dns_provider', Domain::DNS_PROVIDER_MANUAL);
+
         try {
-            $domain = $this->domainService->addDomain($project, $domainName, $isPrimary);
-            $this->addFlash('success', "Domain {$domainName} added successfully");
+            $domain = $this->domainService->addDomain($project, $domainName, $isPrimary, $dnsProvider);
+
+            if ($dnsProvider === Domain::DNS_PROVIDER_PUSHIFY) {
+                $this->addFlash('success', "Domain {$domainName} added successfully with Pushify DNS management");
+            } else {
+                $this->addFlash('success', "Domain {$domainName} added successfully. Please configure your DNS records.");
+            }
         } catch (\Exception $e) {
             $this->addFlash('error', $e->getMessage());
         }

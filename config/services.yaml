@@ -69,3 +69,8 @@ services:
             $iyzicoApiKey: '%env(IYZICO_API_KEY)%'
             $iyzicoSecretKey: '%env(IYZICO_SECRET_KEY)%'
             $iyzicoBaseUrl: '%env(IYZICO_BASE_URL)%'
+
+    App\Service\CloudFlareService:
+        arguments:
+            $cloudflareApiToken: '%env(CLOUDFLARE_API_TOKEN)%'
+            $cloudflareAccountId: '%env(CLOUDFLARE_ACCOUNT_ID)%'

@@ -16,14 +16,15 @@ class DomainService
         private EntityManagerInterface $entityManager,
         private DomainRepository $domainRepository,
         private ServerService $serverService,
-        private LoggerInterface $logger
+        private LoggerInterface $logger,
+        private CloudFlareService $cloudFlareService
     ) {
     }
 
     /**
      * Add a new domain to a project
      */
-    public function addDomain(Project $project, string $domainName, bool $isPrimary = false): Domain
+    public function addDomain(Project $project, string $domainName, bool $isPrimary = false, string $dnsProvider = Domain::DNS_PROVIDER_MANUAL): Domain
     {
         // Check if domain already exists
         $existing = $this->domainRepository->findByDomainName($domainName);
@@ -36,16 +37,70 @@ class DomainService
         $domain->setDomain($domainName);
         $domain->setIsPrimary($isPrimary);
         $domain->setStatus(Domain::STATUS_PENDING);
+        $domain->setDnsProvider($dnsProvider);
 
         // If this is primary, unset other primaries
         if ($isPrimary) {
             $this->unsetOtherPrimaries($project, $domain);
         }
 
+        // If CloudFlare DNS, create zone and configure DNS automatically
+        if ($dnsProvider === Domain::DNS_PROVIDER_PUSHIFY) {
+            $this->setupCloudFlareDns($domain, $project);
+        }
+
         $this->entityManager->persist($domain);
         $this->entityManager->flush();
 
         return $domain;
+    }
+
+    /**
+     * Setup CloudFlare DNS for a domain
+     */
+    private function setupCloudFlareDns(Domain $domain, Project $project): void
+    {
+        try {
+            // Create CloudFlare zone
+            $result = $this->cloudFlareService->createZone($domain->getDomain());
+
+            if (!$result['success']) {
+                $domain->setStatus(Domain::STATUS_FAILED);
+                $domain->setLastError('Failed to create CloudFlare zone: ' . $result['error']);
+                return;
+            }
+
+            $domain->setCloudflareZoneId($result['zone_id']);
+
+            // Get server IP
+            $server = $project->getServer();
+            if (!$server) {
+                $domain->setStatus(Domain::STATUS_FAILED);
+                $domain->setLastError('No server assigned to project');
+                return;
+            }
+
+            $serverIp = $server->getIpAddress();
+
+            // Create A records (@ and www)
+            $this->cloudFlareService->createARecord($result['zone_id'], '@', $serverIp);
+            $this->cloudFlareService->createARecord($result['zone_id'], 'www', $serverIp);
+
+            $domain->setStatus(Domain::STATUS_VERIFYING);
+
+            $this->logger->info('CloudFlare DNS configured for domain', [
+                'domain' => $domain->getDomain(),
+                'zone_id' => $result['zone_id'],
+                'server_ip' => $serverIp
+            ]);
+        } catch (\Exception $e) {
+            $domain->setStatus(Domain::STATUS_FAILED);
+            $domain->setLastError($e->getMessage());
+            $this->logger->error('Failed to setup CloudFlare DNS', [
+                'domain' => $domain->getDomain(),
+                'error' => $e->getMessage()
+            ]);
+        }
     }
 
     /**
@@ -59,6 +114,22 @@ class DomainService
         // Remove nginx config if exists
         if ($server && $server->isActive()) {
             $this->removeNginxConfig($domain, $server);
+        }
+
+        // If CloudFlare managed, delete the zone
+        if ($domain->isPushifyDns() && $domain->getCloudflareZoneId()) {
+            try {
+                $this->cloudFlareService->deleteZone($domain->getCloudflareZoneId());
+                $this->logger->info('CloudFlare zone deleted', [
+                    'domain' => $domain->getDomain(),
+                    'zone_id' => $domain->getCloudflareZoneId()
+                ]);
+            } catch (\Exception $e) {
+                $this->logger->error('Failed to delete CloudFlare zone', [
+                    'domain' => $domain->getDomain(),
+                    'error' => $e->getMessage()
+                ]);
+            }
         }
 
         $this->entityManager->remove($domain);
