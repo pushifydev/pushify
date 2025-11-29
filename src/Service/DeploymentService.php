@@ -920,6 +920,9 @@ DOCKERFILE;
         $deployment->appendDeployLog("📦 Environment variables: " . count($envVars) . " configured");
         $this->save($deployment);
 
+        // Force PORT to 3000 inside container (override user's PORT env var)
+        $envString .= " -e PORT=3000";
+
         $runCommand = "docker run -d --name {$containerName} -p {$port}:3000 --restart unless-stopped{$envString} {$localImageName}";
 
         $runResult = $this->executeRemoteCommand($server, $keyFile, $runCommand);
