@@ -588,13 +588,20 @@ class ProjectController extends AbstractController
             return $this->json(['success' => false, 'error' => 'Project not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $days = (int) $request->query->get('days', 7);
-        $stats = $this->monitoringService->getUptimeStats($project, $days);
+        try {
+            $days = (int) $request->query->get('days', 7);
+            $stats = $this->monitoringService->getUptimeStats($project, $days);
 
-        return $this->json([
-            'success' => true,
-            'stats' => $stats,
-        ]);
+            return $this->json([
+                'success' => true,
+                'stats' => $stats,
+            ]);
+        } catch (\Exception $e) {
+            return $this->json([
+                'success' => false,
+                'error' => $e->getMessage(),
+            ], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
     #[Route('/{slug}/monitoring/history', name: 'app_project_monitoring_history', methods: ['GET'])]
