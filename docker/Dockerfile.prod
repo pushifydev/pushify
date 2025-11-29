@@ -83,7 +83,8 @@ RUN apk add --no-cache \
     curl \
     curl-dev \
     openssh-client \
-    linux-headers
+    linux-headers \
+    docker-cli
 
 # Install PHP extensions
 RUN docker-php-ext-install \

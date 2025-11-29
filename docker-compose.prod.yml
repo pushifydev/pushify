@@ -23,6 +23,7 @@ services:
       - ./public/uploads:/var/www/html/public/uploads
       - app_cache:/var/www/html/var/cache
       - app_logs:/var/www/html/var/log
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - pushify
     depends_on:
