@@ -243,10 +243,26 @@ class MonitoringService
         $avgResponseTime = $this->healthCheckRepository->getAverageResponseTime($project, $since);
         $latestCheck = $this->healthCheckRepository->findLatestForProject($project);
 
+        // Convert latest check to array to avoid circular reference in JSON serialization
+        $latestCheckData = null;
+        if ($latestCheck) {
+            $latestCheckData = [
+                'id' => $latestCheck->getId(),
+                'status' => $latestCheck->getStatus(),
+                'response_time' => $latestCheck->getResponseTime(),
+                'cpu_usage' => $latestCheck->getCpuUsage(),
+                'memory_usage' => $latestCheck->getMemoryUsage(),
+                'is_container_running' => $latestCheck->isContainerRunning(),
+                'http_status_code' => $latestCheck->getHttpStatusCode(),
+                'error_message' => $latestCheck->getErrorMessage(),
+                'checked_at' => $latestCheck->getCheckedAt()?->format('c'),
+            ];
+        }
+
         return [
             'uptime_percent' => $uptime,
             'avg_response_time' => $avgResponseTime,
-            'latest_check' => $latestCheck,
+            'latest_check' => $latestCheckData,
             'period_days' => $days,
         ];
     }
