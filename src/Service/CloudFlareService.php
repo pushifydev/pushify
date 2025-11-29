@@ -23,6 +23,12 @@ class CloudFlareService
     public function createZone(string $domain): array
     {
         try {
+            $this->logger->info('Creating CloudFlare zone', [
+                'domain' => $domain,
+                'account_id' => $this->cloudflareAccountId,
+                'token_length' => strlen($this->cloudflareApiToken)
+            ]);
+
             $response = $this->httpClient->request('POST', self::API_BASE_URL . '/zones', [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $this->cloudflareApiToken,
@@ -35,14 +41,23 @@ class CloudFlareService
                 ],
             ]);
 
+            $statusCode = $response->getStatusCode();
             $data = $response->toArray(false); // Don't throw on error
+
+            $this->logger->info('CloudFlare API response', [
+                'status' => $statusCode,
+                'success' => $data['success'] ?? false,
+                'data' => $data
+            ]);
 
             if (!$data['success']) {
                 $errorDetails = isset($data['errors']) ? json_encode($data['errors']) : 'Unknown error';
                 $this->logger->error('CloudFlare zone creation failed', [
                     'domain' => $domain,
+                    'status_code' => $statusCode,
                     'errors' => $data['errors'] ?? [],
-                    'messages' => $data['messages'] ?? []
+                    'messages' => $data['messages'] ?? [],
+                    'full_response' => $data
                 ]);
                 throw new \RuntimeException('CloudFlare API error: ' . $errorDetails);
             }
