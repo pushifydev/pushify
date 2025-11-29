@@ -4,8 +4,10 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\DatabaseRepository;
+use App\Repository\DeploymentRepository;
 use App\Repository\DomainRepository;
 use App\Repository\ProjectRepository;
+use App\Repository\ServerRepository;
 use App\Service\AnalyticsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,6 +24,8 @@ class DashboardController extends AbstractController
         private ProjectRepository $projectRepository,
         private DomainRepository $domainRepository,
         private DatabaseRepository $databaseRepository,
+        private DeploymentRepository $deploymentRepository,
+        private ServerRepository $serverRepository,
         private AnalyticsService $analyticsService
     ) {
     }
@@ -29,7 +33,40 @@ class DashboardController extends AbstractController
     #[Route('', name: 'app_dashboard')]
     public function index(): Response
     {
-        return $this->render('dashboard/index.html.twig');
+        /** @var User $user */
+        $user = $this->getUser();
+
+        // Get counts
+        $totalProjects = $this->projectRepository->count(['owner' => $user]);
+        $activeServers = $this->serverRepository->count(['status' => 'active']);
+        $totalDatabases = $this->databaseRepository->count([]);
+
+        // Get deployments this month
+        $startOfMonth = new \DateTimeImmutable('first day of this month 00:00:00');
+        $deploymentsThisMonth = $this->deploymentRepository->createQueryBuilder('d')
+            ->select('COUNT(d.id)')
+            ->join('d.project', 'p')
+            ->where('p.owner = :owner')
+            ->andWhere('d.createdAt >= :start')
+            ->setParameter('owner', $user)
+            ->setParameter('start', $startOfMonth)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        // Get recent projects (last 5)
+        $recentProjects = $this->projectRepository->findBy(
+            ['owner' => $user],
+            ['updatedAt' => 'DESC'],
+            5
+        );
+
+        return $this->render('dashboard/index.html.twig', [
+            'totalProjects' => $totalProjects,
+            'activeServers' => $activeServers,
+            'deploymentsThisMonth' => $deploymentsThisMonth,
+            'totalDatabases' => $totalDatabases,
+            'recentProjects' => $recentProjects,
+        ]);
     }
 
     // Databases
