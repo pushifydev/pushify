@@ -62,6 +62,9 @@ class Domain
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $cloudflareZoneId = null;
 
+    #[ORM\Column(type: 'json', nullable: true)]
+    private ?array $cloudflareNameservers = null;
+
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
@@ -225,6 +228,17 @@ class Domain
     public function setCloudflareZoneId(?string $cloudflareZoneId): static
     {
         $this->cloudflareZoneId = $cloudflareZoneId;
+        return $this;
+    }
+
+    public function getCloudflareNameservers(): ?array
+    {
+        return $this->cloudflareNameservers;
+    }
+
+    public function setCloudflareNameservers(?array $cloudflareNameservers): static
+    {
+        $this->cloudflareNameservers = $cloudflareNameservers;
         return $this;
     }
 

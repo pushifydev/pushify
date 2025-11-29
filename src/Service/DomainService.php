@@ -71,6 +71,7 @@ class DomainService
             }
 
             $domain->setCloudflareZoneId($result['zone_id']);
+            $domain->setCloudflareNameservers($result['nameservers']);
 
             // Get server IP
             $server = $project->getServer();
