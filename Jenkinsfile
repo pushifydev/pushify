@@ -93,6 +93,10 @@ pipeline {
                         echo "⚠️  WARNING: Using example .env.prod! Update with real credentials!"
                     fi
 
+                    # Detect host's docker group GID for universal compatibility
+                    export DOCKER_GID=$(getent group docker | cut -d: -f3)
+                    echo "Detected docker GID: ${DOCKER_GID}"
+
                     # Stop and remove old containers to avoid ContainerConfig errors
                     docker-compose -f docker-compose.prod.yml down || true
 

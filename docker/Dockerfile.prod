@@ -3,6 +3,7 @@
 
 ARG PHP_VERSION=8.4
 ARG NODE_VERSION=20
+ARG DOCKER_GID=987
 
 # ============================================
 # Stage 1: PHP Dependencies
@@ -118,7 +119,8 @@ COPY docker/nginx/default.conf /etc/nginx/http.d/default.conf
 COPY docker/supervisor/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Create docker group with host's GID and application user, add user to docker group for Docker-in-Docker
-RUN addgroup -g 987 docker && \
+ARG DOCKER_GID
+RUN addgroup -g ${DOCKER_GID} docker && \
     addgroup -g 1000 pushify && \
     adduser -D -u 1000 -G pushify pushify && \
     addgroup pushify docker

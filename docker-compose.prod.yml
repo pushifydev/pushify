@@ -8,6 +8,7 @@ services:
       dockerfile: docker/Dockerfile.prod
       args:
         APP_VERSION: ${APP_VERSION:-latest}
+        DOCKER_GID: ${DOCKER_GID:-987}
     image: pushifydev/pushify:${APP_VERSION:-latest}
     container_name: pushify_app
     restart: unless-stopped
