@@ -466,11 +466,28 @@ DOCKERFILE;
 
         return <<<DOCKERFILE
 FROM node:20-alpine
+
+# Create app user for security (non-root)
+RUN addgroup -g 1001 -S nodejs && adduser -S nodejs -u 1001
+
 WORKDIR /app
+
+# Install dependencies as root
 COPY package*.json ./
 RUN $installCommand --production
+
+# Copy application code
 COPY . .
+
+# Build if needed
 RUN $buildCommand || true
+
+# Change ownership to nodejs user
+RUN chown -R nodejs:nodejs /app
+
+# Switch to non-root user
+USER nodejs
+
 ENV NODE_ENV production
 EXPOSE 3000
 CMD $cmdJson
