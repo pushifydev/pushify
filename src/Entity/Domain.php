@@ -17,6 +17,9 @@ class Domain
     public const STATUS_SSL_ACTIVE = 'ssl_active';
     public const STATUS_FAILED = 'failed';
 
+    public const DNS_PROVIDER_MANUAL = 'manual';
+    public const DNS_PROVIDER_PUSHIFY = 'pushify';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -52,6 +55,12 @@ class Domain
 
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $lastError = null;
+
+    #[ORM\Column(length: 20)]
+    private string $dnsProvider = self::DNS_PROVIDER_MANUAL;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $cloudflareZoneId = null;
 
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
@@ -195,6 +204,38 @@ class Domain
     public function getUpdatedAt(): ?\DateTimeImmutable
     {
         return $this->updatedAt;
+    }
+
+    public function getDnsProvider(): string
+    {
+        return $this->dnsProvider;
+    }
+
+    public function setDnsProvider(string $dnsProvider): static
+    {
+        $this->dnsProvider = $dnsProvider;
+        return $this;
+    }
+
+    public function getCloudflareZoneId(): ?string
+    {
+        return $this->cloudflareZoneId;
+    }
+
+    public function setCloudflareZoneId(?string $cloudflareZoneId): static
+    {
+        $this->cloudflareZoneId = $cloudflareZoneId;
+        return $this;
+    }
+
+    public function isManualDns(): bool
+    {
+        return $this->dnsProvider === self::DNS_PROVIDER_MANUAL;
+    }
+
+    public function isPushifyDns(): bool
+    {
+        return $this->dnsProvider === self::DNS_PROVIDER_PUSHIFY;
     }
 
     public function getStatusBadgeClass(): string
