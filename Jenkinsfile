@@ -106,6 +106,10 @@ pipeline {
                     # Run database migrations (with timeout to prevent hanging)
                     timeout 60 docker-compose -f docker-compose.prod.yml exec -T app php bin/console doctrine:migrations:migrate --no-interaction || echo "⚠️  Migration skipped or timed out"
 
+                    # Fix cache directory permissions
+                    docker-compose -f docker-compose.prod.yml exec -T app chown -R pushify:pushify /var/www/html/var/cache || echo "⚠️  Permission fix skipped"
+                    docker-compose -f docker-compose.prod.yml exec -T app chmod -R 775 /var/www/html/var/cache || echo "⚠️  Permission fix skipped"
+
                     # Clear production cache
                     timeout 30 docker-compose -f docker-compose.prod.yml exec -T app php bin/console cache:clear --env=prod || echo "⚠️  Cache clear skipped or timed out"
 
