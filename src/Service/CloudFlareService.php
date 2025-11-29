@@ -35,10 +35,16 @@ class CloudFlareService
                 ],
             ]);
 
-            $data = $response->toArray();
+            $data = $response->toArray(false); // Don't throw on error
 
             if (!$data['success']) {
-                throw new \RuntimeException('CloudFlare API error: ' . json_encode($data['errors']));
+                $errorDetails = isset($data['errors']) ? json_encode($data['errors']) : 'Unknown error';
+                $this->logger->error('CloudFlare zone creation failed', [
+                    'domain' => $domain,
+                    'errors' => $data['errors'] ?? [],
+                    'messages' => $data['messages'] ?? []
+                ]);
+                throw new \RuntimeException('CloudFlare API error: ' . $errorDetails);
             }
 
             $this->logger->info('CloudFlare zone created', [
